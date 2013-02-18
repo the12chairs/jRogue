@@ -1,9 +1,8 @@
 package roguelike;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Random;
+
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -11,52 +10,42 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class Dungeon {
-
-	private Tile dungeon[][];
+	
+	private LinkedList<Tile> dungeon;
 	private int numRooms;
-	private LinkedList<Room> rooms;
-	private int height;
-	private int width;
+	//private LinkedList<Room> rooms;
+	private long height;
+	private long width;
 	
 	
 	private static final int maxRoomSquare = 20;
 	
-	public void setDungeon(Tile dungeon[][]) {
+	public long getHeight(){
+		return this.height;
+	}
+	public long getWidth(){
+		return this.width;
+	}
+	
+	public void setDungeon(LinkedList<Tile> dungeon) {
 		this.dungeon = dungeon;
 	}
 	
 	
 	public Dungeon(int x, int y){
-		this.rooms = new LinkedList<Room>();
+		//this.rooms = new LinkedList<Room>();
 		this.height = x;
 		this.width = y;
 		// Рисуем коробку x/y, окруженную стеной
-		this.dungeon = new Tile[x][y];
+		this.dungeon = new LinkedList<Tile>();
 
-		for(int i = 0; i < x; i++){
-
-			for(int j = 0; j < y; j++){
-				dungeon[i][j] = new Tile("Пол", '.', true, true, i, j);
-				if(i == 0) {
-					dungeon[0][j] = new Tile("Стена", '#', true, false, i, j);
-				}
-				if(i == x - 1){
-					dungeon[x-1][j] = new Tile("Стена", '#', true, false, i, j);;
-				}
-				if(j == 0){
-					dungeon[i][0] = new Tile("Стена", '#', true, false, i, j);;
-				}
-				if(j == y - 1){
-					dungeon[i][y-1] = new Tile("Стена", '#', true, false, i, j);;
-				}
-			}
-		}
 	}
 
 	
 	public Dungeon(String filePath){
 		// Прочтем карту из json файла
 		// Ох и медленно эта хрень работать будет ><
+		dungeon = new LinkedList<Tile>();
 		String fileContent = null;
 		
 		try {
@@ -79,8 +68,10 @@ public class Dungeon {
 		// Выдернем из него все значения
 		JSONObject jsonObj = (JSONObject) obj;
 		JSONArray tiles = new JSONArray();
+		this.height = (long) jsonObj.get("height");
+		this.width = (long) jsonObj.get("width");
 		tiles = (JSONArray) jsonObj.get("tiles");
-		ArrayList<Tile> tileList = new ArrayList<Tile>();
+
 		for(int i = 0; i < tiles.size(); i++){ // Каждый тайл из файла засунем в список тайлов
 			
 			// Создадим на основе полученных значений тайлы, и запихнем и в список тайлов
@@ -90,64 +81,101 @@ public class Dungeon {
 			char tile = parsableTile.get("tile").toString().charAt(0);
 			boolean passable = (boolean) parsableTile.get("passable");
 			boolean visible = true; // По умолчанию видно тайл
+			long x = (long) parsableTile.get("x"); 
+			long y = (long) parsableTile.get("y");
+			dungeon.add(new Tile(title, tile, passable, visible, x, y));
 			
-			Tile fromFile = new Tile(title, tile, passable, visible, 0, 0);
-			tileList.add(fromFile);
-			
 		}
-		
-		String stringMap  = (String) jsonObj.get("map");
-		//System.out.print(stringMap);
-		
-		// Посчитаем высоту и ширину карты
-		int height = 0;
-		
-		while(stringMap.charAt(height) != '\n'){
-			height++;
-		}
-		
-		int width = stringMap.length() / height;
-		
-		//System.out.println(width);
-		int k = 0;
-		char symbol = '1';
-		for(int j = 0; j < width; j++){
-			for(int i = 0; i < height; i++){
-				//char symbol = '1';
-				if(stringMap.charAt(k) == '\n'){
-					System.out.print('1');//
-				}
-				else{
-					System.out.print(stringMap.charAt(k));
-				}
-				
-				k++;
-			}
-		}
+
 		
 	}
 	
 	
-	public void generateDungeon(int x, int y, int rooms){
-		this.height = x;
-		this.width = y;
-		this.numRooms = rooms;
-		for(int i = 0; i < x; i++){
-			for(int j = 0; j < y; j++){
-				this.dungeon[i][j] = new Tile("Стена", '#', true, false, i, j);;
-			}
+	
+	
+	public void oldDungeon(String filePath){
+		// Прочтем карту из json файла
+		// Ох и медленно эта хрень работать будет ><
+		dungeon = new LinkedList<Tile>();
+		String fileContent = null;
+		
+		try {
+			fileContent = FileReader.readFile(filePath);
+			
+		} catch (IOException e) { // Хьюстон, у нас проблема
+			e.printStackTrace();
 		}
 		
+		// Парсим засранца
+		JSONParser parser = new JSONParser();
+		
+		Object obj = null;
+		try {
+			obj = parser.parse(fileContent);
+		} catch (ParseException e) {
+			// Нираспарсилось((((999
+			e.printStackTrace();
+		}
+		// Выдернем из него все значения
+		JSONObject jsonObj = (JSONObject) obj;
+		JSONArray tiles = new JSONArray();
 
-		for(int i = 0; i < rooms; i++){
-			Room r = generateRoom(this.height - 10);
-			while(!isGoodRoom(r)){
-				r = generateRoom(this.height - 10);	
-			}
-			this.rooms.add(r);
-			this.setRoom(r);
+		tiles = (JSONArray) jsonObj.get("tiles");
+		LinkedList<TileProto> tilePrototipes = new LinkedList<TileProto>();
+		for(int i = 0; i < tiles.size(); i++){ // Каждый тайл из файла засунем в список тайлов
+			
+			// Создадим на основе полученных значений тайлы, и запихнем и в список тайлов
+			JSONObject parsableTile = (JSONObject) tiles.get(i);
+			
+			String title = (String) parsableTile.get("title");
+			char tile = parsableTile.get("tile").toString().charAt(0);
+			boolean passable = (boolean) parsableTile.get("passable");
+			TileProto p = new TileProto(title, tile, passable);
+			// Добавить прототип в масив прототипов
+			tilePrototipes.add(p);
+			
+			
 		}
 		
+		// Дебаг
+		for(TileProto t : tilePrototipes){
+			System.out.println(t.getTile());
+		}
+		
+		
+		String map = (String) jsonObj.get("map"); // Выдернем карту из файла
+		
+		// Посчитаем высоту и ширину
+		int w = 0;
+		while(map.charAt(w) != '\n'){
+			w++;
+		}
+		
+		// Занесем в атрибуты класса
+		this.width = w - 1;
+		this.height = map.length() / w - 1;
+		
+		// Дебаг
+		System.out.println(height + ":" + width);
+		int current = 0;
+		for(int i = 0; i < height; i++){
+			for(int j = 0; j < width; j++){
+
+				for(TileProto t : tilePrototipes){ // Пробежимся по списку прототипов и найдем
+					if(t.getTile() == map.charAt(current)){
+						//System.out.println("Нашли "+ t.getTitle());
+						Tile finalTile = new Tile(t.getTitle(), t.getTile(), t.getPassable(), true, i, j);
+						dungeon.add(finalTile);
+					}
+				}
+				current++;
+			}
+		}
+	
+	}
+	
+	public void generateDungeon(int x, int y, int rooms){
+
 	}
 	
 	
@@ -160,67 +188,36 @@ public class Dungeon {
 	}
 	
 	
-	public Room generateRoom(int seed){
-		// Зафигачим координаты
-		Random rnd = new Random();
-		
-		// Вроде правильно
-		
-		int hlx = rnd.nextInt(seed - 10);
-
-		int hly = rnd.nextInt(seed - 10);
-		
-		int hrx = hlx;
-		int hry = hly + rnd.nextInt(this.width - 2*hly);
-		
-		int lrx = hrx + rnd.nextInt(this.width - 2*hrx);
-		int lry = hry;
-		
-		int llx = lrx;
-		int lly = hly;
-		
-		Tile hl = new Tile("Пол", '.', true, true, hlx, hly);
-		Tile hr = new Tile("Пол", '.', true, true, hrx, hry);
-		Tile lr = new Tile("Пол", '.', true, true, lrx, lry);
-		Tile ll = new Tile("Пол", '.', true, true, llx, lly);
-		
-		return new Room(hl, hr, lr, ll);
-	}
-	
-	public void setRoom(Room room){
-		for(int i = room.edges[0].getX(); i < room.edges[2].getX(); i++){
-			for(int j = room.edges[0].getY(); j < room.edges[2].getY(); j++){
-				this.dungeon[i][j] = new Tile("Пол", '.', true, true, i, j);
-			}
-		}
-		
-	}
-	
 	public static void main(String[] args) {
 		//int y = 100;
 		//int x = 50;
 		//int rooms = 2;
 
 		Dungeon d = new Dungeon("./modules/TestModule/locations/test.json");
-		
+		d.oldDungeon("../jRogueLocationConverter/test.old.json");
+		int i = 0;
+		for(Tile t : d.dungeon){
+			System.out.print(t.getY());
+			if(i == d.getWidth() - 1){
+				System.out.println();
+				i = 0;
+			}
+			i++;
+		}
+
 		/*
-		d.generateDungeon(x, y, rooms);
-		for(int i = 0; i < x; i++){
-			for(int j = 0; j < y; j++){
-				//System.out.print("<"+d.dungeon[i][j].getX()+":"+d.dungeon[i][j].getY()+">");
-				System.out.print(d.dungeon[i][j].getTile());
+  		int k = 0;
+		for(int i = 0; i < d.getHeight(); i++){
+			for(int j = 0; j < d.getWidth(); j++){
+				if(d.dungeon.get(k).getX() == i && d.dungeon.get(k).getY() == j){
+					System.out.print(( d.dungeon.get(k)).getTile());
+				}
+				k++;
 			}
 			System.out.println();
-			
+
 		}
-		for(int k = 0; k < d.getNumRooms(); k++){
-			System.out.println();
-			for(int i = 0; i < 4; i++){
-				System.out.println(d.rooms.get(k).edges[i].getX() + ":" + d.rooms.getFirst().edges[i].getY());
-			}
-			System.out.println();
-		}
-		*/
+*/
 	}
 	
 	public int getNumRooms() {
@@ -243,7 +240,7 @@ public class Dungeon {
 			edges[3] = lowLeft;
 		}
 		
-		public int calculateSquare(){
+		public long calculateSquare(){
 			return ((edges[2].getX() - edges[0].getX()) * (edges[2].getY() - edges[0].getY())); 
 		}
 		
@@ -257,6 +254,33 @@ public class Dungeon {
 		}
 		
 	}
+	
+	
+	// Прототип тайла без координат
+	public class TileProto{
+		private String title;
+		private char tile;
+		private boolean passable;
+		
+		public TileProto(String title, char tile, boolean passable){
+			this.title = title;
+			this.tile = tile;
+			this.passable = passable;
+		}
+
+		public char getTile() {
+			return tile;
+		}
+
+		public String getTitle(){
+			return title;
+		}
+		
+		public boolean getPassable(){
+			return passable;
+		}
+	}
+	
 
 }
 

@@ -6,8 +6,8 @@ public class Tile {
 	private char tile;
 	private boolean visible;
 	private boolean passable;
-	private int x;
-	private int y;
+	private long x;
+	private long y;
 	
 	public static void main(String[] args) {
 		Tile t = new Tile("Стена", '#', true, false, 1, 1);
@@ -18,7 +18,7 @@ public class Tile {
 		
 	}
 	
-	public Tile(String name, char tile, boolean visible, boolean passable, int x, int y){
+	public Tile(String name, char tile, boolean visible, boolean passable, long x, long y){
 		
 		this.name = name;
 		this.tile = tile;
@@ -61,22 +61,22 @@ public class Tile {
 		return this.passable;
 	}
 
-	public int getX() {
+	public long getX() {
 		return x;
 	}
 
 
-	public void setX(int x) {
+	public void setX(long x) {
 		this.x = x;
 	}
 
 
-	public int getY() {
+	public long getY() {
 		return y;
 	}
 
 
-	public void setY(int y) {
+	public void setY(long y) {
 		this.y = y;
 	}
 
