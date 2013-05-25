@@ -1,6 +1,6 @@
 package lifeforms;
 
 
-public class Mob extends AbstractCreature implements CreatureController {
+public class Mob extends AbstractCreature {
 
 }

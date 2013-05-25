@@ -6,7 +6,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import lowlevel.FileReader;
+import tools.FileReader;
+
 
 public class Quest {
 	

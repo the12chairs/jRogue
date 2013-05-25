@@ -1,5 +1,6 @@
 package lifeforms;
 
+import primitives.GraphObject;
 import primitives.Inventory;
 import properties.Race;
 import properties.Stat;
@@ -7,15 +8,13 @@ import lowlevel.AbstractThing;
 
 
 
-public abstract class AbstractCreature implements CreatureController{
+public abstract class AbstractCreature extends GraphObject{
 
 	//static enum Race { HUMAN, ELF, DWARF };
 	public static enum Profession { WARRIOR, ROGUE, MAGE }; 
 	
 	protected String name;
-	protected char face;
-	protected int x;
-	protected int y;
+	//protected String face;
 	protected Race race;
 	protected Profession profession;
 	protected Stat hp;
@@ -44,9 +43,6 @@ public abstract class AbstractCreature implements CreatureController{
 		this.y = y;
 	}
 	
-	public void setFace(char face){
-		this.face = face;
-	}
 	
 	public String getName(){
 		return this.name;
@@ -56,17 +52,6 @@ public abstract class AbstractCreature implements CreatureController{
 		this.name = name;
 	}
 	
-	public char getFace(){
-		return  this.face;
-	}
-	
-	public int getX(){
-		return this.x;
-	}
-	
-	public int getY(){
-		return this.y;
-	}
 	
 	// Выставим расовые бонусы
 	public void initRaceBonuses(){

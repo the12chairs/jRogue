@@ -2,6 +2,7 @@ package lifeforms;
 
 import java.util.LinkedList;
 
+
 import primitives.Inventory;
 import primitives.Quest;
 import properties.Race;
@@ -10,14 +11,14 @@ import properties.Stat;
 
 
 
-public class Hero extends AbstractCreature implements CreatureController{
+public class Hero extends AbstractCreature{
 
 	
 	LinkedList<Quest> questJournal; // Активные, выполненные, проваленные. Смотрим по флажку в Quest
 	private Stat exp; // Опыт персонажа
 	private int level; // Его уровень
 	private long statPoints;
-	
+
 	// Баланс тут
 	private static final int expCoef = 6;
 	private static final int statCoef = 10;
@@ -63,7 +64,7 @@ public class Hero extends AbstractCreature implements CreatureController{
 		quest.fail();
 	}
 	
-	public Hero(String name, char face, int x, int y, int hp, int str, int dex,
+	public Hero(String name, String face, int x, int y, int hp, int str, int dex,
 			    int intel, Race race, Profession profession){
 		
 		this.name = name;
@@ -89,7 +90,7 @@ public class Hero extends AbstractCreature implements CreatureController{
 	public static void main(String[] args) {
 		// Тесты
 		Race dwarf = new Race("Дварф", 5, 0, -3, 4);
-		Hero you = new Hero("Макс", '@', 2, 1, 5, 5, 5, 5, dwarf, Profession.WARRIOR);
+		Hero you = new Hero("Макс", "ololo", 2, 1, 5, 5, 5, 5, dwarf, Profession.WARRIOR);
 		System.out.println("Опыт: " + you.exp.getPair());
 		you.initRaceBonuses();
 

@@ -1,12 +1,11 @@
 package lowlevel;
 
+import primitives.GraphObject;
 
-public abstract class AbstractThing implements ThingController {
+
+public abstract class AbstractThing extends GraphObject{
 	
 	protected String name;
-	protected char face;
-	protected int x;
-	protected int y;
 	protected int heavy;
 	protected boolean visible;
 	protected int cost;
@@ -15,10 +14,7 @@ public abstract class AbstractThing implements ThingController {
 		this.name = name;
 	}
 	
-	public void setFace(char face){
-		this.face = face;
-	}
-	
+
 	public void setPos(int x, int y){
 		this.x = x;
 		this.y = y;
@@ -42,18 +38,6 @@ public abstract class AbstractThing implements ThingController {
 	
 	public String getName(){
 		return name;
-	}
-	
-	public char getFace(){
-		return face;
-	}
-	
-	public int getX(){
-		return x;
-	}
-	
-	public int getY(){
-		return y;
 	}
 
 	public int getHeavy(){

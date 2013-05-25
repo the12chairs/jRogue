@@ -1,27 +1,42 @@
 package lowlevel;
 
-public class Tile {
+import primitives.GraphObject;
+
+
+
+public class Tile extends GraphObject {
 	
 	protected String name;
-	protected char tile;
-	protected boolean visible;
+	//protected boolean visible;
 	protected boolean passable;
-	protected long x;
-	protected long y;
+	protected String texturePath;
 	
 	public static void main(String[] args) {
-		Tile t = new Tile("Стена", '#', true, false, 1, 1);
-		System.out.println(t.getTile());
+		//Tile t = new Tile("Стена", '#', true, false, 1, 1);
+		//System.out.println(t.getTile());
 	}
 	
 	public Tile(){
+		super();
+	}
+	
+	
+	
+	public Tile(Tile t, int x, int y){
+		super.face = t.getFace();
+		name = t.getName();
+		visible = t.getVisible();
+		passable = t.getPassable();
+		this.x = x;
+		this.y = y;
 		
 	}
 	
-	public Tile(String name, char tile, boolean visible, boolean passable, long x, long y){
-		
+	
+	public Tile(String name, String face, boolean visible, boolean passable, long x, long y){
+		super(face);
 		this.name = name;
-		this.tile = tile;
+		//this.face = face;
 		this.visible = visible;
 		this.passable = passable;
 		this.x = x;
@@ -29,17 +44,23 @@ public class Tile {
 	}
 	
 	
+
+	
+	// Конструктор прототипа.
+	public Tile(String name, String face, boolean visible, boolean passable){
+		super(face);
+		this.name = name;
+		this.face = face;
+		this.visible = visible;
+		this.passable = passable;
+	}
+	
+
+	
 	public void setName(String name){
 		this.name = name;
 	}
 	
-	public void setTile(char tile){
-		this.tile = tile;
-	}
-	
-	public void setVisible(boolean visible){
-		this.visible = visible;
-	}
 	
 	public void setPassable(boolean passable){
 		this.passable = passable;
@@ -49,35 +70,16 @@ public class Tile {
 		return this.name;
 	}
 	
-	public char getTile(){
-		return this.tile;
-	}
-	
-	public boolean getVisible(){
-		return this.visible;
-	}
 	
 	public boolean getPassable(){
 		return this.passable;
 	}
-
-	public long getX() {
-		return x;
+	
+	public void setTexturePath(String texturePath){
+		this.texturePath = texturePath;
 	}
-
-
-	public void setX(long x) {
-		this.x = x;
+	
+	public String getTexturePath(){
+		return texturePath;
 	}
-
-
-	public long getY() {
-		return y;
-	}
-
-
-	public void setY(long y) {
-		this.y = y;
-	}
-
 }

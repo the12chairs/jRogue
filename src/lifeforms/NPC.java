@@ -1,6 +1,6 @@
 package lifeforms;
 
 
-public class NPC extends AbstractCreature implements CreatureController {
+public class NPC extends AbstractCreature {
 
 }

@@ -5,5 +5,17 @@
 	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/json-simple-1.1.1.jar"/>
 	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/jcurses-x.jar"/>
 	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/libjcsi.jar"/>
+	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/jinput.jar"/>
+	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/lwjgl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/max/java_projects/jRogue/libs/native/linux"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/lwjgl_util.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/max/java_projects/jRogue/libs/native"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/slick-util.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

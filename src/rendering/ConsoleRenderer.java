@@ -1,9 +1,10 @@
 package rendering;
 
 import lifeforms.AbstractCreature;
-import lifeforms.ActiveTile;
 import lowlevel.AbstractThing;
+import lowlevel.Dungeon;
 import lowlevel.Tile;
+import sz.csi.CharKey;
 import sz.csi.ConsoleSystemInterface;
 import sz.csi.wswing.WSwingConsoleInterface;
 
@@ -16,8 +17,12 @@ public class ConsoleRenderer {
 		csi.cls();
 	}
 	
+	public CharKey listenKey(){
+		return csi.inkey();
+	}
+	
 	public void renderTile(Tile t){
-		csi.print((int)t.getY(), (int)t.getX(), t.getTile(), ConsoleSystemInterface.CYAN);
+		csi.print((int)t.getY(), (int)t.getX(), t.getFace(), ConsoleSystemInterface.CYAN);
 	}
 	
 	public void renderCreature(AbstractCreature c){
@@ -28,18 +33,18 @@ public class ConsoleRenderer {
 		csi.print((int)t.getY(), (int)t.getX(), t.getFace(), ConsoleSystemInterface.CYAN);
 	}
 	public static void main(String args[]){
-		ActiveTile t = new ActiveTile("JJ",'X', 'O', true, true, 0, 0);
+		//ActiveTile t = new ActiveTile("JJ",'X', 'O', true, true, 0, 0);
 		ConsoleRenderer r = new ConsoleRenderer();
-		r.csi.locateCaret((int)t.getX(), (int)t.getY());
-		t.activate();
-		r.renderTile(t);
-		/*Dungeon d = new Dungeon("./modules/TestModule/locations/generated.json");
+		//r.csi.locateCaret((int)t.getX(), (int)t.getY());
+		//t.activate();
+		//r.renderTile(t);
+		//CharKey k = r.csi.inkey();
+		//System.out.println(k.toString());
+		Dungeon d = new Dungeon("./modules/TestModule/locations/generated.json");
 		//d.oldDungeon("./modules/TestModule/locations/test.old.json");
-		ConsoleSystemInterface csi = new WSwingConsoleInterface();
-		csi.cls();
 		for(Tile t : d.dungeon()){
-			csi.print((int)t.getY(), (int)t.getX(), t.getTile(), ConsoleSystemInterface.CYAN);
-		}*/
+			r.renderTile(t);
+		}
 		
 	}
 
