@@ -24,8 +24,8 @@ public class DungeonGenerator {
 	
 	private List<Room> rooms;
 	
-	public static final Tile wall = new Tile("Wall", "./res/tiles/wall.png", true, true);
-	public static final Tile floor = new Tile("Floor", "./res/tiles/floor.png", true, true);
+	public static final Tile wall = new Tile("Wall", "./res/tiles/wall.png", false, false);
+	public static final Tile floor = new Tile("Floor", "./res/tiles/floor.png", false, true);
 	
 	
 	
@@ -69,18 +69,13 @@ public class DungeonGenerator {
 	
 	
 	
-	public void generateRoom(){
-		
-		boolean good = false;
-		Random rnd = new Random();
-		while(!good){
-		
-			Room tmp = new Room(rnd.nextInt(), rnd.nextInt(), rnd.nextInt(), rnd.nextInt());
-			for(Room r : rooms){
-			
-			}
-		}
+	public Room generateRoom(int hlx, int hly, int brx, int bry){
+
+		return new Room(hlx, hly, brx, bry);
 	}
+	
+	
+
 	
 	public int horizontalDivide(){
 		Random rnd = new Random();
@@ -100,6 +95,19 @@ public class DungeonGenerator {
 		return d;
 	}
 	
+	
+	public void makeRoom(Room r){
+		for(int i = r.hlx; i <= r.brx; i++){
+			for(int j = r.hly; j <= r.bry; j++){
+				System.out.println(i + " " + j);
+				dungeon.removeTile(i, j);
+				dungeon.addTile(new Tile(floor, i, j));
+			}
+		}
+	}
+	
+	
+	
 	public Dungeon generateDungeon(){
 	
 		System.out.println("Generate dungeon withs params:");
@@ -114,15 +122,65 @@ public class DungeonGenerator {
 			}
 		}
 		
+		int prewH = 1;//horizontalDivide();
+		int prewW = 1;//verticalDivide();
 		
-		int prewH = horizontalDivide();
-		int prewW = verticalDivide();
+		//for(int i = 1; i < maxRooms; i++){
 		
-		Random rnd = new Random();
+
 		
-		for(int i = 1; i < maxRooms; i++){
+			int wh = horizontalDivide();
+			int ww = verticalDivide();
 			
-		}
+			//makeRoom(new Room(prewH, wh, prewW, ww));
+			
+			
+			
+			// Верхняя левая
+			
+			for(int j = prewW ; j < ww - 1; j++){
+				for(int k = prewH; k < wh - 1; k++){
+					dungeon.removeTile(j, k);
+					dungeon.addTile(new Tile(floor, j, k));
+				}
+			}
+			
+			// Верхняя правая
+			for(int j = ww ; j < width; j++){
+				for(int k = prewH; k < wh; k++){
+					dungeon.removeTile(j, k);
+					dungeon.addTile(new Tile(floor, j, k));
+				}
+			}
+			
+						
+			// Нижняя левая
+			
+			for(int j = prewW; j < ww - 1; j++){
+				for(int k = wh; k < height - 1; k++){
+					dungeon.removeTile(j, k);
+					dungeon.addTile(new Tile(floor, j, k));
+				}
+			}
+			
+			
+			// Нижняя правая
+			for(int j = ww + 1; j < width; j++){
+				for(int k = wh + 1; k < height; k++){
+					dungeon.removeTile(j, k);
+					dungeon.addTile(new Tile(floor, j, k));
+				}
+			}
+		
+			
+
+			
+			//while (wh)
+			//wh = horizontalDivide();
+			//ww = verticalDivide();
+			//Random rnd = new Random();
+			
+		//}
 		
 		
 

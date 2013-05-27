@@ -219,7 +219,7 @@ public class TileRenderer extends Thread {
 		
 		
 		Race dwarf = new Race("Дварф", 5, 0, -3, 4);
-		Hero you = new Hero("Макс", "./modules/TestModule/heros/hero.png", 1, 1, 5, 5, 5, 5, dwarf, Profession.WARRIOR);
+		Hero you = new Hero("Макс", "./modules/TestModule/heros/hero.png", 1, 1, 5, 5, 5, 5, dwarf, 3, Profession.WARRIOR);
 		
 		
 		

@@ -65,7 +65,7 @@ public class Hero extends AbstractCreature{
 	}
 	
 	public Hero(String name, String face, int x, int y, int hp, int str, int dex,
-			    int intel, Race race, Profession profession){
+			    int intel, Race race, int visionRadius, Profession profession){
 		
 		this.name = name;
 		this.face = face;
@@ -84,13 +84,14 @@ public class Hero extends AbstractCreature{
 		this.exp = new Stat(0, firstExpCoef);
 		this.statPoints = 0;
 		this.damage = new Stat(str, str + damageCoef);
+		this.visionRadius = visionRadius;
 	}
 	
 
 	public static void main(String[] args) {
 		// Тесты
 		Race dwarf = new Race("Дварф", 5, 0, -3, 4);
-		Hero you = new Hero("Макс", "ololo", 2, 1, 5, 5, 5, 5, dwarf, Profession.WARRIOR);
+		Hero you = new Hero("Макс", "ololo", 2, 1, 5, 5, 5, 5, dwarf, 3, Profession.WARRIOR);
 		System.out.println("Опыт: " + you.exp.getPair());
 		you.initRaceBonuses();
 

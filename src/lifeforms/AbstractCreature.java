@@ -25,12 +25,22 @@ public abstract class AbstractCreature extends GraphObject{
 	protected Stat mass;
 	protected Stat damage;
 	protected Inventory inventory;
+	protected int visionRadius;
 	// Интерфейс
 	public void move(int dx, int dy){
 		this.x += dx;
 		this.y += dy;
 	}
 
+	
+	public void getVisionRadius(int visionRadius){
+		this.visionRadius = visionRadius;
+	}
+	
+	public int getVisionRadius(){
+		return visionRadius;
+	}
+	
 	public long getPurse(){
 		return this.purse;
 	}

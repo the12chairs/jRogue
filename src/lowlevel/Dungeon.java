@@ -14,10 +14,12 @@ import org.json.simple.parser.ParseException;
 
 import primitives.Quest;
 import properties.Race;
+import rlforj.los.ILosBoard;
+
 
 import tools.FileReader;
 
-public class Dungeon {
+public class Dungeon implements ILosBoard{
 	
 	private LinkedList<Tile> dungeon;
 	private LinkedList<AbstractThing> sceneThings;
@@ -190,7 +192,7 @@ public class Dungeon {
 	public static void main(String[] args) {
 		// Тесты
 		Race dwarf = new Race("Дварф", 5, 0, -3, 4);
-		Hero you = new Hero("Макс", "ololo", 2, 1, 5, 5, 5, 5, dwarf, Profession.WARRIOR);
+		Hero you = new Hero("Макс", "ololo", 2, 1, 5, 5, 5, 5, dwarf, 2, Profession.WARRIOR);
 		//System.out.println("Опыт: " + you.exp.getPair());
 		you.initRaceBonuses();
 		
@@ -202,7 +204,27 @@ public class Dungeon {
 
 	}
 
-	
+	@Override
+	public boolean contains(int x, int y) {
+		return x>=0 && y>=0 && x<width && y<height;
+		//return true;
+	}
+
+	@Override
+	public boolean isObstacle(int x, int y) {
+		if(getTile(x, y).getPassable() == false){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	@Override
+	public void visit(int x, int y) {
+		getTile(x, y).setVisible(true);
+	}
+
 
 }
 

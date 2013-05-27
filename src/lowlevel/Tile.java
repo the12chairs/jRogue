@@ -10,6 +10,7 @@ public class Tile extends GraphObject {
 	//protected boolean visible;
 	protected boolean passable;
 	protected String texturePath;
+	protected boolean visited;
 	
 	public static void main(String[] args) {
 		//Tile t = new Tile("Стена", '#', true, false, 1, 1);
@@ -41,6 +42,7 @@ public class Tile extends GraphObject {
 		this.passable = passable;
 		this.x = x;
 		this.y = y;
+		visited = false;
 	}
 	
 	
@@ -53,11 +55,19 @@ public class Tile extends GraphObject {
 		this.face = face;
 		this.visible = visible;
 		this.passable = passable;
+		visited = false;
 	}
 	
 
 	
-	public void setName(String name){
+	public boolean getVisited(){
+		return visited;
+	}
+	
+	public void visit(){
+		visited = true;
+	}
+	void setName(String name){
 		this.name = name;
 	}
 	
