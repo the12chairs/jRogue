@@ -59,6 +59,7 @@ public class TileRenderer extends Thread {
 		try {
 			t = TextureLoader.getTexture
 					("PNG", ResourceLoader.getResourceAsStream(texturePath));
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -70,17 +71,24 @@ public class TileRenderer extends Thread {
 
 		GraphObject tmp = cDungeon.dungeon().get(0);
 		loadTexture(tmp.getFace()).bind();
-
+		
 		for(GraphObject tile : cDungeon.dungeon()){
+					
 			if(tile.getVisible() == true){
+				//Texture t = loadTexture(tile.getFace());
+				//t.bind();
+				//loadTexture(tile.getFace()).bind();
 				renderTile(tile);
-				//if(tmp.getFace() == tile.getFace)
-				if(!tmp.getFace().equals(tile.getFace())){
-					//System.out.println(tile.getFace());
-					tmp = tile;
-					loadTexture(tmp.getFace()).bind();
+			
+				//t.release();
+			}
+			
+			
+			if(!tmp.getFace().equals(tile.getFace())){
+				//System.out.println(tile.getFace());
+				tmp = tile;
+				loadTexture(tmp.getFace()).bind();
 
-				}
 			}
 			//updateFPS();
 		}
@@ -225,8 +233,7 @@ public class TileRenderer extends Thread {
 		
 		DungeonGenerator generator = new DungeonGenerator(30, 30, 5, 5);
 		Dungeon d = generator.generateDungeon();//new Dungeon("./modules/TestModule/locations/texture.json");
-		
-		
+		//Dungeon d = new Dungeon("./modules/TestModule/locations/generated.json");
 		System.out.println(d.getHeight());
 		//System.out.println(you.getFace());
 

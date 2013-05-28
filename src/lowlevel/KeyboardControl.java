@@ -1,30 +1,25 @@
 package lowlevel;
 
-import java.util.LinkedList;
-import java.util.List;
 
-import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 
 import lifeforms.AbstractCreature;
-import lifeforms.Hero;
 
-import rlforj.los.IConeFovAlgorithm;
 import rlforj.los.IFovAlgorithm;
 import rlforj.los.ShadowCasting;
-import sz.csi.CharKey;
-
 
 
 public class KeyboardControl extends Thread{
 	
 	private AbstractCreature controlled; // Кем управляем
 	private Dungeon dung; // Мля, вторая копия этого ублюдка
+	
+	/*
 	private boolean left = false;
 	private boolean right = false;
 	private boolean up = false;
 	private boolean down = false;	
-	
+	*/
 	
 	private IFovAlgorithm a = new ShadowCasting();
 	
@@ -89,7 +84,7 @@ public class KeyboardControl extends Thread{
 				//recreateVisible();
 				if(isPassable(t)){
 					controlled.move(0, -1);
-					up = true;
+					//up = true;
 				}
 
 			}
@@ -98,7 +93,7 @@ public class KeyboardControl extends Thread{
 				//recreateVisible();
 				if(isPassable(t)){
 					controlled.move(0, 1);	
-					down = true;
+					//down = true;
 				}
 
 			}
@@ -107,7 +102,7 @@ public class KeyboardControl extends Thread{
 				//recreateVisible();
 				if(isPassable(t)){
 					controlled.move(-1, 0);
-					left = true;
+					//left = true;
 				}
 
 			}
@@ -116,7 +111,7 @@ public class KeyboardControl extends Thread{
 				//recreateVisible();
 				if(isPassable(t)){
 					controlled.move(1, 0);
-					right = true;
+					//right = true;
 				}
 			}
 			recreateVisible();
