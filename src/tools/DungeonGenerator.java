@@ -66,7 +66,16 @@ public class DungeonGenerator {
 		}
 	
 	
-	
+	public int setRoomPoint(int min, int max){
+		Random rnd = new Random();
+		int point = rnd.nextInt(max);
+		while((point < min) && (point > max)){
+			point = rnd.nextInt(max);
+		}
+		
+		return point;
+		
+	}
 	
 	
 	public Room generateRoom(int hlx, int hly, int brx, int bry){
@@ -114,6 +123,9 @@ public class DungeonGenerator {
 		
 		Dungeon dungeon = new Dungeon(height, width);
 		
+		
+		Random rnd = new Random();
+		
 		for(int i = 0; i <= height; i++){
 			for(int j = 0; j <= width; j++){
 	
@@ -124,6 +136,13 @@ public class DungeonGenerator {
 
 		int prewH = 1;//horizontalDivide();
 		int prewW = 1;//verticalDivide();
+		
+		int x1;
+		int y1;
+		
+		int x2;
+		int y2;
+		
 		
 		//for(int i = 1; i < maxRooms; i++){
 		
@@ -138,25 +157,40 @@ public class DungeonGenerator {
 			
 		// Верхняя левая
 		
-		//dungeon.removeTile(6, 6);
-		//dungeon.addTile(floor, 6, 6);
 		
 		for(int j = prewW ; j < ww - 1; j++){
 			for(int k = prewH; k < wh - 1; k++){
 				dungeon.removeTile(j, k);
 				dungeon.addTile(new Tile(floor, j, k));
 			}
+			
 		}
 		
+		x1 = setRoomPoint(prewW, ww);//rnd.nextInt(ww);
+		y1 = setRoomPoint(prewH, wh);
+
+		x2 = rnd.nextInt(width);
+		y2 = rnd.nextInt(wh);
+		
+		System.out.println(x1+":"+y1);
+		
+		
+		//dungeon.removeTile(x1, y1);
+		//dungeon.removeTile(x2, y2);
 		// Верхняя правая
+		int coridor1 = rnd.nextInt(wh);
+		int coridor2 = rnd.nextInt(ww);
 		for(int j = ww ; j < width; j++){
 			for(int k = prewH; k < wh; k++){
 				dungeon.removeTile(j, k);
 				dungeon.addTile(new Tile(floor, j, k));
 			}
+			if(j == coridor2){
+
+			}
 		}
 		
-					
+		
 		// Нижняя левая
 		
 		for(int j = prewW; j < ww - 1; j++){
@@ -176,6 +210,11 @@ public class DungeonGenerator {
 		}
 					
 	
+		
+		
+		// Коридоры
+		
+		
 	
 		//while (wh)
 		//wh = horizontalDivide();
