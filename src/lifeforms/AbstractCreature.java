@@ -11,7 +11,7 @@ import lowlevel.AbstractThing;
 public abstract class AbstractCreature extends GraphObject{
 
 	//static enum Race { HUMAN, ELF, DWARF };
-	public static enum Profession { WARRIOR, ROGUE, MAGE }; 
+	public static enum Profession { WARRIOR, ROGUE, MAGE }; // Читать из директории profession
 	
 	protected String name;
 	//protected String face;

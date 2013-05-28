@@ -1,19 +1,29 @@
 package primitives;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import lowlevel.AbstractThing;
 
 public class Inventory {
 	
 	int itemNumber;
-	private LinkedList<AbstractThing> inventory;
+	
+	private List<AbstractThing> inventory;
 	
 	
 	public Inventory(){
 		
 		inventory = new LinkedList<AbstractThing>();
 		itemNumber = 0;
+	}
+	
+	
+	
+	
+	
+	public List<AbstractThing> allInvenory(){
+		return inventory;
 	}
 	
 	
