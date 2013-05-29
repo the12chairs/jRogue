@@ -18,5 +18,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/slick-util.jar"/>
 	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/rlforj.0.2.jar"/>
+	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/jruby.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
