@@ -6,6 +6,8 @@ import java.nio.file.NoSuchFileException;
 import org.jruby.embed.PathType;
 import org.jruby.embed.ScriptingContainer;
 
+import properties.Race;
+
 public class JRubyScripting {
 	ScriptingContainer ruby;
 	
@@ -27,13 +29,20 @@ public class JRubyScripting {
 		ruby.runScriptlet(PathType.ABSOLUTE, filename);
 	}
 	
+	/*
+	public Race loadRace(String filename){
+		Race r = new Race();
+		return race;
+	}
 	
+	*/
 	public static void main(String args[]){
 		JRubyScripting r = new JRubyScripting();
 		try {
 			r.evalFile("./scripts/test.rb");
+			//r.
 		} catch (NoSuchFileException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 	}

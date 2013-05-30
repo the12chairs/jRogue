@@ -48,7 +48,7 @@ public class Hero extends AbstractCreature{
 		this.questJournal.push(quest);
 	}
 	
-	public void makeQuest(Quest quest){
+	public void finishQuest(Quest quest){
 		for(Quest q : questJournal){
 			if(q == quest){
 				q.success();

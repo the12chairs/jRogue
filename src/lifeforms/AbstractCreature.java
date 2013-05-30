@@ -21,17 +21,48 @@ public abstract class AbstractCreature extends GraphObject{
 	protected Stat str;
 	protected Stat dex;
 	protected Stat intel;
-	protected long purse;
+	protected long purse; // Деньги-денежки
 	protected Stat mass;
 	protected Stat damage;
 	protected Inventory inventory;
 	protected int visionRadius;
+	protected Stat age; // Смари, current значение - текущий возраст, full значение - возраст смерти.
+	
 	// Интерфейс
 	public void move(int dx, int dy){
 		this.x += dx;
 		this.y += dy;
 	}
 
+	
+	public Stat hp(){
+		return hp;
+	}
+	
+	public Stat str(){
+		return str;
+	}
+	
+	public Stat dex(){
+		return dex;
+	}
+	public Stat intel(){
+		return intel;
+	}
+
+	
+	public Stat mass(){
+		return mass;
+	}
+	
+	public Stat age(){
+		return age;
+	}
+	
+	
+	public Inventory inventory(){
+		return inventory;
+	}
 	
 	public void getVisionRadius(int visionRadius){
 		this.visionRadius = visionRadius;
