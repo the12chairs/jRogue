@@ -7,9 +7,20 @@ public abstract class AbstractThing extends GraphObject{
 	
 	protected String name;
 	protected int heavy;
-	protected boolean visible;
+	//protected boolean visible;
 	protected int cost;
 	
+	
+	
+	
+	public AbstractThing(String name, String face, int heavy, int cost, long x, long y){
+		super(face, x, y);
+		this.name = name;
+		this.heavy = heavy;
+		this.cost = cost;
+	}
+
+
 	public void setName(String name){
 		this.name = name;
 	}

@@ -1,9 +1,13 @@
 package rendering;
 
+import items.Weapon;
+import items.Weapon.Type;
+
 import java.io.IOException;
 
 import lifeforms.Hero;
 import lifeforms.AbstractCreature.Profession;
+import lowlevel.AbstractThing;
 import lowlevel.Dungeon;
 import lowlevel.KeyboardControl;
 
@@ -20,6 +24,7 @@ import org.newdawn.slick.util.ResourceLoader;
 
 import primitives.GraphObject;
 import properties.Race;
+import properties.Stat;
 import tools.DungeonGenerator;
 
 public class TileRenderer extends Thread {
@@ -43,7 +48,6 @@ public class TileRenderer extends Thread {
 	
 	public TileRenderer(Dungeon cDungeon){
 		this.cDungeon = cDungeon;
-		//initGL(HEIGHT,WIDTH);
 	}
 	
 	
@@ -95,16 +99,21 @@ public class TileRenderer extends Thread {
 		
 		
 		
-		//System.out.println(cDungeon.getCreatures().size());
-
+		
+		for(AbstractThing item : cDungeon.getItems()){
+			if(item.getVisible() == true){
+				loadTexture(item.getFace()).bind();
+				renderTile(item);
+			}
+		}
 		
 		for(GraphObject creature : cDungeon.getCreatures()){
-			loadTexture(creature.getFace()).bind();
-			renderTile(creature);
+			if(creature.getVisible() == true){
+				loadTexture(creature.getFace()).bind();
+				renderTile(creature);
+			}
 		}
-
-
-		//System.out.println("Загрузок текстур: " + loads + ", против " + oldLoads + " загрузок ранее.");
+		
 	}
 	
 
@@ -236,11 +245,12 @@ public class TileRenderer extends Thread {
 		//Dungeon d = new Dungeon("./modules/TestModule/locations/generated.json");
 		System.out.println(d.getHeight());
 		//System.out.println(you.getFace());
-
+		you.setVisible(true);
 		d.addHero(you);
 				
-		
-		
+		Weapon sword = new Weapon("Звизда", "./res/items/star.png", Type.ONE_HAND_SWORD, new Stat(1, 2), 100, 10, 4, 4);
+		sword.setVisible(false);
+		d.addThing(sword);
 		TileRenderer r = new TileRenderer(d);
 	
 		r.controller.controlCreature(you);

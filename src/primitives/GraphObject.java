@@ -18,6 +18,12 @@ public class GraphObject {
 		
 	}
 	
+	public GraphObject(String face, long x, long y){
+		this.face = face;
+		this.x = x;
+		this.y = y;
+	}
+	
 	public GraphObject(String face){
 		this.face = face;
 	}

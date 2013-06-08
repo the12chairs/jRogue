@@ -2,6 +2,7 @@ package lowlevel;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 
 import lifeforms.AbstractCreature;
 import lifeforms.Hero;
@@ -68,6 +69,12 @@ public class Dungeon implements ILosBoard{
 	public LinkedList<AbstractCreature> getCreatures(){
 		return this.sceneLife;
 	}
+	
+	
+	public LinkedList<AbstractThing> getItems(){
+		return this.sceneThings;
+	}
+	
 	
 	public Dungeon(int x, int y){
 		//this.rooms = new LinkedList<Room>();
@@ -177,6 +184,28 @@ public class Dungeon implements ILosBoard{
 		dungeon.push(t);
 	}
 	
+	public AbstractCreature getCreature(long x, long y){
+		AbstractCreature creature = null;
+		for(AbstractCreature c : sceneLife){
+			if((c.getX() == x) && (c.getY() == y)){
+				creature = c;
+				break;
+			}
+		}
+		return creature;
+	}
+	
+	
+	public List<AbstractThing> getThings(long x, long y){
+		List<AbstractThing> things = new LinkedList<AbstractThing>();
+		for(AbstractThing t : sceneThings){
+			if((t.getX() == x) && (t.getY() == y)){
+				things.add(t);
+			}
+		}
+		return things;
+	}
+	
 	// Get tile by coords
 	public Tile getTile(long x, long y){
 		Tile t = null;
@@ -223,6 +252,9 @@ public class Dungeon implements ILosBoard{
 	@Override
 	public void visit(int x, int y) {
 		getTile(x, y).setVisible(true);
+		for(AbstractThing t : getThings(x, y)){
+			t.setVisible(true);
+		}
 	}
 
 

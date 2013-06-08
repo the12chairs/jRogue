@@ -35,7 +35,7 @@ public class Tile extends GraphObject {
 	
 	
 	public Tile(String name, String face, boolean visible, boolean passable, long x, long y){
-		super(face);
+		super(face, x, y);
 		this.name = name;
 		//this.face = face;
 		this.visible = visible;
