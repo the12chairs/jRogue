@@ -5,6 +5,7 @@ import items.Weapon.Type;
 
 import java.io.IOException;
 
+import lifeforms.AbstractCreature;
 import lifeforms.Hero;
 import lifeforms.AbstractCreature.Profession;
 import lowlevel.AbstractThing;
@@ -30,17 +31,23 @@ import tools.DungeonGenerator;
 public class TileRenderer extends Thread {
 
 	
+
 	
-	long lastFrame;
-	long lastFPS;
-	int fps;
+	
+	
+	public enum State {MAIN_MENU, DUNGEON, INVENTORY};
 	
 	private static final int HEIGHT = 800;
 	private static final int WIDTH = 600;
 	private static final int TILE_SIZE = 16;
-
 	
-	public KeyboardControl controller = new KeyboardControl();
+	private long lastFrame;
+	private long lastFPS;
+	private int fps;
+	
+	private State gameState;
+	
+	//public KeyboardControl controller = new KeyboardControl();
 	
 	
 	private Dungeon cDungeon;
@@ -48,14 +55,30 @@ public class TileRenderer extends Thread {
 	
 	public TileRenderer(Dungeon cDungeon){
 		this.cDungeon = cDungeon;
+		gameState = State.DUNGEON;
 	}
 	
 	
 	
-	
+	/*
 	public KeyboardControl getController(){
 		return controller;
 	}
+	
+	*/
+	
+	
+	
+	
+	
+	public void renderInventory(){
+		// Отрисовка инвентаря
+	}
+	
+	public void renderMainMenu(){
+		// Заглушка
+	}
+	
 	
 	// Грузим текстурку
 	public Texture loadTexture(String texturePath){
@@ -70,7 +93,7 @@ public class TileRenderer extends Thread {
 		return t;
 	}
 	
-	// Рисуем тайл
+	// Рисуем карту
 	public void renderDungeon(){
 
 		GraphObject tmp = cDungeon.dungeon().get(0);
@@ -117,7 +140,7 @@ public class TileRenderer extends Thread {
 	}
 	
 
-	
+	// Отрисовка отдельного тайла
 	public void renderTile(GraphObject tile){
 		
 		
@@ -143,6 +166,7 @@ public class TileRenderer extends Thread {
 	
 	@Override
 	public void run(){
+		System.out.println("Rendering thread has started.");
 		render();
 		Thread.yield();
 		
@@ -171,19 +195,39 @@ public class TileRenderer extends Thread {
 		fps++;
 	}
 	
+	// Устарело, логика вынесена в отдельный поток
+	/*
 	public void logic(){
 		controller.commandAction();
 	}
+	*/
 	
-	public void render(){
+	public void renderState(){
+		switch(gameState){
+		
+		case INVENTORY:
+			renderInventory();
+			break;
+		case DUNGEON:
+			renderDungeon();
+			break;
+		default:
+			break;
+			
+		}
+	}
+	
+	
+	
+	public synchronized void render(){
 		initGL(HEIGHT, WIDTH);
 
 		while (true) {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 			
 			//--------------			
-			renderDungeon();
-			logic();
+			renderState();
+			//logic();
 			//--------------
 			Display.update();
 			Display.sync(100);
@@ -236,14 +280,14 @@ public class TileRenderer extends Thread {
 		
 		
 		Race dwarf = new Race("Дварф", 5, 0, -3, 4);
-		Hero you = new Hero("Макс", "./modules/TestModule/heros/hero.png", 1, 1, 5, 5, 5, 5, dwarf, 3, Profession.WARRIOR);
+		Hero you = new Hero("Макс", "./modules/TestModule/heros/hero.png", 1, 1, 5, 5, 5, 5, dwarf, 4, Profession.WARRIOR);
 		
 		
 		
 		DungeonGenerator generator = new DungeonGenerator(30, 30, 5, 5);
 		Dungeon d = generator.generateDungeon();//new Dungeon("./modules/TestModule/locations/texture.json");
 		//Dungeon d = new Dungeon("./modules/TestModule/locations/generated.json");
-		System.out.println(d.getHeight());
+		//System.out.println(d.getHeight());
 		//System.out.println(you.getFace());
 		you.setVisible(true);
 		
@@ -253,22 +297,25 @@ public class TileRenderer extends Thread {
 		d.addThing(sword);
 		TileRenderer r = new TileRenderer(d);
 	
-		
-		r.controller.setDungeon(d);
+		KeyboardControl controller = new KeyboardControl();
+		//r.controller.setDungeon(d);
+		controller.setDungeon(d);
 		d.addHero(you);
-		r.controller.controlCreature(you);
+		controller.controlCreature(you);
+		//r.controller.controlCreature(you);
 		//r.controller.recreateVisible(); // Чтобы не появляться в темноте
-		r.render();
+		//r.render();
 		
 		
-		//Thread keyboard = new Thread(r.getController());
-		//Thread renderer = new Thread(r);
+		Thread keyboard = new Thread(controller);
+		Thread renderer = new Thread(r);
 		
 		//r.getController().controlCreature(you);
 		
-		//renderer.start();
-		//keyboard.start();
+		renderer.start();
 		
+		keyboard.start();
+
 
 	}
 
@@ -278,6 +325,20 @@ public class TileRenderer extends Thread {
 
 	public void setcDungeon(Dungeon cDungeon) {
 		this.cDungeon = cDungeon;
+	}
+
+
+
+
+	public State getGameState() {
+		return gameState;
+	}
+
+
+
+
+	public void setGameState(State gameState) {
+		this.gameState = gameState;
 	}
 
 

@@ -59,9 +59,11 @@ public class KeyboardControl extends Thread{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		commandAction();
-		Thread.yield();
+		System.out.println("Keyboard thread has started.");
+		while(true){
+			commandAction();
+			Thread.yield();
+		}
 		
 	}
 	
@@ -70,7 +72,7 @@ public class KeyboardControl extends Thread{
 		a.visitFieldOfView(dung, (int)controlled.getX(), (int)controlled.getY(), controlled.getVisionRadius());
 	}
 	
-	public void commandAction(){
+	public synchronized void commandAction(){
 		long x = controlled.getX();
 		long y = controlled.getY();
 		
@@ -115,7 +117,7 @@ public class KeyboardControl extends Thread{
 				}
 			}
 			// Взять предмет
-			if(Keyboard.isKeyDown(Keyboard.KEY_T)){
+			if(Keyboard.isKeyDown(Keyboard.KEY_COMMA)){
 				AbstractThing getted = null;
 				for(AbstractThing t : dung.getThings(x, y)){
 					if(t.getVisible() == true){
@@ -128,8 +130,17 @@ public class KeyboardControl extends Thread{
 					controlled.takeItem(getted);
 				}
 			}
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_I)){
+				Tile t = dung.getTile(x + 1, y);
+				//recreateVisible();
+				if(isPassable(t)){
+					controlled.move(1, 0);
+					//right = true;
+				}
+			}
+			
 			recreateVisible();
 		}
 	}
-
 }
