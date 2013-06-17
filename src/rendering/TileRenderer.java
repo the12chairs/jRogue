@@ -246,16 +246,18 @@ public class TileRenderer extends Thread {
 		System.out.println(d.getHeight());
 		//System.out.println(you.getFace());
 		you.setVisible(true);
-		d.addHero(you);
+		
 				
 		Weapon sword = new Weapon("Звизда", "./res/items/star.png", Type.ONE_HAND_SWORD, new Stat(1, 2), 100, 10, 4, 4);
 		sword.setVisible(false);
 		d.addThing(sword);
 		TileRenderer r = new TileRenderer(d);
 	
-		r.controller.controlCreature(you);
-		r.controller.setDungeon(d);
 		
+		r.controller.setDungeon(d);
+		d.addHero(you);
+		r.controller.controlCreature(you);
+		//r.controller.recreateVisible(); // Чтобы не появляться в темноте
 		r.render();
 		
 		

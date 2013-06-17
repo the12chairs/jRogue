@@ -43,6 +43,7 @@ public class KeyboardControl extends Thread{
 	
 	public void controlCreature(AbstractCreature creature){
 		controlled = creature;
+		recreateVisible();
 	}
 	
 	
@@ -72,7 +73,6 @@ public class KeyboardControl extends Thread{
 	public void commandAction(){
 		long x = controlled.getX();
 		long y = controlled.getY();
-		
 		
 		
 		//Tile t = dung.getTile(x, y);
@@ -112,6 +112,20 @@ public class KeyboardControl extends Thread{
 				if(isPassable(t)){
 					controlled.move(1, 0);
 					//right = true;
+				}
+			}
+			// Взять предмет
+			if(Keyboard.isKeyDown(Keyboard.KEY_T)){
+				AbstractThing getted = null;
+				for(AbstractThing t : dung.getThings(x, y)){
+					if(t.getVisible() == true){
+						getted = t;
+						dung.getItems().remove(getted);
+						break;
+					}
+				}
+				if(getted != null){
+					controlled.takeItem(getted);
 				}
 			}
 			recreateVisible();

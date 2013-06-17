@@ -59,6 +59,11 @@ public abstract class AbstractCreature extends GraphObject{
 		return age;
 	}
 	
+	/*
+	public void takeItem(AbstractThing t){
+		
+	}
+	*/
 	
 	public Inventory inventory(){
 		return inventory;
@@ -126,6 +131,7 @@ public abstract class AbstractCreature extends GraphObject{
 		this.inventory.pushItem(item);
 		this.mass.setCurrent(this.mass.getCurrent() + item.getHeavy());
 	}
+	
 	
 	public void dropItem(AbstractThing item){
 		this.inventory.dropItem(item);
