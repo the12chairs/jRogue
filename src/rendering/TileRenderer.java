@@ -45,7 +45,7 @@ public class TileRenderer extends Thread {
 	private long lastFPS;
 	private int fps;
 	
-	private State gameState;
+	public static State gameState;
 	
 	//public KeyboardControl controller = new KeyboardControl();
 	
@@ -59,20 +59,9 @@ public class TileRenderer extends Thread {
 	}
 	
 	
-	
-	/*
-	public KeyboardControl getController(){
-		return controller;
-	}
-	
-	*/
-	
-	
-	
-	
-	
 	public void renderInventory(){
 		// Отрисовка инвентаря
+		
 	}
 	
 	public void renderMainMenu(){
@@ -202,20 +191,20 @@ public class TileRenderer extends Thread {
 	}
 	*/
 	
-	public void renderState(){
-		switch(gameState){
-		
-		case INVENTORY:
-			renderInventory();
-			break;
-		case DUNGEON:
-			renderDungeon();
-			break;
-		default:
-			break;
+	 public void renderState(){
+		 // Состояния рендерера
+		 switch(gameState){
+		 case INVENTORY:
+			 renderInventory();
+			 break;
+		 case DUNGEON:
+			 renderDungeon();
+			 break;
+		 default:
+			 break;
 			
-		}
-	}
+		 }
+	 }
 	
 	
 	
@@ -227,7 +216,6 @@ public class TileRenderer extends Thread {
 			
 			//--------------			
 			renderState();
-			//logic();
 			//--------------
 			Display.update();
 			Display.sync(100);
@@ -236,7 +224,9 @@ public class TileRenderer extends Thread {
 			Display.destroy();
 			System.exit(0);
 			}
+		Thread.yield();
 		}
+		
 	}
 
 	
@@ -313,7 +303,6 @@ public class TileRenderer extends Thread {
 		//r.getController().controlCreature(you);
 		
 		renderer.start();
-		
 		keyboard.start();
 
 

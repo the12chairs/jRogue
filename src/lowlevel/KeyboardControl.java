@@ -5,6 +5,7 @@ import org.lwjgl.input.Keyboard;
 
 import lifeforms.AbstractCreature;
 
+import rendering.TileRenderer;
 import rlforj.los.IFovAlgorithm;
 import rlforj.los.ShadowCasting;
 
@@ -22,6 +23,8 @@ public class KeyboardControl extends Thread{
 	*/
 	
 	private IFovAlgorithm a = new ShadowCasting();
+	
+	private boolean invStatus = false; // открыт/закрыт инвентарь
 	
 	public KeyboardControl(){
 		System.out.println("Initializing keyboard controller...");
@@ -54,9 +57,8 @@ public class KeyboardControl extends Thread{
 	@Override
 	public void run() {
 		try {
-			sleep(1000);
+			sleep(2000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("Keyboard thread has started.");
@@ -76,11 +78,11 @@ public class KeyboardControl extends Thread{
 		long x = controlled.getX();
 		long y = controlled.getY();
 		
-		
+		//System.out.println(openInv);
 		//Tile t = dung.getTile(x, y);
 		
 		while(Keyboard.next()){
-			
+			int openInv = 0;	
 			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
 				Tile t = dung.getTile(x, y - 1);
 				//recreateVisible();
@@ -132,15 +134,27 @@ public class KeyboardControl extends Thread{
 			}
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_I)){
-				Tile t = dung.getTile(x + 1, y);
-				//recreateVisible();
-				if(isPassable(t)){
-					controlled.move(1, 0);
-					//right = true;
+				// Робит
+				if(getInvStatus()) {
+					TileRenderer.gameState = TileRenderer.State.DUNGEON;
+					setInvStatus(false);
+				}
+				else {
+					TileRenderer.gameState = TileRenderer.State.INVENTORY;
+					setInvStatus(true);
 				}
 			}
-			
 			recreateVisible();
 		}
+	}
+
+
+	public boolean getInvStatus() {
+		return invStatus;
+	}
+
+
+	public void setInvStatus(boolean invStatus) {
+		this.invStatus = invStatus;
 	}
 }
