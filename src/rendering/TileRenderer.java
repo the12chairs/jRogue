@@ -3,15 +3,17 @@ package rendering;
 import items.Weapon;
 import items.Weapon.Type;
 
+import java.awt.Font;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
-import lifeforms.AbstractCreature;
-import lifeforms.Hero;
 import lifeforms.AbstractCreature.Profession;
+import lifeforms.Hero;
 import lowlevel.AbstractThing;
 import lowlevel.Dungeon;
 import lowlevel.KeyboardControl;
-
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
@@ -19,6 +21,11 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+
+import org.newdawn.slick.Color;
+
+import org.newdawn.slick.TrueTypeFont;
+
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
@@ -35,7 +42,7 @@ public class TileRenderer extends Thread {
 	
 	
 	
-	public enum State {MAIN_MENU, DUNGEON, INVENTORY};
+	public enum State {MAIN_MENU, DUNGEON, INVENTORY, DROP_ITEM, WEAR_ARMOR, TAKE_WEAPON};
 	
 	private static final int HEIGHT = 800;
 	private static final int WIDTH = 600;
@@ -44,6 +51,10 @@ public class TileRenderer extends Thread {
 	private long lastFrame;
 	private long lastFPS;
 	private int fps;
+	
+	
+	private TrueTypeFont headFont;
+	private TrueTypeFont bodyFont;
 	
 	public static State gameState;
 	
@@ -62,6 +73,48 @@ public class TileRenderer extends Thread {
 	public void renderInventory(){
 		// Отрисовка инвентаря
 		
+		
+		// Хэш для управления предметами через буквенные идентификаторы
+		//HashMap<Character, AbstractThing> inventoryHash = new HashMap<Character, AbstractThing>();
+		
+		
+		headFont.drawString(WIDTH / 2 + 40, 20, "Inventory");
+		
+		int w = 50;
+		
+		
+		for (Entry<Integer, AbstractThing> entry : cDungeon.getHero().inventory().allInvenory().entrySet()) {
+			int h = 20;
+			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName(), Color.white);
+			w += 10;
+			System.out.println(entry.getValue().getName());
+		}
+
+	}
+
+	
+	
+	public void renderDrop(){
+		// Отрисовка меню выбрасывания предмета
+		
+		
+		// Хэш для управления предметами через буквенные идентификаторы
+		//HashMap<Character, AbstractThing> inventoryHash = new HashMap<Character, AbstractThing>();
+		
+		
+		headFont.drawString(WIDTH / 2 + 40, 20, "Inventory");
+		
+		int w = 50;
+		
+		
+		for (Entry<Integer, AbstractThing> entry : cDungeon.getHero().inventory().allInvenory().entrySet()) {
+			int h = 20;
+			bodyFont.drawString(h, w, entry.getKey().toString(), Color.white);
+			bodyFont.drawString(h + 10, w, entry.getValue().getName(), Color.white);
+
+			w += 10;
+		}
+
 	}
 	
 	public void renderMainMenu(){
@@ -197,6 +250,9 @@ public class TileRenderer extends Thread {
 		 case INVENTORY:
 			 renderInventory();
 			 break;
+		 case DROP_ITEM:
+			 renderDrop();
+			 break;
 		 case DUNGEON:
 			 renderDungeon();
 			 break;
@@ -262,9 +318,31 @@ public class TileRenderer extends Thread {
 		GL11.glOrtho(0, width, height, 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		System.out.println("Done!");
+		
+		System.out.println("Fonts initializing.");
+		initFonts();
+		System.out.println("Done!");
 	}
 	
-	
+	public void initFonts() {
+		// load a default java font
+		Font awtFont1 = new Font("Times New Roman", Font.BOLD, 24);
+		headFont = new TrueTypeFont(awtFont1, false);
+		Font awtFont2 = new Font("Times New Roman", Font.PLAIN, 14);
+		bodyFont = new TrueTypeFont(awtFont2, false);
+		/*	
+		// load font from a .ttf file
+		try {
+			InputStream inputStream	= ResourceLoader.getResourceAsStream("TIMCYR.TTF");
+			
+			Font awtFont2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+			awtFont2 = awtFont2.deriveFont(24f); // set font size
+			font2 = new TrueTypeFont(awtFont2, false);
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}*/
+	}
 	
 	public static void main(String args[]){
 		
@@ -282,7 +360,7 @@ public class TileRenderer extends Thread {
 		you.setVisible(true);
 		
 				
-		Weapon sword = new Weapon("Звизда", "./res/items/star.png", Type.ONE_HAND_SWORD, new Stat(1, 2), 100, 10, 4, 4);
+		Weapon sword = new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, new Stat(1, 2), 100, 10, 4, 4);
 		sword.setVisible(false);
 		d.addThing(sword);
 		TileRenderer r = new TileRenderer(d);

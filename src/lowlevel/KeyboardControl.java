@@ -74,14 +74,53 @@ public class KeyboardControl extends Thread{
 		a.visitFieldOfView(dung, (int)controlled.getX(), (int)controlled.getY(), controlled.getVisionRadius());
 	}
 	
+	
+	
+	
+	public synchronized void dropAction(){
+		if(TileRenderer.gameState == TileRenderer.State.DUNGEON){
+			commandAction();
+		}
+		while(Keyboard.next()){
+			
+
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_0)){
+				
+				AbstractThing dropped = controlled.inventory().allInvenory().get(0);
+				controlled.inventory().dropItem(0);
+				long x = controlled.getX();
+				long y = controlled.getY();
+				
+				dropped.setX(x);
+				dropped.setY(y);
+				dung.addThing(dropped);
+				TileRenderer.gameState = TileRenderer.State.DUNGEON;
+			}
+			
+		}
+	}
+	
 	public synchronized void commandAction(){
+
 		long x = controlled.getX();
 		long y = controlled.getY();
 		
 		//System.out.println(openInv);
 		//Tile t = dung.getTile(x, y);
 		
+		if(TileRenderer.gameState == TileRenderer.State.DROP_ITEM){
+			System.out.println("ololo");
+			dropAction();
+		}
+		
 		while(Keyboard.next()){
+			
+			
+
+			
+			
+			
 			int openInv = 0;	
 			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
 				Tile t = dung.getTile(x, y - 1);
@@ -141,6 +180,18 @@ public class KeyboardControl extends Thread{
 				}
 				else {
 					TileRenderer.gameState = TileRenderer.State.INVENTORY;
+					setInvStatus(true);
+				}
+			}
+			// Дроп
+			if(Keyboard.isKeyDown(Keyboard.KEY_D)){
+				// Робит
+				if(getInvStatus()) {
+					TileRenderer.gameState = TileRenderer.State.DUNGEON;
+					setInvStatus(false);
+				}
+				else {
+					TileRenderer.gameState = TileRenderer.State.DROP_ITEM;
 					setInvStatus(true);
 				}
 			}

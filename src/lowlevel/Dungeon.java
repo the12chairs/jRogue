@@ -40,6 +40,10 @@ public class Dungeon implements ILosBoard{
 		sceneLife.addFirst(hero);
 	}
 	
+	public AbstractCreature getHero(){
+		return sceneLife.getFirst();
+	}
+	
 	public void addThing(AbstractThing thing){
 		sceneThings.push(thing);
 	}

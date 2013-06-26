@@ -132,9 +132,10 @@ public abstract class AbstractCreature extends GraphObject{
 		this.mass.setCurrent(this.mass.getCurrent() + item.getHeavy());
 	}
 	
-	
+	/*
 	public void dropItem(AbstractThing item){
 		this.inventory.dropItem(item);
 		this.mass.setCurrent(this.mass.getCurrent() - item.getHeavy());
 	}
+	*/
 }
