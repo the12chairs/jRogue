@@ -48,6 +48,14 @@ public class Dungeon implements ILosBoard{
 		sceneThings.push(thing);
 	}
 	
+	public void addThing(AbstractThing thing, long x, long y){
+		thing.setX(x);
+		thing.setY(y);
+		sceneThings.push(thing);
+	}
+	
+	
+	
 	public void addLife(AbstractCreature life){
 		sceneLife.push(life);
 	}
@@ -230,7 +238,7 @@ public class Dungeon implements ILosBoard{
 		you.initRaceBonuses();
 		
 		System.out.println(you.getFace());
-		Dungeon d = new Dungeon("./modules/TestModule/locations/texture.json");
+		//Dungeon d = new Dungeon("./modules/TestModule/locations/texture.json");
 		LinkedList<AbstractCreature> f = new LinkedList<AbstractCreature>();
 		f.push(you);
 		//d.addLife(you);

@@ -7,7 +7,6 @@ public class Weapon extends AbstractThing{
 
 	
 	public enum Type {
-		
 		ONE_HAND_SWORD,
 		TWO_HAND_SWORD,
 		MACE,
@@ -19,12 +18,13 @@ public class Weapon extends AbstractThing{
 	
 	private Type type;
 	private Stat damage;
+	private String symType;
 	
 	
-	
-	public Weapon(String name, String face, Type type, Stat damage, int heavy, int cost, long x, long y){
+	public Weapon(String name, String face, Type type, String symType, Stat damage, int heavy, int cost, long x, long y){
 		super(name, face, heavy, cost, x, y);
 		this.type = type;
+		this.symType = symType;
 		this.damage = damage;
 
 	}

@@ -1,12 +1,8 @@
 package primitives;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import lowlevel.AbstractThing;
 
@@ -53,28 +49,24 @@ public class Inventory {
 	}
 	
 	
-	
+	// Удаление по ключу
 	public void dropItem(Integer key){
 
 		inventory.remove(key);
 		itemNumber--;
 	}
 	
-	
-	// Более не работает, выкидываем элементы по ключу
-	/*
+	// Удаление по значению
 	public void dropItem(AbstractThing item){
-		for(AbstractThing i : this.inventory){
-			if(i == item){
-				inventory.remove(i); // ???
+		
+		
+		for(Entry<Integer, AbstractThing> t: inventory.entrySet())
+		
+			if(t == item){
+				inventory.remove(t.getKey());
 				itemNumber--;
 			}
-		}
 	}
-	*/
-	public static void main(String[] args) {
-		
 
-	}
 
 }

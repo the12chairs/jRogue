@@ -5,8 +5,6 @@ import items.Weapon.Type;
 
 import java.awt.Font;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map.Entry;
 
 import lifeforms.AbstractCreature.Profession;
@@ -98,21 +96,18 @@ public class TileRenderer extends Thread {
 		// Отрисовка меню выбрасывания предмета
 		
 		
-		// Хэш для управления предметами через буквенные идентификаторы
-		//HashMap<Character, AbstractThing> inventoryHash = new HashMap<Character, AbstractThing>();
 		
 		
-		headFont.drawString(WIDTH / 2 + 40, 20, "Inventory");
+		headFont.drawString(WIDTH / 2 + 40, 20, "Drop item");
 		
 		int w = 50;
 		
 		
 		for (Entry<Integer, AbstractThing> entry : cDungeon.getHero().inventory().allInvenory().entrySet()) {
 			int h = 20;
-			bodyFont.drawString(h, w, entry.getKey().toString(), Color.white);
-			bodyFont.drawString(h + 10, w, entry.getValue().getName(), Color.white);
-
+			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName(), Color.white);
 			w += 10;
+			System.out.println(entry.getValue().getName());
 		}
 
 	}
@@ -360,7 +355,7 @@ public class TileRenderer extends Thread {
 		you.setVisible(true);
 		
 				
-		Weapon sword = new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, new Stat(1, 2), 100, 10, 4, 4);
+		Weapon sword = new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Stat(1, 2), 100, 10, 4, 4);
 		sword.setVisible(false);
 		d.addThing(sword);
 		TileRenderer r = new TileRenderer(d);
@@ -394,19 +389,6 @@ public class TileRenderer extends Thread {
 		this.cDungeon = cDungeon;
 	}
 
-
-
-
-	public State getGameState() {
-		return gameState;
-	}
-
-
-
-
-	public void setGameState(State gameState) {
-		this.gameState = gameState;
-	}
 
 
 }
