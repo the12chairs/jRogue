@@ -1,48 +1,58 @@
 package tools;
 
 import java.io.File;
-import java.nio.file.NoSuchFileException;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+/*
+import org.jruby.Ruby;
+import org.jruby.RubyRuntimeAdapter;
+import org.jruby.javasupport.JavaEmbedUtils; 
+*/
 
-import org.jruby.embed.PathType;
-import org.jruby.embed.ScriptingContainer;
 
-import properties.Race;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import javax.script.ScriptContext;
+
 
 public class JRubyScripting {
-	ScriptingContainer ruby;
-	
-	public JRubyScripting(){
-		ruby = new ScriptingContainer();
-	}
-	
-	
-	// Обертки для удобства
-	
-	public void evalString(String code){
-		ruby.runScriptlet(code);
-	}
-	
-	
-	
-	public void evalFile(String filename) throws NoSuchFileException{
-		//File f = new File(filename);
-		ruby.runScriptlet(PathType.ABSOLUTE, filename);
-	}
-	
 	/*
-	public Race loadRace(String filename){
-		Race r = new Race();
-		return race;
+	
+	private Ruby runtime = JavaEmbedUtils.initialize(new ArrayList());
+	private RubyRuntimeAdapter evaler = JavaEmbedUtils.newRuntimeAdapter();
+*/
+	
+	private ScriptEngine ruby = new ScriptEngineManager().getEngineByName("jruby");
+    //process a ruby file
+    //jruby.eval(new BufferedReader(new FileReader("myruby.rb")));
+	
+	public void eval(String expression) throws ScriptException{
+		ruby.eval(expression);
+		//JavaEmbedUtils.terminate(runtime);		
 	}
 	
-	*/
+	public void evalFile(String filename) throws FileNotFoundException, ScriptException{
+		String content = new Scanner(new File(filename)).useDelimiter("\\Z").next();
+		eval(content);
+	}
+	
+	
+	
 	public static void main(String args[]){
 		JRubyScripting r = new JRubyScripting();
 		try {
-			r.evalFile("./scripts/test.rb");
-			//r.
-		} catch (NoSuchFileException e) {
-
+			try {
+				r.evalFile("./scripts/weapon.rb");
+				r.ruby.put("ololo", 1);
+			} catch (ScriptException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

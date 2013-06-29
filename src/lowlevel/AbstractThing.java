@@ -5,19 +5,32 @@ import primitives.GraphObject;
 
 public abstract class AbstractThing extends GraphObject{
 	
+	
+	
+	public static enum MainType{
+		WEAPON,
+		ARMOR,
+		THING,
+		POTION,
+		SCROLL
+	}
+	
+	private MainType mType;
+	
 	protected String name;
 	protected int heavy;
-	//protected boolean visible;
 	protected int cost;
 	
+	protected int bonus;
 	
 	
 	
-	public AbstractThing(String name, String face, int heavy, int cost, long x, long y){
+	public AbstractThing(String name, String face, int heavy, int cost, long x, long y, MainType mType){
 		super(face, x, y);
 		this.name = name;
 		this.heavy = heavy;
 		this.cost = cost;
+		this.mType = mType;
 	}
 
 
@@ -25,6 +38,15 @@ public abstract class AbstractThing extends GraphObject{
 		this.name = name;
 	}
 	
+	
+	
+	public void setBonus(int bonus){
+		this.bonus = bonus;
+	}
+	
+	public int getBonus(){
+		return bonus;
+	}
 
 	public void setPos(int x, int y){
 		this.x = x;
@@ -57,5 +79,15 @@ public abstract class AbstractThing extends GraphObject{
 	
 	public boolean getVisible(){
 		return visible;
+	}
+
+
+	public MainType getMType() {
+		return mType;
+	}
+
+
+	public void setMType(MainType mType) {
+		this.mType = mType;
 	}
 }

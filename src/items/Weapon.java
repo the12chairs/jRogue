@@ -1,7 +1,7 @@
 package items;
 
+import dnd.Dice;
 import lowlevel.AbstractThing;
-import properties.Stat;
 
 public class Weapon extends AbstractThing{
 
@@ -17,26 +17,35 @@ public class Weapon extends AbstractThing{
 	
 	
 	private Type type;
-	private Stat damage;
+	//private Stat damage;
+	private Dice damage;
 	private String symType;
 	
 	
-	public Weapon(String name, String face, Type type, String symType, Stat damage, int heavy, int cost, long x, long y){
-		super(name, face, heavy, cost, x, y);
+	public Weapon(String name, String face, Type type, String symType,
+			Dice damage, int heavy, int cost, long x, long y){
+		
+		
+		super(name, face, heavy, cost, x, y, AbstractThing.MainType.WEAPON);
 		this.type = type;
 		this.symType = symType;
 		this.damage = damage;
+		
+		
+	}
+	
+	
+	public Type getType(){
+		return this.type;
+	}
 
+	public Dice getDamage(){
+		return this.damage;
 	}
 	
 	
 	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
-		
-		
-		
+	public String getSymType(){
+		return this.symType;
 	}
-
 }

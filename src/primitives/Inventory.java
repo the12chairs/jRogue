@@ -1,5 +1,7 @@
 package primitives;
 
+import items.Weapon;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -27,6 +29,19 @@ public class Inventory {
 		return inventory;
 	}
 	
+	
+	public Map<Integer, Weapon> getAllWeapon(){
+		Map<Integer, Weapon> weapons = new HashMap<Integer, Weapon>();
+		
+		for (Entry<Integer, AbstractThing> entry : inventory.entrySet()){
+			if(entry.getValue().getMType() == AbstractThing.MainType.WEAPON){
+				weapons.put(entry.getKey(), (Weapon) entry.getValue());
+				//System.out.println(entry.getValue().getName());
+			}
+		}
+
+		return weapons;
+	}
 	
 	public AbstractThing findByName(String name){
 		for(AbstractThing i : this.inventory.values()){

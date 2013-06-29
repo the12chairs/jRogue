@@ -28,6 +28,8 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
+import dnd.Dice;
+
 import primitives.GraphObject;
 import properties.Race;
 import properties.Stat;
@@ -72,10 +74,6 @@ public class TileRenderer extends Thread {
 		// Отрисовка инвентаря
 		
 		
-		// Хэш для управления предметами через буквенные идентификаторы
-		//HashMap<Character, AbstractThing> inventoryHash = new HashMap<Character, AbstractThing>();
-		
-		
 		headFont.drawString(WIDTH / 2 + 40, 20, "Inventory");
 		
 		int w = 50;
@@ -85,7 +83,7 @@ public class TileRenderer extends Thread {
 			int h = 20;
 			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName(), Color.white);
 			w += 10;
-			System.out.println(entry.getValue().getName());
+
 		}
 
 	}
@@ -94,10 +92,7 @@ public class TileRenderer extends Thread {
 	
 	public void renderDrop(){
 		// Отрисовка меню выбрасывания предмета
-		
-		
-		
-		
+			
 		headFont.drawString(WIDTH / 2 + 40, 20, "Drop item");
 		
 		int w = 50;
@@ -107,10 +102,28 @@ public class TileRenderer extends Thread {
 			int h = 20;
 			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName(), Color.white);
 			w += 10;
-			System.out.println(entry.getValue().getName());
 		}
 
 	}
+	
+	
+	
+	public void renderWeapon(){
+		headFont.drawString(WIDTH / 2 + 40, 20, "Weapon");
+		
+		int w = 50;
+		
+		
+		for (Entry<Integer, Weapon> entry : cDungeon.getHero().inventory().getAllWeapon().entrySet()) {
+			int h = 20;
+			//System.out.println(entry.getValue().getDamage().getDice());
+			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName() + 
+					" +" + entry.getValue().getBonus() + " " + entry.getValue().getDamage().getDice(), Color.white);
+			w += 10;
+
+		}
+	}
+	
 	
 	public void renderMainMenu(){
 		// Заглушка
@@ -232,12 +245,6 @@ public class TileRenderer extends Thread {
 		fps++;
 	}
 	
-	// Устарело, логика вынесена в отдельный поток
-	/*
-	public void logic(){
-		controller.commandAction();
-	}
-	*/
 	
 	 public void renderState(){
 		 // Состояния рендерера
@@ -250,6 +257,9 @@ public class TileRenderer extends Thread {
 			 break;
 		 case DUNGEON:
 			 renderDungeon();
+			 break;
+		 case TAKE_WEAPON:
+			 renderWeapon();
 			 break;
 		 default:
 			 break;
@@ -355,8 +365,12 @@ public class TileRenderer extends Thread {
 		you.setVisible(true);
 		
 				
-		Weapon sword = new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Stat(1, 2), 100, 10, 4, 4);
+		Weapon sword = new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 6), 100, 10, 4, 4);
+		
+		
+		
 		sword.setVisible(false);
+		sword.setBonus(1);
 		d.addThing(sword);
 		TileRenderer r = new TileRenderer(d);
 	

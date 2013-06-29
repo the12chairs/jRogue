@@ -1,7 +1,11 @@
 package lowlevel;
 
 
+import items.Weapon;
+
 import org.lwjgl.input.Keyboard;
+
+import properties.Weaponable;
 
 import lifeforms.AbstractCreature;
 
@@ -84,6 +88,31 @@ public class KeyboardControl extends Thread{
 		
 		if(TileRenderer.gameState == TileRenderer.State.DUNGEON){
 			commandAction();
+		}
+		
+		if(TileRenderer.gameState == TileRenderer.State.TAKE_WEAPON){
+			takeWeaponAction();
+		}
+		
+	}
+	
+	
+	
+	public synchronized void takeWeaponAction(){
+		
+		Weaponable w = (Weaponable) controlled;
+		while(Keyboard.next()){
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_0)){
+				Weapon wep = controlled.inventory().getAllWeapon().get(0);
+				w.useWeapon(wep);
+				controlled = (AbstractCreature) w;
+			}
+			
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
+				TileRenderer.gameState = TileRenderer.State.DUNGEON;
+			}
 		}
 		
 	}
@@ -185,6 +214,11 @@ public class KeyboardControl extends Thread{
 				TileRenderer.gameState = TileRenderer.State.DROP_ITEM;
 			}
 			
+			// Список оружия
+			if(Keyboard.isKeyDown(Keyboard.KEY_W)){
+				TileRenderer.gameState = TileRenderer.State.TAKE_WEAPON;
+			}
+			System.out.println(controlled.getDamage().getDice());
 			recreateVisible();
 		}
 	}

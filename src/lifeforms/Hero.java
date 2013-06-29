@@ -1,17 +1,22 @@
 package lifeforms;
 
+import items.Weapon;
+
 import java.util.LinkedList;
+
+import dnd.Dice;
 
 
 import primitives.Inventory;
 import primitives.Quest;
 import properties.Race;
 import properties.Stat;
+import properties.Weaponable;
 
 
 
 
-public class Hero extends AbstractCreature{
+public class Hero extends AbstractCreature implements Weaponable{
 
 	
 	LinkedList<Quest> questJournal; // Активные, выполненные, проваленные. Смотрим по флажку в Quest
@@ -83,7 +88,7 @@ public class Hero extends AbstractCreature{
 		this.level = 0;
 		this.exp = new Stat(0, firstExpCoef);
 		this.statPoints = 0;
-		this.damage = new Stat(str, str + damageCoef);
+		this.damage = new Dice(1, 3);//new Stat(str, str + damageCoef);
 		this.visionRadius = visionRadius;
 	}
 	
@@ -119,6 +124,25 @@ public class Hero extends AbstractCreature{
 
 	public void setStatPoints(long statPoints) {
 		this.statPoints = statPoints;
+	}
+
+	@Override
+	public void useWeapon(Weapon w) {
+		
+		this.damage = w.getDamage(); 
+		weaponed = true;
+		
+	}
+
+	@Override
+	public void unuseWeapon() {
+		this.damage = calculateDamage();
+		
+	}
+
+	@Override
+	public boolean isWeaponed() {
+		return weaponed;
 	}
 
 

@@ -1,5 +1,6 @@
 package lifeforms;
 
+import dnd.Dice;
 import primitives.GraphObject;
 import primitives.Inventory;
 import properties.Race;
@@ -23,11 +24,11 @@ public abstract class AbstractCreature extends GraphObject{
 	protected Stat intel;
 	protected long purse; // Деньги-денежки
 	protected Stat mass;
-	protected Stat damage;
+	protected Dice damage;
 	protected Inventory inventory;
 	protected int visionRadius;
 	protected Stat age; // Смари, current значение - текущий возраст, full значение - возраст смерти.
-	
+	protected boolean weaponed;
 	// Интерфейс
 	public void move(int dx, int dy){
 		this.x += dx;
@@ -98,6 +99,15 @@ public abstract class AbstractCreature extends GraphObject{
 		this.name = name;
 	}
 	
+	
+	
+	public Dice getDamage(){
+		return damage;
+	}
+	
+	public Dice calculateDamage(){
+		return new Dice(1,3);
+	}
 	
 	// Выставим расовые бонусы
 	public void initRaceBonuses(){
