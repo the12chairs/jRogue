@@ -359,19 +359,14 @@ public class TileRenderer extends Thread {
 		
 		DungeonGenerator generator = new DungeonGenerator(30, 30, 5, 5);
 		Dungeon d = generator.generateDungeon();//new Dungeon("./modules/TestModule/locations/texture.json");
-		//Dungeon d = new Dungeon("./modules/TestModule/locations/generated.json");
-		//System.out.println(d.getHeight());
-		//System.out.println(you.getFace());
+
 		you.setVisible(true);
 		
 				
-		Weapon sword = new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 6), 100, 10, 4, 4);
+		d.addThing(new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 6), 100, 10, 4, 4));
 		
-		
-		
-		sword.setVisible(false);
-		sword.setBonus(1);
-		d.addThing(sword);
+		d.addThing(new Weapon("Pipka", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 8), 100, 10, 4, 5));
+
 		TileRenderer r = new TileRenderer(d);
 	
 		KeyboardControl controller = new KeyboardControl();
@@ -379,15 +374,12 @@ public class TileRenderer extends Thread {
 		controller.setDungeon(d);
 		d.addHero(you);
 		controller.controlCreature(you);
-		//r.controller.controlCreature(you);
-		//r.controller.recreateVisible(); // Чтобы не появляться в темноте
-		//r.render();
-		
+
 		
 		Thread keyboard = new Thread(controller);
 		Thread renderer = new Thread(r);
 		
-		//r.getController().controlCreature(you);
+
 		
 		renderer.start();
 		keyboard.start();

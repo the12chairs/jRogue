@@ -104,11 +104,22 @@ public class KeyboardControl extends Thread{
 		while(Keyboard.next()){
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_0)){
-				Weapon wep = controlled.inventory().getAllWeapon().get(0);
-				w.useWeapon(wep);
+				w.useWeapon(controlled.inventory().getAllWeapon().get(0));
 				controlled = (AbstractCreature) w;
 			}
 			
+			if(Keyboard.isKeyDown(Keyboard.KEY_1)){
+				w.useWeapon(controlled.inventory().getAllWeapon().get(1));
+				controlled = (AbstractCreature) w;
+			}
+			if(Keyboard.isKeyDown(Keyboard.KEY_2)){
+				w.useWeapon(controlled.inventory().getAllWeapon().get(2));
+				controlled = (AbstractCreature) w;
+			}
+			if(Keyboard.isKeyDown(Keyboard.KEY_3)){
+				w.useWeapon(controlled.inventory().getAllWeapon().get(3));
+				controlled = (AbstractCreature) w;
+			}
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
 				TileRenderer.gameState = TileRenderer.State.DUNGEON;
@@ -121,17 +132,23 @@ public class KeyboardControl extends Thread{
 	public synchronized void dropAction(){
 		
 		
+		long x = controlled.getX();
+		long y = controlled.getY();
+		
+		
+		
 		while(Keyboard.next()){
 			
+
 			if(Keyboard.isKeyDown(Keyboard.KEY_0)){
-				
-				AbstractThing dropped = controlled.inventory().allInvenory().get(0);
+				AbstractThing dropped = null;
+				dropped = controlled.inventory().allInvenory().get(0);
 				controlled.inventory().dropItem(0);
-				long x = controlled.getX();
-				long y = controlled.getY();
-			
 				dung.addThing(dropped, x, y);
+				
 			}
+			
+
 			
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){

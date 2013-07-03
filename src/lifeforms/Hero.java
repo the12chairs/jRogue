@@ -2,7 +2,11 @@ package lifeforms;
 
 import items.Weapon;
 
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map.Entry;
+
+import lowlevel.AbstractThing;
 
 import dnd.Dice;
 
@@ -29,7 +33,6 @@ public class Hero extends AbstractCreature implements Weaponable{
 	private static final int statCoef = 10;
 	private static final int firstExpCoef = 5;
 	private static final int massCoef = 8;
-	private static final int damageCoef = 3;
 	// Пока уровень не является отдельной сущностью. Пусть будет тут
 	public boolean isLevelUp(){
 		if(this.exp.getCurrent() >= this.exp.getFull()){
@@ -128,15 +131,33 @@ public class Hero extends AbstractCreature implements Weaponable{
 
 	@Override
 	public void useWeapon(Weapon w) {
-		
-		this.damage = w.getDamage(); 
-		weaponed = true;
+		 
+		//Чорная магия, не трожь! 
+		for(Entry<Integer, Weapon> p : inventory.getAllWeapon().entrySet()){
+			if(p.getValue() == w){
+				
+				// Если руки заняты, меняем оружие
+				if(hands != null){
+					//System.out.println("Ololo");
+					//inventory.pushItem(hands);
+					takeItem(hands);
+					hands = null;
+				}
+				else{
+					hands = p.getValue();
+					damage = hands.getDamage();
+					dropItem(p.getKey());
+				}
+				break;
+			}
+				
+		}
 		
 	}
 
 	@Override
 	public void unuseWeapon() {
-		this.damage = calculateDamage();
+		this.damage = new Dice(1, 3);
 		
 	}
 

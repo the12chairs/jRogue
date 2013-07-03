@@ -1,5 +1,6 @@
 package lifeforms;
 
+import items.Weapon;
 import dnd.Dice;
 import primitives.GraphObject;
 import primitives.Inventory;
@@ -29,6 +30,7 @@ public abstract class AbstractCreature extends GraphObject{
 	protected int visionRadius;
 	protected Stat age; // Смари, current значение - текущий возраст, full значение - возраст смерти.
 	protected boolean weaponed;
+	protected Weapon hands;
 	// Интерфейс
 	public void move(int dx, int dy){
 		this.x += dx;
@@ -143,9 +145,10 @@ public abstract class AbstractCreature extends GraphObject{
 	}
 	
 	
-	public void dropItem(AbstractThing item){
+	public void dropItem(Integer item){
+		AbstractThing t = inventory.allInvenory().get(item);
 		this.inventory.dropItem(item);
-		this.mass.setCurrent(this.mass.getCurrent() - item.getHeavy());
+		this.mass.setCurrent(this.mass.getCurrent() - t.getHeavy());
 	}
 	
 }
