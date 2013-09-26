@@ -2,22 +2,18 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/json-simple-1.1.1.jar"/>
-	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/jcurses-x.jar"/>
-	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/libjcsi.jar"/>
-	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/jinput.jar"/>
-	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/lwjgl.jar">
+	<classpathentry kind="lib" path="/home/max/src/java/jRogue/libs/jcurses-x.jar"/>
+	<classpathentry kind="lib" path="/home/max/src/java/jRogue/libs/jinput.jar"/>
+	<classpathentry kind="lib" path="/home/max/src/java/jRogue/libs/jruby.jar"/>
+	<classpathentry kind="lib" path="/home/max/src/java/jRogue/libs/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/home/max/src/java/jRogue/libs/libjcsi.jar"/>
+	<classpathentry kind="lib" path="/home/max/src/java/jRogue/libs/lwjgl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/max/java_projects/jRogue/libs/native/linux"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/max/src/java/jRogue/libs/native/linux"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/lwjgl_util.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/home/max/java_projects/jRogue/libs/native"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/slick-util.jar"/>
-	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/rlforj.0.2.jar"/>
-	<classpathentry kind="lib" path="/home/max/java_projects/jRogue/libs/jruby.jar"/>
+	<classpathentry kind="lib" path="/home/max/src/java/jRogue/libs/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="/home/max/src/java/jRogue/libs/rlforj.0.2.jar"/>
+	<classpathentry kind="lib" path="/home/max/src/java/jRogue/libs/slick-util.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
