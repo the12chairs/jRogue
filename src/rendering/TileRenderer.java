@@ -41,8 +41,10 @@ public class TileRenderer extends Thread {
 
 	
 	
-	
-	public enum State {MAIN_MENU, DUNGEON, INVENTORY, DROP_ITEM, WEAR_ARMOR, TAKE_WEAPON};
+	// TODO: Сделать обработку этих состояний
+	public enum State { MAIN_MENU, DUNGEON, INVENTORY,
+						DROP_ITEM, WEAR_ARMOR, TAKE_WEAPON,
+						MAGICK, ALCHEMY, RUNES, CRAFT };
 	
 	private static final int HEIGHT = 800;
 	private static final int WIDTH = 600;
@@ -58,15 +60,21 @@ public class TileRenderer extends Thread {
 	
 	public static State gameState;
 	
-	//public KeyboardControl controller = new KeyboardControl();
-	
 	
 	private Dungeon cDungeon;
+	
+	
+	
+	
+	private Checkbox check;
+	
+	
 	
 	
 	public TileRenderer(Dungeon cDungeon){
 		this.cDungeon = cDungeon;
 		gameState = State.DUNGEON;
+		check = new Checkbox(">");
 	}
 	
 	
@@ -90,6 +98,11 @@ public class TileRenderer extends Thread {
 
 	
 	
+	
+	public Checkbox getCheckbox(){
+		return check;
+	}
+	
 	public void renderDrop(){
 		// Отрисовка меню выбрасывания предмета
 			
@@ -109,19 +122,23 @@ public class TileRenderer extends Thread {
 	
 	
 	public void renderWeapon(){
+		
 		headFont.drawString(WIDTH / 2 + 40, 20, "Weapon");
 		
 		int w = 50;
 		
+		//Checkbox check = new Checkbox(">");
 		
 		for (Entry<Integer, Weapon> entry : cDungeon.getHero().inventory().getAllWeapon().entrySet()) {
 			int h = 20;
 			//System.out.println(entry.getValue().getDamage().getDice());
 			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName() + 
-					" +" + entry.getValue().getBonus() + " " + entry.getValue().getDamage().getDice(), Color.white);
+					" +" + entry.getValue().getBonus() + " " + entry.getValue().getDamage().getPair(), Color.white);
 			w += 10;
 
 		}
+		check.render();
+		
 	}
 	
 	
@@ -395,6 +412,40 @@ public class TileRenderer extends Thread {
 		this.cDungeon = cDungeon;
 	}
 
+	
+	
+	// Контейнер, содержащий выбранный предмет
+	public class Checkbox {
+		
+		private AbstractThing checked; // Предмет
+		private int checkedPos; // Его позиция в инвентаре (0 - N)
+		
+		private String mark;
+		
+		
+		public Checkbox(String mark) {
+			this.mark = mark;
+		}
+		
+		
+		
+		public void render(){
+			bodyFont.drawString(checkedPos, 0, mark);
+		}
+		
+		public void prev() {
+			checkedPos++;
+		}
+	
+		public void next() {
+			checkedPos--;
+		}
+		
+		public void mark(AbstractThing t) {
+			checked = t;
+		}
+	}
+	
 
 
 }

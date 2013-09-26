@@ -235,7 +235,7 @@ public class KeyboardControl extends Thread{
 			if(Keyboard.isKeyDown(Keyboard.KEY_W)){
 				TileRenderer.gameState = TileRenderer.State.TAKE_WEAPON;
 			}
-			System.out.println(controlled.getDamage().getDice());
+			//System.out.println(controlled.getDamage().getDice());
 			recreateVisible();
 		}
 	}
