@@ -64,7 +64,7 @@ public class TileRenderer extends Thread {
 	
 	
 	
-	private Checkbox check;
+	public static Checkbox check;
 	
 	
 	
@@ -88,7 +88,7 @@ public class TileRenderer extends Thread {
 		for (Entry<Integer, AbstractThing> entry : cDungeon.getHero().inventory().allInvenory().entrySet()) {
 			int h = 20;
 			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName(), Color.white);
-			w += 10;
+			w += 12;
 
 		}
 
@@ -112,8 +112,12 @@ public class TileRenderer extends Thread {
 		for (Entry<Integer, AbstractThing> entry : cDungeon.getHero().inventory().allInvenory().entrySet()) {
 			int h = 20;
 			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName(), Color.white);
-			w += 10;
+			w += 12;
+			
+		
 		}
+		check.render();
+		//System.out.println(check.getThing().getName());
 
 	}
 	
@@ -131,7 +135,7 @@ public class TileRenderer extends Thread {
 			//System.out.println(entry.getValue().getDamage().getDice());
 			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName() + 
 					" +" + entry.getValue().getBonus() + " " + entry.getValue().getDamage().getPair(), Color.white);
-			w += 10;
+			w += 12;
 			
 			if(entry.getValue() != null){
 				check.mark(entry.getValue());
@@ -140,7 +144,7 @@ public class TileRenderer extends Thread {
 
 		}
 		//Map<Integer, Weapon> e = cDungeon.getHero().inventory().getAllWeapon().entrySet();
-		check.renderFirst();
+		check.render(); //First();
 		//System.out.println(check.getThing().getName());
 	}
 	
@@ -423,30 +427,37 @@ public class TileRenderer extends Thread {
 		
 		private AbstractThing checked; // Предмет
 		private int checkedPos; // Его позиция в инвентаре (0 - N)
-		
+		private int renderPos; // Костыль, нужен только для отрисовки
 		private String mark;
 		
 		
 		public Checkbox(String mark) {
 			this.mark = mark;
+			checkedPos = renderPos = 0;
 		}
 		
 		
+		public boolean biggerNull(){
+			return (checkedPos > 0);
+		}
+	
 		
-		public void renderFirst(){
-			bodyFont.drawString(8, 50, mark);
+		public int getPos(){
+			return checkedPos;
 		}
 		
 		public void render() {
-			bodyFont.drawString(8, 5 + checkedPos, mark);
+			bodyFont.drawString(8, 50 + renderPos, mark);
 		}
 		
 		public void prev() {
-			checkedPos++;
+			checkedPos--;// -= 12;
+			renderPos = checkedPos * 12;
 		}
 	
 		public void next() {
-			checkedPos--;
+			checkedPos++;// += 12;
+			renderPos = checkedPos * 12;
 		}
 		
 		public void mark(AbstractThing t) {

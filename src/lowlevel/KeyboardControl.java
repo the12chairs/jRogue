@@ -19,6 +19,7 @@ public class KeyboardControl extends Thread{
 	private AbstractCreature controlled; // Кем управляем
 	private Dungeon dung; // Мля, вторая копия этого ублюдка
 	
+	
 
 	private IFovAlgorithm a = new ShadowCasting();
 
@@ -102,6 +103,17 @@ public class KeyboardControl extends Thread{
 		
 		Weaponable w = (Weaponable) controlled;
 		while(Keyboard.next()){
+	
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
+				TileRenderer.check.next();
+			}
+			
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
+				TileRenderer.check.prev();
+			}
+			
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_0)){
 				w.useWeapon(controlled.inventory().getAllWeapon().get(0));
@@ -134,12 +146,44 @@ public class KeyboardControl extends Thread{
 		
 		long x = controlled.getX();
 		long y = controlled.getY();
-		
-		
+		//int pos = 0;
+		TileRenderer.check.mark(dung.getHero().inventory().findByKey(TileRenderer.check.getPos()));
 		
 		while(Keyboard.next()){
 			
-
+			
+			
+			// По нажатию на вверх/вниз меняем позицию маркера и кладем предмет в контейнер маркера
+			
+			System.out.println(TileRenderer.check.getPos());
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
+				TileRenderer.check.next();
+				TileRenderer.check.mark(controlled.inventory().allInvenory().get(TileRenderer.check.getPos()));
+				//System.out.println(pos);
+			}
+			
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
+				if(TileRenderer.check.biggerNull()){
+					TileRenderer.check.prev();
+					TileRenderer.check.mark(controlled.inventory().allInvenory().get(TileRenderer.check.getPos()));
+			
+				}
+			}
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
+				AbstractThing dropped = null;
+				if(controlled.inventory().allInvenory().get(TileRenderer.check.getPos()) != null){
+					dropped = controlled.inventory().allInvenory().get(TileRenderer.check.getPos());
+					controlled.inventory().dropItem(TileRenderer.check.getPos());
+					dung.addThing(dropped, x, y);
+				}
+				
+			}
+			
+			
+			/*
 			if(Keyboard.isKeyDown(Keyboard.KEY_0)){
 				AbstractThing dropped = null;
 				dropped = controlled.inventory().allInvenory().get(0);
@@ -147,7 +191,7 @@ public class KeyboardControl extends Thread{
 				dung.addThing(dropped, x, y);
 				
 			}
-			
+			*/
 
 			
 			
