@@ -5,7 +5,9 @@ import items.Weapon.Type;
 
 import java.awt.Font;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import lifeforms.AbstractCreature.Profession;
 import lifeforms.Hero;
@@ -19,17 +21,13 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
-
 import org.newdawn.slick.Color;
-
 import org.newdawn.slick.TrueTypeFont;
-
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 import dnd.Dice;
-
 import primitives.GraphObject;
 import properties.Race;
 import properties.Stat;
@@ -127,7 +125,6 @@ public class TileRenderer extends Thread {
 		
 		int w = 50;
 		
-		//Checkbox check = new Checkbox(">");
 		
 		for (Entry<Integer, Weapon> entry : cDungeon.getHero().inventory().getAllWeapon().entrySet()) {
 			int h = 20;
@@ -135,10 +132,16 @@ public class TileRenderer extends Thread {
 			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName() + 
 					" +" + entry.getValue().getBonus() + " " + entry.getValue().getDamage().getPair(), Color.white);
 			w += 10;
+			
+			if(entry.getValue() != null){
+				check.mark(entry.getValue());
+			}
+			
 
 		}
-		check.render();
-		
+		//Map<Integer, Weapon> e = cDungeon.getHero().inventory().getAllWeapon().entrySet();
+		check.renderFirst();
+		//System.out.println(check.getThing().getName());
 	}
 	
 	
@@ -148,6 +151,7 @@ public class TileRenderer extends Thread {
 	
 	
 	// Грузим текстурку
+	
 	public Texture loadTexture(String texturePath){
 		Texture t = null;
 		try {
@@ -429,8 +433,12 @@ public class TileRenderer extends Thread {
 		
 		
 		
-		public void render(){
-			bodyFont.drawString(checkedPos, 0, mark);
+		public void renderFirst(){
+			bodyFont.drawString(8, 50, mark);
+		}
+		
+		public void render() {
+			bodyFont.drawString(8, 5 + checkedPos, mark);
 		}
 		
 		public void prev() {
@@ -443,6 +451,10 @@ public class TileRenderer extends Thread {
 		
 		public void mark(AbstractThing t) {
 			checked = t;
+		}
+		
+		public AbstractThing getThing() {
+			return checked;
 		}
 	}
 	
