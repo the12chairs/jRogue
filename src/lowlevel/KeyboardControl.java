@@ -104,6 +104,8 @@ public class KeyboardControl extends Thread{
 		Weaponable w = (Weaponable) controlled;
 		while(Keyboard.next()){
 	
+			TileRenderer.check.mark(controlled.inventory().findByKey(TileRenderer.check.getPos()));
+			
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
 				TileRenderer.check.next();
@@ -113,6 +115,14 @@ public class KeyboardControl extends Thread{
 			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
 				TileRenderer.check.prev();
 			}
+			
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
+				w.useWeapon(controlled.inventory().getAllWeapon().get(TileRenderer.check.getPos()));
+				controlled = (AbstractCreature) w;
+			}
+			
+			
 			
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_0)){
@@ -147,15 +157,19 @@ public class KeyboardControl extends Thread{
 		long x = controlled.getX();
 		long y = controlled.getY();
 		//int pos = 0;
-		TileRenderer.check.mark(dung.getHero().inventory().findByKey(TileRenderer.check.getPos()));
+		TileRenderer.check.mark(controlled.inventory().findByKey(TileRenderer.check.getPos()));
 		
+		if(TileRenderer.check.getThing() != null)
+			System.out.println(TileRenderer.check.getPos() + ":" + TileRenderer.check.getThing().name);
+		else
+			System.out.println("Nothing");
 		while(Keyboard.next()){
 			
 			
 			
 			// По нажатию на вверх/вниз меняем позицию маркера и кладем предмет в контейнер маркера
 			
-			System.out.println(TileRenderer.check.getPos());
+
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
 				TileRenderer.check.next();
@@ -177,7 +191,9 @@ public class KeyboardControl extends Thread{
 				if(controlled.inventory().allInvenory().get(TileRenderer.check.getPos()) != null){
 					dropped = controlled.inventory().allInvenory().get(TileRenderer.check.getPos());
 					controlled.inventory().dropItem(TileRenderer.check.getPos());
+					
 					dung.addThing(dropped, x, y);
+				
 				}
 				
 			}

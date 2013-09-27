@@ -2,7 +2,10 @@ package primitives;
 
 import items.Weapon;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -69,18 +72,57 @@ public class Inventory {
 
 		inventory.remove(key);
 		itemNumber--;
+		
+		
+		
+		// Костыльное царство // Зато работает
+		
+		// Сохраняем оставшиеся предметы в инвентаре
+		List<AbstractThing> buffer = new ArrayList<AbstractThing>();
+		for(Entry<Integer, AbstractThing> t: inventory.entrySet()){
+			buffer.add(t.getValue());
+		}	
+		
+		// Зачищаем инвентарь
+		inventory.clear();
+		
+		int i = 0;
+		// Запихиваем предметы из буфера обратно в инвентарь
+		for(AbstractThing t : buffer){
+			inventory.put(i, t);
+			i++;
+		}
+		
 	}
 	
 	// Удаление по значению
 	public void dropItem(AbstractThing item){
 		
 		
-		for(Entry<Integer, AbstractThing> t: inventory.entrySet())
+		for(Entry<Integer, AbstractThing> t: inventory.entrySet()){
 		
 			if(t == item){
 				inventory.remove(t.getKey());
 				itemNumber--;
 			}
+		}
+		
+		// Сохраняем оставшиеся предметы в инвентаре
+		List<AbstractThing> buffer = new ArrayList<AbstractThing>();
+		for(Entry<Integer, AbstractThing> t: inventory.entrySet()){
+			buffer.add(t.getValue());
+		}	
+		
+		// Зачищаем инвентарь
+		inventory.clear();
+		
+		int i = 0;
+		// Запихиваем предметы из буфера обратно в инвентарь
+		for(AbstractThing t : buffer){
+			inventory.put(i, t);
+			i++;
+		}
+			
 	}
 
 

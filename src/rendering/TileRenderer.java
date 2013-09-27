@@ -1,5 +1,6 @@
 package rendering;
 
+import items.Armor;
 import items.Weapon;
 import items.Weapon.Type;
 
@@ -390,8 +391,8 @@ public class TileRenderer extends Thread {
 				
 		d.addThing(new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 6), 100, 10, 4, 4));
 		
-		d.addThing(new Weapon("Pipka", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 8), 100, 10, 4, 5));
-
+		d.addThing(new Weapon("Sword", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 8), 100, 10, 4, 5));
+		d.addThing(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3));
 		TileRenderer r = new TileRenderer(d);
 	
 		KeyboardControl controller = new KeyboardControl();
