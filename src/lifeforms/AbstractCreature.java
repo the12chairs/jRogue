@@ -1,5 +1,7 @@
 package lifeforms;
 
+import java.util.Map.Entry;
+
 import items.Weapon;
 import dnd.Dice;
 import primitives.GraphObject;
@@ -30,7 +32,7 @@ public abstract class AbstractCreature extends GraphObject{
 	protected int visionRadius;
 	protected Stat age; // Смари, current значение - текущий возраст, full значение - возраст смерти.
 	protected boolean weaponed;
-	protected Weapon hands;
+	protected Weapon hands; // Что в руках
 	// Интерфейс
 	public void move(int dx, int dy){
 		this.x += dx;
@@ -150,5 +152,48 @@ public abstract class AbstractCreature extends GraphObject{
 		this.inventory.dropItem(item);
 		this.mass.setCurrent(this.mass.getCurrent() - t.getHeavy());
 	}
+	
+	
+	public Weapon getHands(){
+		return hands;
+	}
+	
+	public void useWeapon(Weapon w) {
+		 
+		//Чорная магия, не трожь! 
+		for(Entry<Integer, Weapon> p : inventory.getAllWeapon().entrySet()){
+			if(p.getValue() == w){
+				
+				// Если руки заняты, меняем оружие
+				if(hands != null){
+					//System.out.println("Ololo");
+					//inventory.pushItem(hands);
+					//takeItem(hands);
+					hands = w;
+					this.damage = w.getDamage();
+				}
+				else{
+					hands = p.getValue();
+					damage = hands.getDamage();
+					//dropItem(p.getKey());
+				}
+				break;
+			}
+				
+		}
+		
+	}
+
+	public void unuseWeapon() {
+		this.damage = new Dice(1, 3);
+		hands = null;
+	}
+
+	public boolean isWeaponed() {
+		return weaponed;
+	}
+
+	
+	
 	
 }

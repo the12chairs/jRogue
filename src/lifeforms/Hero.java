@@ -20,14 +20,16 @@ import properties.Weaponable;
 
 
 
-public class Hero extends AbstractCreature implements Weaponable{
+public class Hero extends AbstractCreature{
 
 	
 	LinkedList<Quest> questJournal; // Активные, выполненные, проваленные. Смотрим по флажку в Quest
 	private Stat exp; // Опыт персонажа
 	private int level; // Его уровень
 	private long statPoints;
-
+	private Weapon hands;
+	
+	
 	// Баланс тут
 	private static final int expCoef = 6;
 	private static final int statCoef = 10;
@@ -129,43 +131,8 @@ public class Hero extends AbstractCreature implements Weaponable{
 		this.statPoints = statPoints;
 	}
 
-	@Override
-	public void useWeapon(Weapon w) {
-		 
-		//Чорная магия, не трожь! 
-		for(Entry<Integer, Weapon> p : inventory.getAllWeapon().entrySet()){
-			if(p.getValue() == w){
-				
-				// Если руки заняты, меняем оружие
-				if(hands != null){
-					//System.out.println("Ololo");
-					//inventory.pushItem(hands);
-					takeItem(hands);
-					hands = null;
-				}
-				else{
-					hands = p.getValue();
-					damage = hands.getDamage();
-					dropItem(p.getKey());
-				}
-				break;
-			}
-				
-		}
-		
-	}
 
-	@Override
-	public void unuseWeapon() {
-		this.damage = new Dice(1, 3);
-		
-	}
-
-	@Override
-	public boolean isWeaponed() {
-		return weaponed;
-	}
-
+	
 
 
 }

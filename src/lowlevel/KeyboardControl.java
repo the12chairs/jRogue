@@ -172,11 +172,12 @@ public class KeyboardControl extends Thread{
 
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
-				TileRenderer.check.next();
-				TileRenderer.check.mark(controlled.inventory().allInvenory().get(TileRenderer.check.getPos()));
-				//System.out.println(pos);
+				if(TileRenderer.check.getPos() < controlled.inventory().allInvenory().size()){
+					TileRenderer.check.next();
+					TileRenderer.check.mark(controlled.inventory().allInvenory().get(TileRenderer.check.getPos()));
+					//System.out.println(pos);
+				}
 			}
-			
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
 				if(TileRenderer.check.biggerNull()){
@@ -197,19 +198,7 @@ public class KeyboardControl extends Thread{
 				}
 				
 			}
-			
-			
-			/*
-			if(Keyboard.isKeyDown(Keyboard.KEY_0)){
-				AbstractThing dropped = null;
-				dropped = controlled.inventory().allInvenory().get(0);
-				controlled.inventory().dropItem(0);
-				dung.addThing(dropped, x, y);
-				
-			}
-			*/
 
-			
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
 				TileRenderer.gameState = TileRenderer.State.DUNGEON;
@@ -219,19 +208,75 @@ public class KeyboardControl extends Thread{
 
 	public synchronized void inventoryAction(){
 				
+			
+		TileRenderer.check.mark(controlled.inventory().findByKey(TileRenderer.check.getPos()));
+		
+		long x = controlled.getX();
+		long y = controlled.getY();			
+		/*	
+		if(TileRenderer.check.getThing() != null)
+			System.out.println(TileRenderer.check.getPos() + ":" + TileRenderer.check.getThing().name);
+		else
+			System.out.println("Nothing");
+			*/
+			
+		System.out.println(controlled.getDamage().getPair());
+		
 		while(Keyboard.next()){
+		
+			// Перемещаем ползунок
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
+				if(TileRenderer.check.getPos() < controlled.inventory().allInvenory().size()-1){
+					TileRenderer.check.next();
+					TileRenderer.check.mark(controlled.inventory().allInvenory().get(TileRenderer.check.getPos()));
+					//System.out.println(pos);
+				}
+			}
+				
+			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
+				if(TileRenderer.check.biggerNull()){
+					TileRenderer.check.prev();
+					TileRenderer.check.mark(controlled.inventory().allInvenory().get(TileRenderer.check.getPos()));
+				}
+			}
+		
+			
+			// Эквип
+			if(Keyboard.isKeyDown(Keyboard.KEY_E)){
+				if((Weapon)TileRenderer.check.getThing() == controlled.getHands()){
+					controlled.unuseWeapon();
+				}
+				else{
+					controlled.useWeapon((Weapon)TileRenderer.check.getThing());
+				}
+			}
+			
+			// Дроп
+			if(Keyboard.isKeyDown(Keyboard.KEY_D)){
+				AbstractThing dropped = null;
+				if(controlled.inventory().allInvenory().get(TileRenderer.check.getPos()) != null){
+					dropped = controlled.inventory().allInvenory().get(TileRenderer.check.getPos());
+					//controlled.inventory().dropItem(TileRenderer.check.getPos());
+					controlled.dropItem(TileRenderer.check.getPos());
+					dung.addThing(dropped, x, y);
+				
+				}
+				
+			}
 			
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
 				TileRenderer.gameState = TileRenderer.State.DUNGEON;
 			}
+		
 		}
 	}
+
 	
 	
 	
 	public synchronized void commandAction(){
-
 		
 		long x = controlled.getX();
 		long y = controlled.getY();
@@ -285,7 +330,7 @@ public class KeyboardControl extends Thread{
 			if(Keyboard.isKeyDown(Keyboard.KEY_I)){
 				TileRenderer.gameState = TileRenderer.State.INVENTORY;
 			}
-			
+			/*
 			// Дроп
 			if(Keyboard.isKeyDown(Keyboard.KEY_D)){
 				TileRenderer.gameState = TileRenderer.State.DROP_ITEM;
@@ -295,6 +340,7 @@ public class KeyboardControl extends Thread{
 			if(Keyboard.isKeyDown(Keyboard.KEY_W)){
 				TileRenderer.gameState = TileRenderer.State.TAKE_WEAPON;
 			}
+			*/
 			//System.out.println(controlled.getDamage().getDice());
 			recreateVisible();
 		}

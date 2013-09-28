@@ -88,11 +88,13 @@ public class TileRenderer extends Thread {
 		
 		for (Entry<Integer, AbstractThing> entry : cDungeon.getHero().inventory().allInvenory().entrySet()) {
 			int h = 20;
-			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName(), Color.white);
+			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName() + " " + "[e]quip", Color.white);
 			w += 12;
 
 		}
 
+		check.render();
+		
 	}
 
 	
@@ -326,9 +328,10 @@ public class TileRenderer extends Thread {
 			Display.create();
 			Display.setVSyncEnabled(true);
 			Keyboard.create();
-			} catch (LWJGLException e) {
-				e.printStackTrace();
-				System.exit(0);
+		} 
+		catch (LWJGLException e) {
+			e.printStackTrace();
+			System.exit(0);
 
 			}
 		System.out.println("Done!");
@@ -361,18 +364,7 @@ public class TileRenderer extends Thread {
 		headFont = new TrueTypeFont(awtFont1, false);
 		Font awtFont2 = new Font("Times New Roman", Font.PLAIN, 14);
 		bodyFont = new TrueTypeFont(awtFont2, false);
-		/*	
-		// load font from a .ttf file
-		try {
-			InputStream inputStream	= ResourceLoader.getResourceAsStream("TIMCYR.TTF");
-			
-			Font awtFont2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-			awtFont2 = awtFont2.deriveFont(24f); // set font size
-			font2 = new TrueTypeFont(awtFont2, false);
-				
-		} catch (Exception e) {
-			e.printStackTrace();
-		}*/
+
 	}
 	
 	public static void main(String args[]){
