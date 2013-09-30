@@ -161,9 +161,18 @@ public class TileRenderer extends Thread {
 	
 	
 	public void renderInfo(){
+		
 		int h = 20;
-		int w = WIDTH - 50;
+		
+		int w = WIDTH - 65;
+		
+		bodyFont.drawString(h, w, cDungeon.getHero().getName() + ", the " + cDungeon.getHero().getRace().getName());
+		
+		
+		
+		w = WIDTH - 50;
 		//System.out.println(entry.getValue().getDamage().getDice());
+		
 		if(cDungeon.getHero().getHands() != null){
 			bodyFont.drawString(h, w, "Equipped: " + cDungeon.getHero().getHands().getName() + " " +
 					cDungeon.getHero().getHands().getDamage().getPair() + " +" + cDungeon.getHero().getHands().getBonus()); 
@@ -171,6 +180,12 @@ public class TileRenderer extends Thread {
 		else{
 			bodyFont.drawString(h, w, "Equipped: nothing" + " " + cDungeon.getHero().getDamage().getPair());
 		}
+		
+		w = WIDTH - 35;
+		
+		bodyFont.drawString(h, w, "STR: " + cDungeon.getHero().str().getCurrent() + " DEX: " + 
+				cDungeon.getHero().dex().getCurrent() + " INT: " + cDungeon.getHero().intel().getCurrent() + " WEIGHT: "
+				+ cDungeon.getHero().mass().getCurrent() + "/" + cDungeon.getHero().mass().getFull());
 	}
 	
 	
@@ -359,7 +374,6 @@ public class TileRenderer extends Thread {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);              
 		GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);         
-
 		// enable alpha blending
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -392,8 +406,9 @@ public class TileRenderer extends Thread {
 		ScriptingContainer ruby = new ScriptingContainer(LocalVariableBehavior.PERSISTENT);
 		
 		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/hero_init.rb");
-		Race dwarf = new Race("Дварф", 5, 0, -3, 4);
-		Hero you = new Hero("Макс", "./modules/TestModule/heros/hero.png", 1, 1, 5, 5, 5, 5, dwarf, 4, Profession.WARRIOR);
+		Race goblin = (Race) ruby.get("goblin");
+		Race dwarf = new Race("Dwarf", 5, 0, -3, 4);
+		Hero you = new Hero("Urist", "./modules/TestModule/heros/hero.png", 1, 1, 5, 5, 5, 5, goblin, 4, Profession.WARRIOR);
 		
 		
 		

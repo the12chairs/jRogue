@@ -89,6 +89,10 @@ public abstract class AbstractCreature extends GraphObject{
 	public void setPurse(long gold){
 		this.purse += gold;
 	}
+	
+	public Race getRace(){
+		return race;
+	}
 	public void setPos(int x, int y){
 		this.x = x;
 		this.y = y;
