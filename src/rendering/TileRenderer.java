@@ -16,6 +16,9 @@ import lowlevel.AbstractThing;
 import lowlevel.Dungeon;
 import lowlevel.KeyboardControl;
 
+import org.jruby.embed.LocalVariableBehavior;
+import org.jruby.embed.ScriptingContainer;
+import org.jruby.embed.PathType;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
@@ -157,6 +160,20 @@ public class TileRenderer extends Thread {
 	}
 	
 	
+	public void renderInfo(){
+		int h = 20;
+		int w = WIDTH - 50;
+		//System.out.println(entry.getValue().getDamage().getDice());
+		if(cDungeon.getHero().getHands() != null){
+			bodyFont.drawString(h, w, "Equipped: " + cDungeon.getHero().getHands().getName() + " " +
+					cDungeon.getHero().getHands().getDamage().getPair() + " +" + cDungeon.getHero().getHands().getBonus()); 
+		}
+		else{
+			bodyFont.drawString(h, w, "Equipped: nothing" + " " + cDungeon.getHero().getDamage().getPair());
+		}
+	}
+	
+	
 	// Грузим текстурку
 	
 	public Texture loadTexture(String texturePath){
@@ -214,6 +231,9 @@ public class TileRenderer extends Thread {
 				renderTile(creature);
 			}
 		}
+		
+		
+		renderInfo();
 		
 	}
 	
@@ -369,7 +389,9 @@ public class TileRenderer extends Thread {
 	
 	public static void main(String args[]){
 		
+		ScriptingContainer ruby = new ScriptingContainer(LocalVariableBehavior.PERSISTENT);
 		
+		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/hero_init.rb");
 		Race dwarf = new Race("Дварф", 5, 0, -3, 4);
 		Hero you = new Hero("Макс", "./modules/TestModule/heros/hero.png", 1, 1, 5, 5, 5, 5, dwarf, 4, Profession.WARRIOR);
 		
