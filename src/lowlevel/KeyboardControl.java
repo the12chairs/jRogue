@@ -220,7 +220,7 @@ public class KeyboardControl extends Thread{
 			System.out.println("Nothing");
 			*/
 			
-		System.out.println(controlled.getDamage().getPair());
+		//System.out.println(controlled.getDamage().getPair());
 		
 		while(Keyboard.next()){
 		
@@ -244,12 +244,33 @@ public class KeyboardControl extends Thread{
 			
 			// Эквип
 			if(Keyboard.isKeyDown(Keyboard.KEY_E)){
-				if((Weapon)TileRenderer.check.getThing() == controlled.getHands()){
-					controlled.unuseWeapon();
+				
+				//if(TileRenderer.check.getThing().getMType() == AbstractThing.MainType.WEAPON)
+				
+				
+				switch(TileRenderer.check.getThing().getMType()){
+				
+				case WEAPON:
+					
+					if(TileRenderer.check.getThing() == controlled.getHands()){
+						controlled.unuseWeapon();
+					}
+					else{
+						controlled.useWeapon((Weapon)TileRenderer.check.getThing());
+					}	
+					
+					break;
+				
+				case ARMOR:
+					System.out.println("Not ready yet");
+					break;
+				
+				
+				default:
+					break;
+				
 				}
-				else{
-					controlled.useWeapon((Weapon)TileRenderer.check.getThing());
-				}
+				
 			}
 			
 			// Дроп
@@ -258,6 +279,10 @@ public class KeyboardControl extends Thread{
 				if(controlled.inventory().allInvenory().get(TileRenderer.check.getPos()) != null){
 					dropped = controlled.inventory().allInvenory().get(TileRenderer.check.getPos());
 					//controlled.inventory().dropItem(TileRenderer.check.getPos());
+					// Попытка выбросить экипированное
+					if(controlled.getHands() == dropped){
+						controlled.unuseWeapon();
+					}
 					controlled.dropItem(TileRenderer.check.getPos());
 					dung.addThing(dropped, x, y);
 				
