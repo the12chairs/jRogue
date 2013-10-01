@@ -247,7 +247,7 @@ public class Dungeon implements ILosBoard{
 
 	@Override
 	public boolean contains(int x, int y) {
-		return x >= 0 && y >= 0 && x <= width && y <= height;
+		return x >= 0 && y >= 0 && x <= width - 1 && y <= height - 1;
 		//return true;
 	}
 

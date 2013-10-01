@@ -411,10 +411,10 @@ public class TileRenderer extends Thread {
 		Hero you = new Hero("Urist", "./modules/TestModule/heros/hero.png", 1, 1, 5, 5, 5, 5, goblin, 4, Profession.WARRIOR);
 		
 		
-		
-		DungeonGenerator generator = new DungeonGenerator(30, 30, 5, 5);
-		Dungeon d = generator.generateDungeon();//new Dungeon("./modules/TestModule/locations/texture.json");
-
+		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/basic_forest.rb");
+		//DungeonGenerator generator = new DungeonGenerator(30, 30, 5, 5);
+		//Dungeon d = generator.generateDungeon();//new Dungeon("./modules/TestModule/locations/texture.json");
+		Dungeon d = (Dungeon) ruby.get("forest");
 		you.setVisible(true);
 		
 				

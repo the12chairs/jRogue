@@ -1,6 +1,0 @@
-#!/usr/bin/jruby
-
-
-require 'java'
-
-window = renderer.TileRenderer.new
