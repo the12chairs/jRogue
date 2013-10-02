@@ -9,7 +9,7 @@ require adder + 'lib/rlforj.jar'
 require adder + 'lib/json-simple.jar'
 require adder + 'lib/lifeforms.jar'
 require adder + 'lib/primitives.jar'
-
+require adder + 'lib/dnd.jar'
 
 puts "Making dungeon..."
 
@@ -20,7 +20,7 @@ tree1_proto = Java::lowlevel::Tile.new 'Tree', adder + 'res/tree1.png', false, f
 tree2_proto = Java::lowlevel::Tile.new 'Tree', adder + 'res/tree2.png', false, false
 grass_proto = Java::lowlevel::Tile.new 'Grass', adder + 'res/grass.png', false, true
 
-num_trees = 200
+num_trees = Java::dnd::Dice.new(5, 20).throwDice
 
 puts "Making grass..."
 

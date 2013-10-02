@@ -428,7 +428,7 @@ public class TileRenderer extends Thread {
 		
 		ScriptingContainer ruby = new ScriptingContainer(LocalVariableBehavior.PERSISTENT);
 		
-		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/ra:`ces.rb");
+		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/races.rb");
 		Race goblin = (Race) ruby.get("race");
 		Race dwarf = new Race("Dwarf", 5, 0, -3, 4);
 		Hero you = new Hero("Urist", "./modules/TestModule/heros/hero.png", 1, 1, 5, 5, 5, 5, goblin, 4, Profession.WARRIOR);
