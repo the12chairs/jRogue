@@ -15,11 +15,12 @@ puts "Making dungeon..."
 
 forest = Java::lowlevel::Dungeon.new 30, 30
 
-tree_proto = Java::lowlevel::Tile.new 'Tree', adder + 'res/tree.png', false, false
+tree1_proto = Java::lowlevel::Tile.new 'Tree', adder + 'res/tree1.png', false, false
 
+tree2_proto = Java::lowlevel::Tile.new 'Tree', adder + 'res/tree2.png', false, false
 grass_proto = Java::lowlevel::Tile.new 'Grass', adder + 'res/grass.png', false, true
 
-num_trees = 50
+num_trees = 200
 
 puts "Making grass..."
 
@@ -34,11 +35,19 @@ puts "Making grass..."
 puts "Grass done!"
 
 
-puts "Seeds trees"
+puts "Seeding trees"
 
 num_trees.times {
   
-  forest.addTile(Java::lowlevel::Tile.new(tree_proto, Random.rand(1 .. forest.getHeight-1), Random.rand(1 .. forest.getWidth-1)))
+  if Random.rand(1 .. 2) == 1 
+    tree_proto = tree1_proto
+  else
+    tree_proto = tree2_proto
+  end
+  h = Random.rand(1 .. forest.getHeight-1)
+  w = Random.rand(1 .. forest.getWidth-1)
+  forest.removeTile h, w
+  forest.addTile(Java::lowlevel::Tile.new(tree_proto, h, w))
 }
 
 puts "Trees done!"

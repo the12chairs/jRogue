@@ -190,7 +190,7 @@ public class TileRenderer extends Thread {
 	
 	
 	// Грузим текстурку
-	
+	/*
 	public Texture loadTexture(String texturePath){
 		Texture t = null;
 		try {
@@ -198,16 +198,21 @@ public class TileRenderer extends Thread {
 					("PNG", ResourceLoader.getResourceAsStream(texturePath));
 			
 		} catch (IOException e) {
+			
+			
+			
 			e.printStackTrace();
 		}
 		return t;
 	}
-	
+	*/
 	// Рисуем карту
 	public void renderDungeon(){
 
 		GraphObject tmp = cDungeon.dungeon().get(0);
-		loadTexture(tmp.getFace()).bind();
+		
+		//Texture prev_tex = loadTexture(tmp.getFace());
+		//prev_tex.bind();
 		
 		for(GraphObject tile : cDungeon.dungeon()){
 					
@@ -215,6 +220,7 @@ public class TileRenderer extends Thread {
 				//Texture t = loadTexture(tile.getFace());
 				//t.bind();
 				//loadTexture(tile.getFace()).bind();
+				tile.getTexture().bind();
 				renderTile(tile);
 			
 				//t.release();
@@ -224,7 +230,8 @@ public class TileRenderer extends Thread {
 			if(!tmp.getFace().equals(tile.getFace())){
 				//System.out.println(tile.getFace());
 				tmp = tile;
-				loadTexture(tmp.getFace()).bind();
+				tile.getTexture().bind();
+
 
 			}
 			//updateFPS();
@@ -235,14 +242,15 @@ public class TileRenderer extends Thread {
 		
 		for(AbstractThing item : cDungeon.getItems()){
 			if(item.getVisible() == true){
-				loadTexture(item.getFace()).bind();
+				
+				item.getTexture().bind();
 				renderTile(item);
 			}
 		}
 		
 		for(GraphObject creature : cDungeon.getCreatures()){
 			if(creature.getVisible() == true){
-				loadTexture(creature.getFace()).bind();
+				creature.getTexture().bind();
 				renderTile(creature);
 			}
 		}
@@ -253,6 +261,21 @@ public class TileRenderer extends Thread {
 	}
 	
 
+	public void loadTextures(){
+		System.out.println("Loading textures...");
+		for(GraphObject tile : cDungeon.dungeon()){
+			tile.loadTexture();
+		}
+		
+		for(AbstractThing item : cDungeon.getItems()){
+			item.loadTexture();
+		}
+		
+		for(GraphObject creature : cDungeon.getCreatures()){
+			creature.loadTexture();
+		}
+		System.out.println("Done");
+	}
 	// Отрисовка отдельного тайла
 	public void renderTile(GraphObject tile){
 		
@@ -334,7 +357,7 @@ public class TileRenderer extends Thread {
 	
 	public synchronized void render(){
 		initGL(HEIGHT, WIDTH);
-
+		loadTextures();
 		while (true) {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 			
@@ -405,8 +428,8 @@ public class TileRenderer extends Thread {
 		
 		ScriptingContainer ruby = new ScriptingContainer(LocalVariableBehavior.PERSISTENT);
 		
-		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/hero_init.rb");
-		Race goblin = (Race) ruby.get("goblin");
+		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/ra:`ces.rb");
+		Race goblin = (Race) ruby.get("race");
 		Race dwarf = new Race("Dwarf", 5, 0, -3, 4);
 		Hero you = new Hero("Urist", "./modules/TestModule/heros/hero.png", 1, 1, 5, 5, 5, 5, goblin, 4, Profession.WARRIOR);
 		
@@ -415,6 +438,7 @@ public class TileRenderer extends Thread {
 		//DungeonGenerator generator = new DungeonGenerator(30, 30, 5, 5);
 		//Dungeon d = generator.generateDungeon();//new Dungeon("./modules/TestModule/locations/texture.json");
 		Dungeon d = (Dungeon) ruby.get("forest");
+		//loadTextures(d);
 		you.setVisible(true);
 		
 				

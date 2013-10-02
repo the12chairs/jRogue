@@ -1,5 +1,11 @@
 package primitives;
 
+import java.io.IOException;
+
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
+
 public class GraphObject {
 	
 	protected String face;
@@ -8,10 +14,29 @@ public class GraphObject {
 	protected long y;
 	protected boolean visible;
 	
+	protected Texture texture; 
 	
 	public String getFace(){
 		return this.face;
 	}
+	
+	
+	
+	public void loadTexture(){
+		Texture t = null;
+		try {
+			texture = TextureLoader.getTexture
+					("PNG", ResourceLoader.getResourceAsStream(face));
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public Texture getTexture(){
+		return texture;
+	}
+	
 	
 	
 	public GraphObject(){
