@@ -26,7 +26,7 @@ public class Dice {
 	
 	public int throwDice(){
 		
-		rand = new Random();	
+		rand = new Random();
 		return num * (rand.nextInt(edges) + 1);
 	}
 	

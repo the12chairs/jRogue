@@ -100,7 +100,7 @@ public class Hero extends AbstractCreature{
 
 	public static void main(String[] args) {
 		// Тесты
-		Race dwarf = new Race("Дварф", 5, 0, -3, 4);
+		Race dwarf = new Race("Дварф", 5, 0, -3, -2, -1,  4);
 		Hero you = new Hero("Макс", "ololo", 2, 1, 5, 5, 5, 5, dwarf, 3, Profession.WARRIOR);
 		System.out.println("Опыт: " + you.exp.getPair());
 		you.initRaceBonuses();

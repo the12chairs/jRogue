@@ -8,14 +8,20 @@ public class Race {
 	private int dexBonus;
 	private int intelBonus;
 	private int hpBonus;
+	private int wisBonus;
+	private int charBonus;
 	
 	
-	public Race(String name, int str, int dex, int intel, int hp){
+	//TODO Не железный бонус, а описание бросков кубиков
+	
+	public Race(String name, int str, int dex, int intel, int wis, int cha, int hp){
 		this.name = name;
 		this.strBonus = str;
 		this.dexBonus = dex;
 		this.intelBonus = intel;
 		this.hpBonus = hp;
+		this.setCharBonus(cha);
+		this.setWisBonus(wis);
 	}
 	
 	public String getName() {
@@ -56,5 +62,21 @@ public class Race {
 
 	public void setHpBonus(int hpBonus) {
 		this.hpBonus = hpBonus;
+	}
+
+	public int getWisBonus() {
+		return wisBonus;
+	}
+
+	public void setWisBonus(int wisBonus) {
+		this.wisBonus = wisBonus;
+	}
+
+	public int getCharBonus() {
+		return charBonus;
+	}
+
+	public void setCharBonus(int charBonus) {
+		this.charBonus = charBonus;
 	}
 }

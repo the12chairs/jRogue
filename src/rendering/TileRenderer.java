@@ -430,22 +430,24 @@ public class TileRenderer extends Thread {
 		
 		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/races.rb");
 		Race goblin = (Race) ruby.get("race");
-		Race dwarf = new Race("Dwarf", 5, 0, -3, 4);
+		Race dwarf = new Race("Dwarf", 5, 0, -3, -1, -1, 4);
 		Hero you = new Hero("Urist", "./modules/TestModule/heros/hero.png", 1, 1, 5, 5, 5, 5, goblin, 4, Profession.WARRIOR);
 		
 		
 		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/basic_forest.rb");
-		//DungeonGenerator generator = new DungeonGenerator(30, 30, 5, 5);
+		DungeonGenerator generator = new DungeonGenerator(30, 31, 5, 5);
 		//Dungeon d = generator.generateDungeon();//new Dungeon("./modules/TestModule/locations/texture.json");
 		Dungeon d = (Dungeon) ruby.get("forest");
 		//loadTextures(d);
 		you.setVisible(true);
 		
-				
+		/*		
 		d.addThing(new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 6), 100, 10, 4, 4));
 		
 		d.addThing(new Weapon("Sword", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 8), 100, 10, 4, 5));
 		d.addThing(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3));
+		
+		*/
 		TileRenderer r = new TileRenderer(d);
 	
 		KeyboardControl controller = new KeyboardControl();

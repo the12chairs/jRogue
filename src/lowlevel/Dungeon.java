@@ -232,7 +232,7 @@ public class Dungeon implements ILosBoard{
 
 	public static void main(String[] args) {
 		// Тесты
-		Race dwarf = new Race("Дварф", 5, 0, -3, 4);
+		Race dwarf = new Race("Дварф", 5, 0, -3, -1, -1, 4);
 		Hero you = new Hero("Макс", "ololo", 2, 1, 5, 5, 5, 5, dwarf, 2, Profession.WARRIOR);
 		//System.out.println("Опыт: " + you.exp.getPair());
 		you.initRaceBonuses();
@@ -247,12 +247,13 @@ public class Dungeon implements ILosBoard{
 
 	@Override
 	public boolean contains(int x, int y) {
-		return x >= 0 && y >= 0 && x <= width - 1 && y <= height - 1;
+		return x >= 0 && y >= 0 && x < width && y < height;
 		//return true;
 	}
 
 	@Override
 	public boolean isObstacle(int x, int y) {
+	
 		if(getTile(x, y).getPassable() == false){
 			return true;
 		}
@@ -263,9 +264,11 @@ public class Dungeon implements ILosBoard{
 
 	@Override
 	public void visit(int x, int y) {
-		getTile(x, y).setVisible(true);
-		for(AbstractThing t : getThings(x, y)){
-			t.setVisible(true);
+		if( x < width && y < height){
+			getTile(x, y).setVisible(true);
+			for(AbstractThing t : getThings(x, y)){
+				t.setVisible(true);
+			}
 		}
 	}
 

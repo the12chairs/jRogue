@@ -11,7 +11,7 @@ require adder + 'lib/lifeforms.jar'
 require adder + 'lib/primitives.jar'
 require adder + 'lib/dnd.jar'
 
-puts "Making dungeon..."
+puts "Making forest..."
 
 forest = Java::lowlevel::Dungeon.new 30, 30
 
@@ -20,7 +20,7 @@ tree1_proto = Java::lowlevel::Tile.new 'Tree', adder + 'res/tree1.png', false, f
 tree2_proto = Java::lowlevel::Tile.new 'Tree', adder + 'res/tree2.png', false, false
 grass_proto = Java::lowlevel::Tile.new 'Grass', adder + 'res/grass.png', false, true
 
-num_trees = Java::dnd::Dice.new(5, 20).throwDice
+num_trees = Java::dnd::Dice.new(forest.getHeight, forest.getWidth).throwDice
 
 puts "Making grass..."
 
