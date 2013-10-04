@@ -6,9 +6,8 @@ import items.Weapon;
 import org.lwjgl.input.Keyboard;
 
 import properties.Weaponable;
-
 import lifeforms.AbstractCreature;
-
+import lifeforms.Hero;
 import rendering.TileRenderer;
 import rlforj.los.IFovAlgorithm;
 import rlforj.los.ShadowCasting;
@@ -17,7 +16,7 @@ import rlforj.los.ShadowCasting;
 public class KeyboardControl extends Thread{
 	
 	private AbstractCreature controlled; // Кем управляем
-	private Dungeon dung; // Мля, вторая копия этого ублюдка
+	//private Dungeon dung; // Мля, вторая копия этого ублюдка
 	
 	
 
@@ -31,17 +30,16 @@ public class KeyboardControl extends Thread{
 	}
 	
 	
-	public KeyboardControl(Dungeon dung, AbstractCreature object){
+	public KeyboardControl(AbstractCreature object){
 		System.out.println("Initializing keyboard controller...");
-		this.dung = dung;
 		controlled = object;
 		System.out.println("Done!");
 	}
 	
-	public void setDungeon(Dungeon dung){
+	/*public void setDungeon(Dungeon dung){
 		this.dung = dung;
 	}
-	
+	*/
 	public void controlCreature(AbstractCreature creature){
 		controlled = creature;
 		recreateVisible();
@@ -69,7 +67,7 @@ public class KeyboardControl extends Thread{
 	
 	
 	public void recreateVisible(){
-		a.visitFieldOfView(dung, (int)controlled.getX(), (int)controlled.getY(), controlled.getVisionRadius());
+		a.visitFieldOfView(TileRenderer.getDungeon(), (int)controlled.getX(), (int)controlled.getY(), controlled.getVisionRadius());
 	}
 	
 
@@ -193,7 +191,7 @@ public class KeyboardControl extends Thread{
 					dropped = controlled.inventory().allInvenory().get(TileRenderer.check.getPos());
 					controlled.inventory().dropItem(TileRenderer.check.getPos());
 					
-					dung.addThing(dropped, x, y);
+					TileRenderer.getDungeon().addThing(dropped, x, y);
 				
 				}
 				
@@ -284,7 +282,7 @@ public class KeyboardControl extends Thread{
 						controlled.unuseWeapon();
 					}
 					controlled.dropItem(TileRenderer.check.getPos());
-					dung.addThing(dropped, x, y);
+					TileRenderer.getDungeon().addThing(dropped, x, y);
 				
 				}
 				
@@ -310,28 +308,28 @@ public class KeyboardControl extends Thread{
 		while(Keyboard.next()){
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
-				Tile t = dung.getTile(x, y - 1);
+				Tile t = TileRenderer.getDungeon().getTile(x, y - 1);
 				if(isPassable(t)){
 					controlled.move(0, -1);
 				}
 
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
-				Tile t = dung.getTile(x, y + 1);
+				Tile t = TileRenderer.getDungeon().getTile(x, y + 1);
 				if(isPassable(t)){
 					controlled.move(0, 1);	
 				}
 
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
-				Tile t = dung.getTile(x - 1, y);
+				Tile t = TileRenderer.getDungeon().getTile(x - 1, y);
 				if(isPassable(t)){
 					controlled.move(-1, 0);
 				}
 
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
-				Tile t = dung.getTile(x + 1, y);
+				Tile t = TileRenderer.getDungeon().getTile(x + 1, y);
 				if(isPassable(t)){
 					controlled.move(1, 0);
 				}
@@ -339,10 +337,10 @@ public class KeyboardControl extends Thread{
 			// Взять предмет
 			if(Keyboard.isKeyDown(Keyboard.KEY_COMMA)){
 				AbstractThing getted = null;
-				for(AbstractThing t : dung.getThings(x, y)){
-					if(t.getVisible() == true){
+				for(AbstractThing t : TileRenderer.getDungeon().getThings(x, y)){
+					if(t.getVisible() == true && t.isAllowed() == true){
 						getted = t;
-						dung.getItems().remove(getted);
+						TileRenderer.getDungeon().getItems().remove(getted);
 						break;
 					}
 				}
@@ -355,18 +353,18 @@ public class KeyboardControl extends Thread{
 			if(Keyboard.isKeyDown(Keyboard.KEY_I)){
 				TileRenderer.gameState = TileRenderer.State.INVENTORY;
 			}
-			/*
-			// Дроп
-			if(Keyboard.isKeyDown(Keyboard.KEY_D)){
-				TileRenderer.gameState = TileRenderer.State.DROP_ITEM;
+
+			
+			// Переход на другую карту
+			if(Keyboard.isKeyDown(Keyboard.KEY_G)){
+				Portal port = TileRenderer.getDungeon().getPortal(x, y);
+				System.out.println(port.next());
+				TileRenderer.getDungeon().removeHero();
+				port.next().addHero((Hero) controlled);
+				TileRenderer.setDungeon(port.next());
+				port.next().getHero().setVisible(true);
 			}
 			
-			// Список оружия
-			if(Keyboard.isKeyDown(Keyboard.KEY_W)){
-				TileRenderer.gameState = TileRenderer.State.TAKE_WEAPON;
-			}
-			*/
-			//System.out.println(controlled.getDamage().getDice());
 			recreateVisible();
 		}
 	}

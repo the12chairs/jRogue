@@ -14,7 +14,7 @@ require adder + 'lib/dnd.jar'
 puts "Making forest..."
 
 forest = Java::lowlevel::Dungeon.new 30, 30
-
+forest1 = Java::lowlevel::Dungeon.new 30, 30
 tree1_proto = Java::lowlevel::Tile.new 'Tree', adder + 'res/tree1.png', false, false
 
 tree2_proto = Java::lowlevel::Tile.new 'Tree', adder + 'res/tree2.png', false, false
@@ -30,6 +30,7 @@ puts "Making grass..."
   (forest.getWidth).times {
     |j|
     forest.addTile(Java::lowlevel::Tile.new(grass_proto, i, j))
+    forest1.addTile(Java::lowlevel::Tile.new(grass_proto, i, j))
   }
 }
 puts "Grass done!"
@@ -37,8 +38,8 @@ puts "Grass done!"
 
 puts "Seeding trees"
 
-num_trees.times {
-  
+#num_trees.times {
+ 100.times {
   if Random.rand(1 .. 2) == 1 
     tree_proto = tree1_proto
   else
@@ -49,6 +50,11 @@ num_trees.times {
   forest.removeTile h, w
   forest.addTile(Java::lowlevel::Tile.new(tree_proto, h, w))
 }
+
+
+
+forest.addPortal(Java::lowlevel::Portal.new(forest, forest1, 1, 1))
+forest1.addPortal(Java::lowlevel::Portal.new(forest1, forest, 1, 1))
 
 puts "Trees done!"
 puts "Done!"

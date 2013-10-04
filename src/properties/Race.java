@@ -1,25 +1,27 @@
 package properties;
 
+import dnd.Dice;
+
 public class Race {
 
 	private String name;
 	// Расовые бонусы к статам
-	private int strBonus;
-	private int dexBonus;
-	private int intelBonus;
-	private int hpBonus;
-	private int wisBonus;
-	private int charBonus;
-	
+	private Dice strBonus;
+	private Dice dexBonus;
+	private Dice intelBonus;
+	//private Dice hpBonus;
+	private Dice wisBonus;
+	private Dice charBonus;
+	private Dice stamBonus;
 	
 	//TODO Не железный бонус, а описание бросков кубиков
 	
-	public Race(String name, int str, int dex, int intel, int wis, int cha, int hp){
+	public Race(String name, Dice str, Dice dex, Dice intel, Dice wis, Dice cha, Dice stam){
 		this.name = name;
 		this.strBonus = str;
 		this.dexBonus = dex;
 		this.intelBonus = intel;
-		this.hpBonus = hp;
+		this.stamBonus = stam;
 		this.setCharBonus(cha);
 		this.setWisBonus(wis);
 	}
@@ -32,51 +34,51 @@ public class Race {
 		this.name = name;
 	}
 
-	public int getStrBonus() {
+	public Dice getStrBonus() {
 		return strBonus;
 	}
 
-	public void setStrBonus(int strBonus) {
+	public void setStrBonus(Dice strBonus) {
 		this.strBonus = strBonus;
 	}
 
-	public int getDexBonus() {
+	public Dice getDexBonus() {
 		return dexBonus;
 	}
 
-	public void setDexBonus(int dexBonus) {
+	public void setDexBonus(Dice dexBonus) {
 		this.dexBonus = dexBonus;
 	}
 
-	public int getIntelBonus() {
+	public Dice getIntelBonus() {
 		return intelBonus;
 	}
 
-	public void setIntelBonus(int intelBonus) {
+	public void setIntelBonus(Dice intelBonus) {
 		this.intelBonus = intelBonus;
 	}
 
-	public int getHpBonus() {
-		return hpBonus;
+	public Dice getStamBonus() {
+		return stamBonus;
 	}
 
-	public void setHpBonus(int hpBonus) {
-		this.hpBonus = hpBonus;
+	public void setStamBonus(Dice stamBonus) {
+		this.stamBonus = stamBonus;
 	}
 
-	public int getWisBonus() {
+	public Dice getWisBonus() {
 		return wisBonus;
 	}
 
-	public void setWisBonus(int wisBonus) {
+	public void setWisBonus(Dice wisBonus) {
 		this.wisBonus = wisBonus;
 	}
 
-	public int getCharBonus() {
+	public Dice getCharBonus() {
 		return charBonus;
 	}
 
-	public void setCharBonus(int charBonus) {
+	public void setCharBonus(Dice charBonus) {
 		this.charBonus = charBonus;
 	}
 }

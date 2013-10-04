@@ -10,6 +10,10 @@ public class Stat {
 		this.fValue = 0;
 	}
 
+	public Stat(long both) {
+		this.cValue = this.fValue = both;
+	}
+	
 	public Stat (long current, long full){
 		this.cValue = current;
 		this.fValue = full;

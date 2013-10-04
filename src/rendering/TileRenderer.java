@@ -63,7 +63,7 @@ public class TileRenderer extends Thread {
 	public static State gameState;
 	
 	
-	private Dungeon cDungeon;
+	private static Dungeon cDungeon;
 	
 	
 	
@@ -184,8 +184,9 @@ public class TileRenderer extends Thread {
 		w = WIDTH - 35;
 		
 		bodyFont.drawString(h, w, "STR: " + cDungeon.getHero().str().getCurrent() + " DEX: " + 
-				cDungeon.getHero().dex().getCurrent() + " INT: " + cDungeon.getHero().intel().getCurrent() + " WEIGHT: "
-				+ cDungeon.getHero().mass().getCurrent() + "/" + cDungeon.getHero().mass().getFull());
+				cDungeon.getHero().dex().getCurrent() + " INT: " + cDungeon.getHero().intel().getCurrent() + " STA: "
+				+ cDungeon.getHero().stam().getCurrent() + " WIS: " + cDungeon.getHero().wis().getCurrent() + " CHA: "
+				+ cDungeon.getHero().cha().getCurrent() + " HP: " + cDungeon.getHero().hp().getPair());
 	}
 	
 	
@@ -261,7 +262,7 @@ public class TileRenderer extends Thread {
 	}
 	
 
-	public void loadTextures(){
+	public static void loadTextures(){
 		System.out.println("Loading textures...");
 		for(GraphObject tile : cDungeon.dungeon()){
 			tile.loadTexture();
@@ -276,6 +277,21 @@ public class TileRenderer extends Thread {
 		}
 		System.out.println("Done");
 	}
+	
+	public void destroyTextures() {
+		for(GraphObject tile : cDungeon.dungeon()){
+			tile.destroyTexture();
+		}
+		
+		for(AbstractThing item : cDungeon.getItems()){
+			item.destroyTexture();
+		}
+		
+		for(GraphObject creature : cDungeon.getCreatures()){
+			creature.destroyTexture();
+		}
+	}
+	
 	// Отрисовка отдельного тайла
 	public void renderTile(GraphObject tile){
 		
@@ -358,9 +374,15 @@ public class TileRenderer extends Thread {
 	public synchronized void render(){
 		initGL(HEIGHT, WIDTH);
 		loadTextures();
+		Dungeon prev = cDungeon;
 		while (true) {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-			
+			// Каков костыль
+			if(cDungeon != prev){
+				destroyTextures();
+				prev = cDungeon;
+				loadTextures();
+			}
 			//--------------			
 			renderState();
 			//--------------
@@ -424,14 +446,23 @@ public class TileRenderer extends Thread {
 
 	}
 	
+	public static Dungeon getDungeon() {
+		return cDungeon;
+	}
+	
+	public static void setDungeon(Dungeon d) {
+		cDungeon = d;
+		gameState = State.DUNGEON;
+	}
 	public static void main(String args[]){
 		
 		ScriptingContainer ruby = new ScriptingContainer(LocalVariableBehavior.PERSISTENT);
 		
 		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/races.rb");
-		Race goblin = (Race) ruby.get("race");
-		Race dwarf = new Race("Dwarf", 5, 0, -3, -1, -1, 4);
-		Hero you = new Hero("Urist", "./modules/TestModule/heros/hero.png", 1, 1, 5, 5, 5, 5, goblin, 4, Profession.WARRIOR);
+		Race test_race = (Race) ruby.get("race");
+		//Dice 
+		//Race dwarf = new Race("Dwarf", 5, 0, -3, -1, -1, 4);
+		Hero you = new Hero("Urist", "./modules/TestModule/heros/hero.png", 3, 3, test_race, 4, Profession.WARRIOR);
 		
 		
 		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/basic_forest.rb");
@@ -452,7 +483,7 @@ public class TileRenderer extends Thread {
 	
 		KeyboardControl controller = new KeyboardControl();
 		//r.controller.setDungeon(d);
-		controller.setDungeon(d);
+		//controller.setDungeon(d);
 		d.addHero(you);
 		controller.controlCreature(you);
 
@@ -468,13 +499,6 @@ public class TileRenderer extends Thread {
 
 	}
 
-	public Dungeon getcDungeon() {
-		return cDungeon;
-	}
-
-	public void setcDungeon(Dungeon cDungeon) {
-		this.cDungeon = cDungeon;
-	}
 
 	
 	

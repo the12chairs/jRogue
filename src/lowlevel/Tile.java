@@ -11,17 +11,16 @@ public class Tile extends GraphObject {
 	protected boolean passable;
 	protected String texturePath;
 	protected boolean visited;
-	
+
 	public static void main(String[] args) {
 		//Tile t = new Tile("Стена", '#', true, false, 1, 1);
 		//System.out.println(t.getTile());
 	}
 	
-	public Tile(){
-		super();
+	
+	public Tile() {
+		
 	}
-	
-	
 	
 	public Tile(Tile t, int x, int y){
 		super.face = t.getFace();
@@ -46,7 +45,6 @@ public class Tile extends GraphObject {
 	}
 	
 	
-
 	
 	// Конструктор прототипа.
 	public Tile(String name, String face, boolean visible, boolean passable){

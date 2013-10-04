@@ -74,36 +74,38 @@ public class Hero extends AbstractCreature{
 		quest.fail();
 	}
 	
-	public Hero(String name, String face, int x, int y, int hp, int str, int dex,
-			    int intel, Race race, int visionRadius, Profession profession){
+	public Hero(String name, String face, int x, int y, Race race, int visionRadius, Profession profession){
 		
+		this.race = race;
 		this.name = name;
 		this.face = face;
 		this.setPos(x, y);
-		this.hp = new Stat(hp, hp);
-		this.str = new Stat(str, str);
-		this.dex = new Stat(dex, dex);
-		this.intel = new Stat(intel, intel);
-		this.race = race;
+		this.stamina = new Stat(race.getStamBonus().throwDice());
+		this.str = new Stat(race.getStrBonus().throwDice());
+		this.dex = new Stat(race.getDexBonus().throwDice());
+		this.intel = new Stat(race.getIntelBonus().throwDice());
+		this.wisdom = new Stat(race.getWisBonus().throwDice());
+		this.charisma = new Stat(race.getCharBonus().throwDice());
 		this.profession = profession;
 		this.inventory = new Inventory();
-		this.mass = new Stat(0, str * massCoef);
-		this.initRaceBonuses();
+		this.mass = new Stat(0, str.getCurrent() * massCoef);
+		//this.initRaceBonuses();
 		this.questJournal = new LinkedList<Quest>();
 		this.level = 0;
 		this.exp = new Stat(0, firstExpCoef);
 		this.statPoints = 0;
 		this.damage = new Dice(1, 3);//new Stat(str, str + damageCoef);
 		this.visionRadius = visionRadius;
+		// HP = stamina / 2
+		this.hp = new Stat(stamina.getCurrent()/2);
 	}
 	
 
 	public static void main(String[] args) {
 		// Тесты
-		Race dwarf = new Race("Дварф", 5, 0, -3, -2, -1,  4);
-		Hero you = new Hero("Макс", "ololo", 2, 1, 5, 5, 5, 5, dwarf, 3, Profession.WARRIOR);
-		System.out.println("Опыт: " + you.exp.getPair());
-		you.initRaceBonuses();
+		//Race dwarf = new Race("Дварф", 5, 0, -3, -2, -1,  4);
+		//Hero you = new Hero("Макс", "ololo", 2, 1, 5, 5, 5, 5, dwarf, 3, Profession.WARRIOR);
+		//System.out.println("Опыт: " + you.exp.getPair());
 
 	}
 

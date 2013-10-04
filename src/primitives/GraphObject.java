@@ -2,6 +2,7 @@ package primitives;
 
 import java.io.IOException;
 
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
@@ -21,7 +22,10 @@ public class GraphObject {
 	}
 	
 	
-	
+	public void destroyTexture(){
+		if (texture != null)
+			GL11.glDeleteTextures(texture.getTextureID());
+	}
 	public void loadTexture(){
 		Texture t = null;
 		try {

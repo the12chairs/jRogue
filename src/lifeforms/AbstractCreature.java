@@ -25,6 +25,9 @@ public abstract class AbstractCreature extends GraphObject{
 	protected Stat str;
 	protected Stat dex;
 	protected Stat intel;
+	protected Stat wisdom;
+	protected Stat charisma;
+	protected Stat stamina;
 	protected long purse; // Деньги-денежки
 	protected Stat mass;
 	protected Dice damage;
@@ -39,6 +42,16 @@ public abstract class AbstractCreature extends GraphObject{
 		this.y += dy;
 	}
 
+	
+	public Stat wis(){
+		return wisdom;
+	}
+	
+
+	
+	public Stat cha(){
+		return charisma;
+	}
 	
 	public Stat hp(){
 		return hp;
@@ -55,6 +68,10 @@ public abstract class AbstractCreature extends GraphObject{
 		return intel;
 	}
 
+	
+	public Stat stam(){
+		return stamina;
+	}
 	
 	public Stat mass(){
 		return mass;
@@ -117,19 +134,6 @@ public abstract class AbstractCreature extends GraphObject{
 		return new Dice(1,3);
 	}
 	
-	// Выставим расовые бонусы
-	public void initRaceBonuses(){
-		
-		this.dex.setFull(this.dex.getFull() + this.race.getDexBonus());
-		this.str.setFull(this.str.getFull() + this.race.getStrBonus());
-		this.intel.setFull(this.intel.getFull() + this.race.getIntelBonus());
-		this.hp.setFull(this.hp.getFull() + this.race.getHpBonus());
-	
-		this.dex.setCurrent(this.dex.getCurrent() + this.race.getDexBonus());
-		this.str.setCurrent(this.str.getCurrent() + this.race.getStrBonus());
-		this.intel.setCurrent(this.intel.getCurrent() + this.race.getIntelBonus());
-		this.hp.setCurrent(this.hp.getCurrent() + this.race.getHpBonus());
-	}
 
 	public String getProfession(){
 		switch (this.profession){

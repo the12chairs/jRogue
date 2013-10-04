@@ -26,7 +26,7 @@ public class Dungeon implements ILosBoard{
 	private LinkedList<AbstractThing> sceneThings;
 	private LinkedList<Quest> sceneQuests;
 	private LinkedList<AbstractCreature> sceneLife;
-	
+	private LinkedList<Portal> scenePortals;
 
 	private int numRooms;
 	
@@ -35,11 +35,17 @@ public class Dungeon implements ILosBoard{
 	private long width;
 	
 	
+	public void addPortal(Portal p){
+		scenePortals.push(p);
+	}
 	
 	public void addHero(Hero hero){
 		sceneLife.addFirst(hero);
 	}
 	
+	public void removeHero() {
+		sceneLife.removeFirst();
+	}
 	public AbstractCreature getHero(){
 		return sceneLife.getFirst();
 	}
@@ -97,6 +103,7 @@ public class Dungeon implements ILosBoard{
 		this.sceneLife = new LinkedList<AbstractCreature>();
 		this.sceneQuests = new LinkedList<Quest>();
 		this.sceneThings = new LinkedList<AbstractThing>();
+		this.scenePortals = new LinkedList<Portal>();
 	}
 
 	public LinkedList<Tile> dungeon(){
@@ -218,6 +225,17 @@ public class Dungeon implements ILosBoard{
 		return things;
 	}
 	
+	public Portal getPortal(long x, long y){
+		Portal portal = null;
+		for(Portal p : scenePortals){
+			if((p.getX() == x) && (p.getY() == y)){
+				portal = p;
+				break;
+			}
+		}
+		return portal;
+	}
+	
 	// Get tile by coords
 	public Tile getTile(long x, long y){
 		Tile t = null;
@@ -232,6 +250,7 @@ public class Dungeon implements ILosBoard{
 
 	public static void main(String[] args) {
 		// Тесты
+		/*
 		Race dwarf = new Race("Дварф", 5, 0, -3, -1, -1, 4);
 		Hero you = new Hero("Макс", "ololo", 2, 1, 5, 5, 5, 5, dwarf, 2, Profession.WARRIOR);
 		//System.out.println("Опыт: " + you.exp.getPair());
@@ -242,7 +261,7 @@ public class Dungeon implements ILosBoard{
 		LinkedList<AbstractCreature> f = new LinkedList<AbstractCreature>();
 		f.push(you);
 		//d.addLife(you);
-
+*/
 	}
 
 	@Override

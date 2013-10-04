@@ -12,7 +12,8 @@ public abstract class AbstractThing extends GraphObject{
 		ARMOR,
 		THING,
 		POTION,
-		SCROLL
+		SCROLL,
+		PORTAL
 	}
 	
 	private MainType mType;
@@ -22,7 +23,7 @@ public abstract class AbstractThing extends GraphObject{
 	protected int cost;
 	
 	protected int bonus;
-	
+	protected boolean allowed; // Запрет/разрешение подбирать предмет
 	
 	
 	public AbstractThing(String name, String face, int heavy, int cost, long x, long y, MainType mType){
@@ -31,9 +32,19 @@ public abstract class AbstractThing extends GraphObject{
 		this.heavy = heavy;
 		this.cost = cost;
 		this.mType = mType;
+		allowed = true;
 	}
 
+	public AbstractThing() {
+		
+	}
+	public boolean isAllowed(){
+		return allowed;
+	}
 
+	public void setAllow(boolean a) {
+		allowed = a;
+	}
 	public void setName(String name){
 		this.name = name;
 	}
