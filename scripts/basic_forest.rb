@@ -52,9 +52,12 @@ puts "Seeding trees"
 }
 
 
-
+Java::lowlevel::AbstractThing::MainType.value_of("WEAPON")
 forest.addPortal(Java::lowlevel::Portal.new(forest, forest1, 1, 1))
 forest1.addPortal(Java::lowlevel::Portal.new(forest1, forest, 1, 1))
 
+
+sword = Java::items::Weapon.new("Test", adder+"res/star.png", Java::items.Weapon::Type.value_of("MACE"), "Sword", Java::dnd::Dice.new(1,6), 100, 10, 3, 3)
+forest.addThing sword
 puts "Trees done!"
 puts "Done!"

@@ -358,13 +358,14 @@ public class KeyboardControl extends Thread{
 			// Переход на другую карту
 			if(Keyboard.isKeyDown(Keyboard.KEY_G)){
 				Portal port = TileRenderer.getDungeon().getPortal(x, y);
-				System.out.println(port.next());
-				TileRenderer.getDungeon().removeHero();
-				port.next().addHero((Hero) controlled);
-				TileRenderer.setDungeon(port.next());
-				port.next().getHero().setVisible(true);
-			}
+				if(port != null){
+					TileRenderer.getDungeon().removeHero();
+					port.next().addHero((Hero) controlled);
+					TileRenderer.setDungeon(port.next());
+					port.next().getHero().setVisible(true);
 			
+				}
+			}
 			recreateVisible();
 		}
 	}
