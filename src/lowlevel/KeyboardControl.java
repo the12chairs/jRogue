@@ -47,7 +47,12 @@ public class KeyboardControl extends Thread{
 	
 	
 	public boolean isPassable(Tile t){
-		return t.getPassable();
+		if(t != null){
+			return t.getPassable();
+		}
+		else{
+			return false;
+		}
 	}
 	
 	@Override
@@ -309,28 +314,28 @@ public class KeyboardControl extends Thread{
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
 				Tile t = TileRenderer.getDungeon().getTile(x, y - 1);
-				if(isPassable(t)){
+				if(isPassable(t) && t != null){
 					controlled.move(0, -1);
 				}
 
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
 				Tile t = TileRenderer.getDungeon().getTile(x, y + 1);
-				if(isPassable(t)){
+				if(isPassable(t) && t != null){
 					controlled.move(0, 1);	
 				}
 
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
 				Tile t = TileRenderer.getDungeon().getTile(x - 1, y);
-				if(isPassable(t)){
+				if(isPassable(t) && t != null){
 					controlled.move(-1, 0);
 				}
 
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
 				Tile t = TileRenderer.getDungeon().getTile(x + 1, y);
-				if(isPassable(t)){
+				if(isPassable(t) && t != null){
 					controlled.move(1, 0);
 				}
 			}

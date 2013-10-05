@@ -239,6 +239,9 @@ public class Dungeon implements ILosBoard{
 	// Get tile by coords
 	public Tile getTile(long x, long y){
 		Tile t = null;
+		if (x > width || y > width){
+			return null;
+		}
 		for(Tile i : dungeon){
 			if((i.getX() == x) && (i.getY() == y)){
 				t = i;
