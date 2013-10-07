@@ -27,7 +27,11 @@ public class Dice {
 	public int throwDice(){
 		
 		rand = new Random();
-		return num * (rand.nextInt(edges) + 1);
+		int sum = 0;
+		for(int i = 0; i < num; i++){
+			sum += (rand.nextInt(edges)+1);
+		}
+			return sum;
 	}
 	
 	public String getPair(){
