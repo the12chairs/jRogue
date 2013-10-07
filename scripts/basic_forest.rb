@@ -13,17 +13,35 @@ require $adder + 'lib/dnd.jar'
 
 puts "Making forest..."
 
+$forests = Array.new
 forest = Java::lowlevel::Dungeon.new 30, 30
 forest1 = Java::lowlevel::Dungeon.new 30, 30
-tree1_proto = Java::lowlevel::Tile.new 'Tree', $adder + 'res/tree1.png', false, false
+$num_forests = Java::dnd::Dice.new 10,20
 
-tree2_proto = Java::lowlevel::Tile.new 'Tree', $adder + 'res/tree2.png', false, false
-grass_proto = Java::lowlevel::Tile.new 'Grass', $adder + 'res/grass.png', false, true
+$tree1_proto = Java::lowlevel::Tile.new 'Tree', $adder + 'res/tree1.png', true, false
+
+$tree2_proto = Java::lowlevel::Tile.new 'Tree', $adder + 'res/tree2.png', true, false
+grass_proto = Java::lowlevel::Tile.new 'Grass', $adder + 'res/grass.png', true, true
 
 #num_trees = Java::dnd::Dice.new(forest.getHeight, forest.getWidth).throwDice
-num_groups_trees = Java::dnd::Dice.new 6, 6
-$num_trees_in_group = Java::dnd::Dice.new 1, 12 
+$num_groups_trees = Java::dnd::Dice.new 8, 6
+$num_trees_in_group = Java::dnd::Dice.new 1, 9
+$groups = Array.new
 
+
+
+def gen_forests
+  $num_forests.throwDice.times{
+    $forests.push(Java::lowlevel::Dungeon.new(30, 30))
+  }
+  i = 0
+  $forests.each {
+    |f|
+    if i != 0 
+      
+    end
+  } 
+end
 
 def tree 
   if Random.rand(1 .. 2) == 1 
@@ -35,52 +53,50 @@ end
 
 
 def seed_groups f
-  h = Random.rand(4 .. f.getHeight-4)
-  w = Random.rand(4 .. f.getWidth-4)
+  ($num_groups_trees.throwDice).times {
+    prew_h = Random.rand(2 .. f.getHeight-2) 
+    prew_w = Random.rand(2 .. f.getWidth-2)
 
-  f.removeTile h, w
-  f.addTile(Java::lowlevel::Tile.new(tree, h, w))
+    tmp = Java::lowlevel::Tile.new($tree1_proto, prew_h, prew_w)
+    f.removeTile prew_h, prew_w
+    f.addTile tmp
+    $groups.push tmp
+    h = 0
+    w = 0
+    while(h <= 0 || w <= 0 || w >= f.getWidth || h >= f.getHeight || (((w - prew_w).abs < 5) && ((h - prew_h).abs < 5)))
+      
+      h = Random.rand(2 .. f.getHeight-2)
+      w = Random.rand(2 .. f.getWidth-2)
+    end
+    prew_w = w
+    prew_h = h
+  }
 end
 
 
 
 def seed_full f
   trees_places = Array.new
-  f.dungeon.each{
-    |t|
-    if t.getName == 'Tree'
-      num = $num_trees_in_group.throwDice
-      num.times {
-        |i|
-        h_parent = h = t.getX
-        w_parent = w = t.getY
-
-        #$tile = f.getTile(h, w).getName
-
-        while ((f.getTile(h, w)).getName == 'Tree')
-          h = Random.rand h_parent-3 .. h_parent+3
-          w = Random.rand w_parent-3 .. w_parent+3
-          puts "is tree? #{h}:#{w}"
-        end
-        puts "#{num} trees in group, its #{i} -- #{h}:#{w} \n"
-        
-        
-        #f.removeTile h, w
-        #f.addTile tree, h, w
-        
-        trees_places.push( f.getTile( h, w))
-      }
-    end
-  }
-  
-  puts "size"
-  puts trees_places.size
-  trees_places.each {
-    |t|
-    f.removeTile t.getY, t.getX
-    f.addTile tree, t.getY, t.getX
+  i = 0
+  $groups.each{
+    |g|
+    num = $num_trees_in_group.throwDice
+    num.times {
+      |i|
+      w = g.getY
+      h = g.getX
+      while(w <= 0 || h <= 0 || w >= f.getHeight || h >= f.getWidth || f.getTile(h, w).getName == 'Tree') 
+        w = Random.rand(g.getY-3 .. g.getY+3)
+        h = Random.rand(g.getX-3 .. g.getX+3)
+      end
+      f.removeTile h, w
+      f.addTile Java::lowlevel::Tile.new($tree2_proto, h, w)
+      puts "group #{i} tree n #{i} from #{num}" 
+    }
+    i+=1
   }
 end
+
 puts "Making grass..."
 
 
@@ -114,15 +130,15 @@ num_trees.times {
 }
 =end
 
-(num_groups_trees.throwDice()).times {
-  seed_groups forest
-  seed_full forest
-}
+gen_forests
 
-(num_groups_trees.throwDice()).times {
-  seed_groups forest1
-  seed_full forest1
-}
+seed_groups forest
+seed_full forest
+
+
+seed_groups forest1
+
+seed_full forest1 
 Java::lowlevel::AbstractThing::MainType.value_of("WEAPON")
 forest.addPortal(Java::lowlevel::Portal.new(forest, forest1, 1, 1))
 forest1.addPortal(Java::lowlevel::Portal.new(forest1, forest, 1, 1))
