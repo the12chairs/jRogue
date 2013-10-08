@@ -10,8 +10,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import lifeforms.AbstractCreature;
 import lifeforms.AbstractCreature.Profession;
 import lifeforms.Hero;
+import lifeforms.Mob;
 import lowlevel.AbstractThing;
 import lowlevel.Dungeon;
 import lowlevel.KeyboardControl;
@@ -46,7 +48,7 @@ public class TileRenderer extends Thread {
 	// TODO: Сделать обработку этих состояний
 	public enum State { MAIN_MENU, DUNGEON, INVENTORY,
 						DROP_ITEM, WEAR_ARMOR, TAKE_WEAPON,
-						MAGICK, ALCHEMY, RUNES, CRAFT };
+						MAGICK, ALCHEMY, RUNES, CRAFT, DEATH };
 	
 	private static final int HEIGHT = 800;
 	private static final int WIDTH = 600;
@@ -249,8 +251,8 @@ public class TileRenderer extends Thread {
 			}
 		}
 		
-		for(GraphObject creature : cDungeon.getCreatures()){
-			if(creature.getVisible() == true){
+		for(AbstractCreature creature : cDungeon.getCreatures()){
+			if(creature.getVisible() == true && creature.isAlive()){
 				creature.getTexture().bind();
 				renderTile(creature);
 			}
@@ -348,6 +350,10 @@ public class TileRenderer extends Thread {
 	}
 	
 	
+	public void renderDeath(){
+		System.out.println("You're dead!");
+	}
+	
 	 public void renderState(){
 		 // Состояния рендерера
 		 switch(gameState){
@@ -362,6 +368,9 @@ public class TileRenderer extends Thread {
 			 break;
 		 case TAKE_WEAPON:
 			 renderWeapon();
+			 break;
+		 case DEATH:
+			 renderDeath();
 			 break;
 		 default:
 			 break;
@@ -460,18 +469,20 @@ public class TileRenderer extends Thread {
 		
 		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/races.rb");
 		Race test_race = (Race) ruby.get("race");
+		Race gobo = (Race) ruby.get("gobo");
 		//Dice 
 		//Race dwarf = new Race("Dwarf", 5, 0, -3, -1, -1, 4);
 		Hero you = new Hero("Urist", "./modules/TestModule/heros/hero.png", 3, 3, test_race, 4, Profession.WARRIOR);
-		
+		Mob enemy = new Mob("Urist", "./modules/TestModule/heros/hero.png", 5, 5, gobo, 4, true);
 		
 		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/basic_forest.rb");
 		DungeonGenerator generator = new DungeonGenerator(30, 31, 5, 5);
 		//Dungeon d = generator.generateDungeon();//new Dungeon("./modules/TestModule/locations/texture.json");
 		Dungeon d = (Dungeon) ruby.get("forest");
 		//loadTextures(d);
+		d.addLife(enemy);
 		you.setVisible(true);
-		
+		System.out.println(d.getCreature(5, 5));
 		/*		
 		d.addThing(new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 6), 100, 10, 4, 4));
 		

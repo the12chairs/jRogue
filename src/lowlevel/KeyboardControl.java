@@ -8,6 +8,7 @@ import org.lwjgl.input.Keyboard;
 import properties.Weaponable;
 import lifeforms.AbstractCreature;
 import lifeforms.Hero;
+import lifeforms.Mob;
 import rendering.TileRenderer;
 import rlforj.los.IFovAlgorithm;
 import rlforj.los.ShadowCasting;
@@ -98,9 +99,16 @@ public class KeyboardControl extends Thread{
 			takeWeaponAction();
 		}
 		
+		if(TileRenderer.gameState == TileRenderer.State.DEATH){
+			deathAction();
+		}
 	}
 	
 	
+	
+	public synchronized void deathAction(){
+		
+	}
 	
 	public synchronized void takeWeaponAction(){
 		
@@ -156,6 +164,7 @@ public class KeyboardControl extends Thread{
 	
 	public synchronized void dropAction(){
 		
+
 		
 		long x = controlled.getX();
 		long y = controlled.getY();
@@ -207,6 +216,7 @@ public class KeyboardControl extends Thread{
 				TileRenderer.gameState = TileRenderer.State.DUNGEON;
 			}
 		}
+		
 	}
 
 	public synchronized void inventoryAction(){
@@ -306,6 +316,13 @@ public class KeyboardControl extends Thread{
 	
 	public synchronized void commandAction(){
 		
+		
+		
+		// Старушка умерла
+		if(!controlled.isAlive()){
+			TileRenderer.gameState = TileRenderer.State.DEATH;
+		}
+		
 		long x = controlled.getX();
 		long y = controlled.getY();
 		
@@ -314,6 +331,15 @@ public class KeyboardControl extends Thread{
 			
 			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
 				Tile t = TileRenderer.getDungeon().getTile(x, y - 1);
+				Mob c = (Mob)TileRenderer.getDungeon().getCreature(x, y-1);
+				
+				if(c != null && c.isAgressive() && c.isAlive()){
+					controlled.hit(c);
+					if(c.isAlive()){
+						c.hit(controlled);
+					}
+					break;
+				}
 				if(isPassable(t) && t != null){
 					controlled.move(0, -1);
 				}
@@ -321,6 +347,14 @@ public class KeyboardControl extends Thread{
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
 				Tile t = TileRenderer.getDungeon().getTile(x, y + 1);
+				Mob c = (Mob)TileRenderer.getDungeon().getCreature(x, y+1);
+				if(c != null && c.isAgressive() && c.isAlive()){
+					controlled.hit(c);
+					if(c.isAlive()){
+						c.hit(controlled);
+					}
+					break;
+				}
 				if(isPassable(t) && t != null){
 					controlled.move(0, 1);	
 				}
@@ -328,6 +362,15 @@ public class KeyboardControl extends Thread{
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
 				Tile t = TileRenderer.getDungeon().getTile(x - 1, y);
+				Mob c = (Mob)TileRenderer.getDungeon().getCreature(x-1, y);
+				if(c != null && c.isAgressive() && c.isAlive()){
+					controlled.hit(c);
+					if(c.isAlive()){
+						c.hit(controlled);
+					}
+					break;
+				}
+				
 				if(isPassable(t) && t != null){
 					controlled.move(-1, 0);
 				}
@@ -335,6 +378,14 @@ public class KeyboardControl extends Thread{
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
 				Tile t = TileRenderer.getDungeon().getTile(x + 1, y);
+				Mob c = (Mob)TileRenderer.getDungeon().getCreature(x+1, y);
+				if(c != null && c.isAgressive() && c.isAlive()){
+					controlled.hit(c);
+					if(c.isAlive()){
+						c.hit(controlled);
+					}
+					break;
+				}
 				if(isPassable(t) && t != null){
 					controlled.move(1, 0);
 				}

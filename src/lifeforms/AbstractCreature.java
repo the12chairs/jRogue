@@ -37,11 +37,22 @@ public abstract class AbstractCreature extends GraphObject{
 	protected boolean weaponed;
 	protected Weapon hands; // Что в руках
 	// Интерфейс
+	
+	
+	public void hit(AbstractCreature c){
+		c.hp.setCurrent(c.hp.getCurrent() - damage.throwDice());
+	}
+	
 	public void move(int dx, int dy){
 		this.x += dx;
 		this.y += dy;
 	}
 
+	
+	public boolean isAlive() {
+		if(hp.getCurrent() > 0) return true;
+		else return false;
+	}
 	
 	public Stat wis(){
 		return wisdom;
