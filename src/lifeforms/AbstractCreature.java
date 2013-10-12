@@ -1,5 +1,7 @@
 package lifeforms;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 
 import items.Weapon;
@@ -38,6 +40,9 @@ public abstract class AbstractCreature extends GraphObject{
 	protected Weapon hands; // Что в руках
 	// Интерфейс
 	
+	protected Stat pd; // Подвижность
+	
+	protected int armorClass;
 	
 	public void hit(AbstractCreature c){
 		c.hp.setCurrent(c.hp.getCurrent() - damage.throwDice());
@@ -58,7 +63,6 @@ public abstract class AbstractCreature extends GraphObject{
 		return wisdom;
 	}
 	
-
 	
 	public Stat cha(){
 		return charisma;
@@ -171,6 +175,14 @@ public abstract class AbstractCreature extends GraphObject{
 		this.inventory.dropItem(item);
 		this.mass.setCurrent(this.mass.getCurrent() - t.getHeavy());
 	}
+	
+	
+	public void dropItem(AbstractThing item){
+		//AbstractThing t = inventory.findByKey(key);
+		this.inventory.dropItem(item);
+		this.mass.setCurrent(this.mass.getCurrent() - item.getHeavy());
+	}
+	
 	
 	
 	public Weapon getHands(){

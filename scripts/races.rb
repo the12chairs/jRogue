@@ -31,6 +31,7 @@ require "./scripts/lib/dnd.jar"
 
 dice3d6 = Java::dnd::Dice.new 3, 6 # Here 3d6 dice
 dice6d6 = Java::dnd::Dice.new 6, 6
+dice1d6 = Java::dnd::Dice.new 1, 6
 # The hash list of races
 races_list = {}
 
@@ -60,4 +61,4 @@ races_list[:human] = Java::properties::Race.new("Human", dice3d6, dice3d6, dice3
 
 race = races_list[:human]
 
-gobo = Java::properties::Race.new("Gobo", dice6d6, dice6d6, dice6d6, dice6d6, dice6d6, dice6d6)
+gobo = Java::properties::Race.new("Gobo", dice1d6, dice1d6, dice1d6, dice1d6, dice1d6, dice1d6)

@@ -1,6 +1,10 @@
 package lowlevel;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
+
 import items.Weapon;
 
 import org.lwjgl.input.Keyboard;
@@ -288,7 +292,9 @@ public class KeyboardControl extends Thread{
 			
 			// Дроп
 			if(Keyboard.isKeyDown(Keyboard.KEY_D)){
-				AbstractThing dropped = null;
+				drop(controlled, TileRenderer.check.getPos());
+				/*AbstractThing dropped = null;
+				
 				if(controlled.inventory().allInvenory().get(TileRenderer.check.getPos()) != null){
 					dropped = controlled.inventory().allInvenory().get(TileRenderer.check.getPos());
 					//controlled.inventory().dropItem(TileRenderer.check.getPos());
@@ -300,6 +306,7 @@ public class KeyboardControl extends Thread{
 					TileRenderer.getDungeon().addThing(dropped, x, y);
 				
 				}
+				*/
 				
 			}
 			
@@ -312,6 +319,45 @@ public class KeyboardControl extends Thread{
 	}
 
 	
+	public void drop(AbstractCreature who, int what){
+		AbstractThing dropped = null;
+		if(who.inventory().allInvenory().get(TileRenderer.check.getPos()) != null){
+			dropped = who.inventory().allInvenory().get(what);
+			//controlled.inventory().dropItem(TileRenderer.check.getPos());
+			// Попытка выбросить экипированное
+			if(who.getHands() == dropped){
+				who.unuseWeapon();
+			}
+			who.dropItem(/*TileRenderer.check.getPos()*/what);
+			TileRenderer.getDungeon().addThing(dropped, who.getX(), who.getY());
+		
+		}
+	}
+	
+	
+	
+	// При смерти существа
+	
+	public void death(AbstractCreature who){
+		
+		// Сохраняем оставшиеся предметы в инвентаре
+		List<Integer> buffer = new ArrayList<Integer>();
+		for(Entry<Integer, AbstractThing> t: who.inventory().allInvenory().entrySet()){
+			buffer.add(t.getKey());
+		}	
+				
+		// Зачищаем инвентарь
+		for(Integer i : buffer){
+			drop(who, i);
+		}
+	
+		
+	}
+	
+	
+	public void dropAll(AbstractCreature c) {
+		
+	}
 	
 	
 	public synchronized void commandAction(){
@@ -338,8 +384,18 @@ public class KeyboardControl extends Thread{
 					if(c.isAlive()){
 						c.hit(controlled);
 					}
+					else {
+						death(c);
+					}
 					break;
+					
 				}
+				/*
+				if(c!= null && !c.isAlive()){
+					long cx = c.getX();
+					long cy = c.getY();
+				}
+				*/
 				if(isPassable(t) && t != null){
 					controlled.move(0, -1);
 				}
@@ -352,6 +408,9 @@ public class KeyboardControl extends Thread{
 					controlled.hit(c);
 					if(c.isAlive()){
 						c.hit(controlled);
+					}
+					else {
+						death(c);
 					}
 					break;
 				}
@@ -368,6 +427,9 @@ public class KeyboardControl extends Thread{
 					if(c.isAlive()){
 						c.hit(controlled);
 					}
+					else {
+						death(c);
+					}
 					break;
 				}
 				
@@ -383,6 +445,9 @@ public class KeyboardControl extends Thread{
 					controlled.hit(c);
 					if(c.isAlive()){
 						c.hit(controlled);
+					}
+					else {
+						death(c);
 					}
 					break;
 				}

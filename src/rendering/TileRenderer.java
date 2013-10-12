@@ -245,7 +245,6 @@ public class TileRenderer extends Thread {
 		
 		for(AbstractThing item : cDungeon.getItems()){
 			if(item.getVisible() == true){
-				
 				item.getTexture().bind();
 				renderTile(item);
 			}
@@ -277,6 +276,14 @@ public class TileRenderer extends Thread {
 		for(GraphObject creature : cDungeon.getCreatures()){
 			creature.loadTexture();
 		}
+		
+		// Все предметы в карманах у тварей
+		for(AbstractCreature c : cDungeon.getCreatures()){
+			for(Entry<Integer, AbstractThing> t : c.inventory().allInvenory().entrySet()){
+				t.getValue().loadTexture();
+			}
+		}
+		
 		System.out.println("Done");
 	}
 	
@@ -292,6 +299,13 @@ public class TileRenderer extends Thread {
 		for(GraphObject creature : cDungeon.getCreatures()){
 			creature.destroyTexture();
 		}
+		
+		for(AbstractCreature c : cDungeon.getCreatures()){
+			for(Entry<Integer, AbstractThing> t : c.inventory().allInvenory().entrySet()){
+				t.getValue().loadTexture();
+			}
+		}
+		
 	}
 	
 	// Отрисовка отдельного тайла
@@ -351,7 +365,8 @@ public class TileRenderer extends Thread {
 	
 	
 	public void renderDeath(){
-		System.out.println("You're dead!");
+		headFont.drawString(WIDTH / 2, HEIGHT / 2, "You're dead!");
+		//System.out.println("You're dead!");
 	}
 	
 	 public void renderState(){
@@ -384,6 +399,7 @@ public class TileRenderer extends Thread {
 		initGL(HEIGHT, WIDTH);
 		loadTextures();
 		Dungeon prev = cDungeon;
+		//LinkedList<AbstractCreature> prevCreatures = cDungeon.getCreatures();
 		while (true) {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 			// Каков костыль
@@ -392,6 +408,11 @@ public class TileRenderer extends Thread {
 				prev = cDungeon;
 				loadTextures();
 			}
+			/*
+			if(cDungeon.getCreatures() != prev.getCreatures()){
+				//destroyCreatureTextures();
+			}
+			*/
 			//--------------			
 			renderState();
 			//--------------
@@ -482,14 +503,14 @@ public class TileRenderer extends Thread {
 		//loadTextures(d);
 		d.addLife(enemy);
 		you.setVisible(true);
-		System.out.println(d.getCreature(5, 5));
-		/*		
+		//System.out.println(d.getCreature(5, 5));
+		
 		d.addThing(new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 6), 100, 10, 4, 4));
 		
 		d.addThing(new Weapon("Sword", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 8), 100, 10, 4, 5));
 		d.addThing(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3));
 		
-		*/
+		enemy.takeItem(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3));
 		TileRenderer r = new TileRenderer(d);
 	
 		KeyboardControl controller = new KeyboardControl();

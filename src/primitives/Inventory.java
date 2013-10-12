@@ -45,7 +45,10 @@ public class Inventory {
 
 		return weapons;
 	}
+
 	
+	
+
 	public AbstractThing findByName(String name){
 		for(AbstractThing i : this.inventory.values()){
 			if(i.getName() == name){
@@ -99,11 +102,13 @@ public class Inventory {
 	public void dropItem(AbstractThing item){
 		
 		
-		for(Entry<Integer, AbstractThing> t: inventory.entrySet()){
+		for(Entry<Integer, AbstractThing> t : inventory.entrySet()){
 		
 			if(t == item){
 				inventory.remove(t.getKey());
+				//inventory.remove(t);
 				itemNumber--;
+				System.out.println("Dropped");
 			}
 		}
 		
