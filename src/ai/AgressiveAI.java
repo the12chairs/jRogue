@@ -1,16 +1,33 @@
 package ai;
 
+import lifeforms.AbstractCreature;
+import lowlevel.Dungeon;
+
 public class AgressiveAI implements AI{
 
 	
-	public void lurk() {
+	@Override
+	public void lurk(AbstractCreature c) {
 		// TODO Auto-generated method stub
-		System.out.println("lololo");
+		
 	}
-	
-	public void attack() {
+
+	@Override
+	public void attack(AbstractCreature c, AbstractCreature victim) {
 		// TODO Auto-generated method stub
-		int i;
+		
+	}
+
+	@Override
+	public void setVisible(Dungeon d) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setDivide(int x, int y) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

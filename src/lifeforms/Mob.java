@@ -17,8 +17,6 @@ public class Mob extends AbstractCreature {
 	private boolean agressive;
 	
 	
-	AI ai;
-	
 	public Mob(String name, String face, int x, int y, Race race, int visionRadius, boolean agro){
 		this.name = name;
 		this.face = face;
@@ -45,9 +43,6 @@ public class Mob extends AbstractCreature {
 	
 	public boolean isAgressive(){
 		return agressive;
-	}
-	public void seekVictum(){
-		
 	}
 
 }

@@ -20,6 +20,8 @@ import rlforj.los.ShadowCasting;
 
 public class KeyboardControl extends Thread{
 	
+	private long turns;
+	private long oldTurns;
 	private AbstractCreature controlled; // Кем управляем
 	//private Dungeon dung; // Мля, вторая копия этого ублюдка
 	
@@ -29,6 +31,7 @@ public class KeyboardControl extends Thread{
 
 	
 	public KeyboardControl(){
+		turns = oldTurns = 0;
 		System.out.println("Initializing keyboard controller...");
 
 		controlled = null;
@@ -36,6 +39,7 @@ public class KeyboardControl extends Thread{
 	
 	
 	public KeyboardControl(AbstractCreature object){
+		turns = oldTurns = 0;
 		System.out.println("Initializing keyboard controller...");
 		controlled = object;
 		System.out.println("Done!");
@@ -373,9 +377,21 @@ public class KeyboardControl extends Thread{
 		long y = controlled.getY();
 		
 		
+		//Keyboard.
 		while(Keyboard.next()){
 			
+			boolean up = false;
+			boolean down = false;
+			boolean left = false;
+			boolean right = false;
 			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
+				if(Keyboard.getEventKeyState()){
+					up = true;
+				}
+				else {
+					up = false;
+				}
+				/*
 				Tile t = TileRenderer.getDungeon().getTile(x, y - 1);
 				Mob c = (Mob)TileRenderer.getDungeon().getCreature(x, y-1);
 				
@@ -395,13 +411,21 @@ public class KeyboardControl extends Thread{
 					long cx = c.getX();
 					long cy = c.getY();
 				}
-				*/
+				
 				if(isPassable(t) && t != null){
 					controlled.move(0, -1);
 				}
+				*/
 
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
+				if(Keyboard.getEventKeyState()){
+					down = true;
+				}
+				else {
+					down = false;
+				}
+				/*
 				Tile t = TileRenderer.getDungeon().getTile(x, y + 1);
 				Mob c = (Mob)TileRenderer.getDungeon().getCreature(x, y+1);
 				if(c != null && c.isAgressive() && c.isAlive()){
@@ -417,9 +441,16 @@ public class KeyboardControl extends Thread{
 				if(isPassable(t) && t != null){
 					controlled.move(0, 1);	
 				}
-
+*/
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
+				if(Keyboard.getEventKeyState()){
+					left = true;
+				}
+				else {
+					left = false;
+				}
+				/*
 				Tile t = TileRenderer.getDungeon().getTile(x - 1, y);
 				Mob c = (Mob)TileRenderer.getDungeon().getCreature(x-1, y);
 				if(c != null && c.isAgressive() && c.isAlive()){
@@ -436,9 +467,16 @@ public class KeyboardControl extends Thread{
 				if(isPassable(t) && t != null){
 					controlled.move(-1, 0);
 				}
-
+				 */
 			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)){
+			if(Keyboard.getEventKey() == Keyboard.KEY_RIGHT){
+				if(Keyboard.getEventKeyState()){
+					right = true;
+				}
+				else {
+					right = false;
+				}
+				/*
 				Tile t = TileRenderer.getDungeon().getTile(x + 1, y);
 				Mob c = (Mob)TileRenderer.getDungeon().getCreature(x+1, y);
 				if(c != null && c.isAgressive() && c.isAlive()){
@@ -454,9 +492,12 @@ public class KeyboardControl extends Thread{
 				if(isPassable(t) && t != null){
 					controlled.move(1, 0);
 				}
+				*/
 			}
+			
 			// Взять предмет
 			if(Keyboard.isKeyDown(Keyboard.KEY_COMMA)){
+				turns++;
 				AbstractThing getted = null;
 				for(AbstractThing t : TileRenderer.getDungeon().getThings(x, y)){
 					if(t.getVisible() == true && t.isAllowed() == true){
@@ -487,9 +528,63 @@ public class KeyboardControl extends Thread{
 			
 				}
 			}
+			if(up) {
+				controlledMove(0, -1);
+			}
+			if(down) {
+				controlledMove(0, 1);
+			}
+			if(left) {
+				controlledMove(-1, 0);
+			}
+			if(right) {
+				controlledMove(1, 0);
+			}
+			surroundTurn();
 			recreateVisible();
+			
 		}
+		
 	}
 
-
+	
+	
+	public void controlledMove(int dx, int dy) {
+		turns++;
+		Tile t = TileRenderer.getDungeon().getTile(controlled.getX()+dx, controlled.getY()+dy);
+		Mob c = (Mob)TileRenderer.getDungeon().getCreature(controlled.getX()+dx, controlled.getY()+dy);
+		if(c != null && c.isAgressive() && c.isAlive()){
+			controlled.hit(c);
+			if(c.isAlive()){
+				c.hit(controlled);
+			}
+			else {
+				death(c);
+			}
+		}
+		if(isPassable(t) && t != null){
+			controlled.move(dx, dy);
+		}
+	}
+	
+	// Ход всех существ карты
+	public void surroundTurn(){
+		if(turns>oldTurns){
+			//System.out.println("entry");
+			List<AbstractCreature> creatures = TileRenderer.getDungeon().getCreatures();
+			//int i = 0;
+			for(AbstractCreature c : creatures){
+				if(c != controlled && c.isAlive()){
+					c.getAi().setVisible(TileRenderer.getDungeon());
+					c.getAi().setDivide((int)TileRenderer.getDungeon().getWidth(), (int)TileRenderer.getDungeon().getHeight());
+					c.getAi().lurk(c);
+					//System.out.println(c.getX()+":"+c.getY());
+				}
+				oldTurns = turns;
+		
+			}
+		}
+	}
+	
+	
 }

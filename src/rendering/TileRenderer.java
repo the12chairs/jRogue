@@ -1,5 +1,9 @@
 package rendering;
 
+
+
+import ai.PassiveAI;
+
 import items.Armor;
 import items.Weapon;
 import items.Weapon.Type;
@@ -501,6 +505,7 @@ public class TileRenderer extends Thread {
 		//Dungeon d = generator.generateDungeon();//new Dungeon("./modules/TestModule/locations/texture.json");
 		Dungeon d = (Dungeon) ruby.get("forest");
 		//loadTextures(d);
+		enemy.setAI(new PassiveAI());
 		d.addLife(enemy);
 		you.setVisible(true);
 		//System.out.println(d.getCreature(5, 5));

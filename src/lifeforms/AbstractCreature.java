@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import ai.AI;
 import items.Weapon;
 import dnd.Dice;
 import primitives.GraphObject;
@@ -38,7 +39,8 @@ public abstract class AbstractCreature extends GraphObject{
 	protected Stat age; // Смари, current значение - текущий возраст, full значение - возраст смерти.
 	protected boolean weaponed;
 	protected Weapon hands; // Что в руках
-	// Интерфейс
+	
+	protected AI ai;
 	
 	protected Stat pd; // Подвижность
 	
@@ -213,6 +215,14 @@ public abstract class AbstractCreature extends GraphObject{
 				
 		}
 		
+	}
+	
+	
+	public void setAI(AI ai){
+		this.ai = ai;
+	}
+	public AI getAi(){
+		return ai;
 	}
 
 	public void unuseWeapon() {
