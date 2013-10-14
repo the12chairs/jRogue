@@ -100,8 +100,8 @@ class BasicForest
   end
 end
 
-groups = Java::dnd::Dice.new 6, 6
-trees = Java::dnd::Dice.new 3, 6
+groups = Java::dnd::Dice.new 1, 1
+trees = Java::dnd::Dice.new 3, 1
 forest = BasicForest.new(30, 30, groups.throwDice, trees.throwDice).generate
 forest1 = BasicForest.new(10, 10, 1, 1).generate
 

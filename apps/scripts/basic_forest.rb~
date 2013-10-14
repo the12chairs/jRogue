@@ -1,0 +1,9 @@
+#!/usr/bin/jruby
+
+require 'java'
+
+#require './scripts/lib/lowlevel.jar'
+require 'lib/lowlevel.jar'
+
+
+forest = Java::lowlevel::Dungeon.new
