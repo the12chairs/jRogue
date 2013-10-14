@@ -62,9 +62,7 @@ public class Tile extends GraphObject {
 		return visited;
 	}
 	
-	public void visit(){
-		visited = true;
-	}
+
 	void setName(String name){
 		this.name = name;
 	}

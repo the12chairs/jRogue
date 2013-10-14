@@ -223,7 +223,7 @@ public class TileRenderer extends Thread {
 		
 		for(GraphObject tile : cDungeon.dungeon()){
 					
-			if(tile.getVisible() == true){
+			if(tile.getVisible() == true /*|| tile.isVisited() == true*/){
 				//Texture t = loadTexture(tile.getFace());
 				//t.bind();
 				//loadTexture(tile.getFace()).bind();
@@ -507,6 +507,7 @@ public class TileRenderer extends Thread {
 		//loadTextures(d);
 		enemy.setAI(new PassiveAI());
 		d.addLife(enemy);
+		enemy.setVisible(false);
 		you.setVisible(true);
 		//System.out.println(d.getCreature(5, 5));
 		

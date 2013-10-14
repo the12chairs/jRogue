@@ -31,6 +31,7 @@ public class KeyboardControl extends Thread{
 
 	
 	public KeyboardControl(){
+		Keyboard.enableRepeatEvents(true);
 		turns = oldTurns = 0;
 		System.out.println("Initializing keyboard controller...");
 
@@ -39,6 +40,7 @@ public class KeyboardControl extends Thread{
 	
 	
 	public KeyboardControl(AbstractCreature object){
+		Keyboard.enableRepeatEvents(true);
 		turns = oldTurns = 0;
 		System.out.println("Initializing keyboard controller...");
 		controlled = object;
@@ -384,12 +386,11 @@ public class KeyboardControl extends Thread{
 			boolean down = false;
 			boolean left = false;
 			boolean right = false;
-			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
-				if(Keyboard.getEventKeyState()){
-					up = true;
-				}
-				else {
-					up = false;
+			
+			if(Keyboard.getEventKeyState()){
+				if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
+
+					controlledMove(0, -1);
 				}
 				/*
 				Tile t = TileRenderer.getDungeon().getTile(x, y - 1);
@@ -417,13 +418,9 @@ public class KeyboardControl extends Thread{
 				}
 				*/
 
-			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
-				if(Keyboard.getEventKeyState()){
-					down = true;
-				}
-				else {
-					down = false;
+			
+				if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
+					controlledMove(0, 1);
 				}
 				/*
 				Tile t = TileRenderer.getDungeon().getTile(x, y + 1);
@@ -442,13 +439,8 @@ public class KeyboardControl extends Thread{
 					controlled.move(0, 1);	
 				}
 */
-			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
-				if(Keyboard.getEventKeyState()){
-					left = true;
-				}
-				else {
-					left = false;
+				if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
+					controlledMove(-1, 0);
 				}
 				/*
 				Tile t = TileRenderer.getDungeon().getTile(x - 1, y);
@@ -468,13 +460,8 @@ public class KeyboardControl extends Thread{
 					controlled.move(-1, 0);
 				}
 				 */
-			}
-			if(Keyboard.getEventKey() == Keyboard.KEY_RIGHT){
-				if(Keyboard.getEventKeyState()){
-					right = true;
-				}
-				else {
-					right = false;
+				if(Keyboard.getEventKey() == Keyboard.KEY_RIGHT){
+					controlledMove(1, 0);
 				}
 				/*
 				Tile t = TileRenderer.getDungeon().getTile(x + 1, y);
@@ -528,18 +515,6 @@ public class KeyboardControl extends Thread{
 			
 				}
 			}
-			if(up) {
-				controlledMove(0, -1);
-			}
-			if(down) {
-				controlledMove(0, 1);
-			}
-			if(left) {
-				controlledMove(-1, 0);
-			}
-			if(right) {
-				controlledMove(1, 0);
-			}
 			surroundTurn();
 			recreateVisible();
 			
@@ -578,7 +553,11 @@ public class KeyboardControl extends Thread{
 					c.getAi().setVisible(TileRenderer.getDungeon());
 					c.getAi().setDivide((int)TileRenderer.getDungeon().getWidth(), (int)TileRenderer.getDungeon().getHeight());
 					c.getAi().lurk(c);
-					//System.out.println(c.getX()+":"+c.getY());
+					// Не ушел ли засранец в туман войны?
+					if(TileRenderer.getDungeon().getTile(c.getX(), c.getY()).isVisited() == false){
+						c.setVisible(false);
+					}
+					System.out.println(c.getX()+":"+c.getY());
 				}
 				oldTurns = turns;
 		

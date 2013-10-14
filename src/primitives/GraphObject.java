@@ -14,14 +14,20 @@ public class GraphObject {
 	protected long x;
 	protected long y;
 	protected boolean visible;
-	
+	protected boolean visited;
 	protected Texture texture; 
 	
 	public String getFace(){
 		return this.face;
 	}
 	
+	public void visit(){
+		visited = true;
+	}
 	
+	public boolean isVisited(){
+		return visited;
+	}
 	public void destroyTexture(){
 		if (texture != null)
 			GL11.glDeleteTextures(texture.getTextureID());

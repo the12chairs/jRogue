@@ -250,6 +250,9 @@ public class Dungeon implements ILosBoard{
 		}
 		return t;
 	}
+	
+	
+	
 
 	public static void main(String[] args) {
 		// Тесты
@@ -287,10 +290,26 @@ public class Dungeon implements ILosBoard{
 	@Override
 	public void visit(int x, int y) {
 		if( x < width && y < height){
+			getTile(x, y).visit();//setVisible(true); Нужен для определения, надо ли его рисовать
 			getTile(x, y).setVisible(true);
 			for(AbstractThing t : getThings(x, y)){
-				t.setVisible(true);
+				if(getTile(x,y).isVisited()){
+					t.setVisible(true);
+				}
+				else{
+					t.setVisible(false);
+				}
 			}
+			if(getCreature(x, y) != null){
+				if(getTile(x,y).isVisited()){
+					getCreature(x,y).setVisible(true);
+				}
+				else{
+					getCreature(x,y).setVisible(true);
+				}
+				//getCreature(x,y).setVisible(true);
+			}
+				
 		}
 	}
 
