@@ -270,7 +270,7 @@ public class KeyboardControl extends Thread{
 				
 				//if(TileRenderer.check.getThing().getMType() == AbstractThing.MainType.WEAPON)
 				
-				
+				turns++;
 				switch(TileRenderer.check.getThing().getMType()){
 				
 				case WEAPON:
@@ -298,6 +298,7 @@ public class KeyboardControl extends Thread{
 			
 			// Дроп
 			if(Keyboard.isKeyDown(Keyboard.KEY_D)){
+				turns++;
 				drop(controlled, TileRenderer.check.getPos());
 				/*AbstractThing dropped = null;
 				

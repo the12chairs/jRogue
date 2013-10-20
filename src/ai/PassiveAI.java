@@ -56,7 +56,7 @@ public class PassiveAI implements AI{
 	@Override
 	public void attack(AbstractCreature c, AbstractCreature victim) {
 		// TODO Auto-generated method stub
-		
+		c.hit(victim);
 	}
 
 }
