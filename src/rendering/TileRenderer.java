@@ -497,7 +497,7 @@ public class TileRenderer extends Thread {
 		Race gobo = (Race) ruby.get("gobo");
 		//Dice 
 		//Race dwarf = new Race("Dwarf", 5, 0, -3, -1, -1, 4);
-		Hero you = new Hero("Urist", "./modules/TestModule/heros/hero.png", 3, 3, test_race, 4, Profession.WARRIOR);
+		Hero you = new Hero("Urist", "./modules/TestModule/heros/hero.png", 10, 15, test_race, 4, Profession.WARRIOR);
 		Mob enemy = new Mob("Urist", "./modules/TestModule/heros/hero.png", 5, 5, gobo, 4, true);
 		
 		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/basic_forest.rb");
@@ -506,6 +506,7 @@ public class TileRenderer extends Thread {
 		Dungeon d = (Dungeon) ruby.get("forest");
 		//loadTextures(d);
 		enemy.setAI(new PassiveAI());
+		//enemy.g
 		d.addLife(enemy);
 		enemy.setVisible(false);
 		you.setVisible(true);

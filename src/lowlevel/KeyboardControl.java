@@ -529,7 +529,7 @@ public class KeyboardControl extends Thread{
 		turns++;
 		Tile t = TileRenderer.getDungeon().getTile(controlled.getX()+dx, controlled.getY()+dy);
 		Mob c = (Mob)TileRenderer.getDungeon().getCreature(controlled.getX()+dx, controlled.getY()+dy);
-		if(c != null && c.isAgressive() && c.isAlive()){
+		if(c != null && c.isAlive()){
 			controlled.hit(c);
 			if(c.isAlive()){
 				c.hit(controlled);
@@ -553,12 +553,11 @@ public class KeyboardControl extends Thread{
 				if(c != controlled && c.isAlive()){
 					c.getAi().setVisible(TileRenderer.getDungeon());
 					c.getAi().setDivide((int)TileRenderer.getDungeon().getWidth(), (int)TileRenderer.getDungeon().getHeight());
-					c.getAi().lurk(c);
+					c.getAi().attack(c, controlled);
 					// Не ушел ли засранец в туман войны?
-					if(TileRenderer.getDungeon().getTile(c.getX(), c.getY()).isVisited() == false){
+					if(TileRenderer.getDungeon().getTile(c.getX(), c.getY()).getVisible() == false){
 						c.setVisible(false);
 					}
-					System.out.println(c.getX()+":"+c.getY());
 				}
 				oldTurns = turns;
 		

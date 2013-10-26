@@ -61,4 +61,4 @@ races_list[:human] = Java::properties::Race.new("Human", dice3d6, dice3d6, dice3
 
 race = races_list[:human]
 
-gobo = Java::properties::Race.new("Gobo", dice1d6, dice1d6, dice1d6, dice1d6, dice1d6, dice1d6)
+gobo = Java::properties::Race.new("Gobo", dice6d6, dice6d6, dice6d6, dice6d6, dice6d6, dice6d6)
