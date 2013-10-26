@@ -292,6 +292,7 @@ public class Dungeon implements ILosBoard{
 		if( x < width && y < height){
 			getTile(x, y).visit();//setVisible(true); Нужен для определения, надо ли его рисовать
 			getTile(x, y).setVisible(true);
+			
 			for(AbstractThing t : getThings(x, y)){
 				if(getTile(x,y).isVisited()){
 					t.setVisible(true);
@@ -300,16 +301,32 @@ public class Dungeon implements ILosBoard{
 					t.setVisible(false);
 				}
 			}
+			
+			
+			for(AbstractCreature c : sceneLife){
+				if(c == sceneLife.getFirst()) continue;
+				if(getTile(c.getX(), c.getY()).isVisited()){
+					c.setVisible(true);
+				}
+				else{
+					c.setVisible(false);
+				}
+			}
+			
+			
+			
+			/*
 			if(getCreature(x, y) != null){
 				if(getTile(x,y).isVisited()){
 					getCreature(x,y).setVisible(true);
 				}
 				else{
-					getCreature(x,y).setVisible(true);
+					getCreature(x,y).setVisible(false);
 				}
 				//getCreature(x,y).setVisible(true);
 			}
-				
+			*/
+			
 		}
 	}
 

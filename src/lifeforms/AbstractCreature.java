@@ -56,6 +56,18 @@ public abstract class AbstractCreature extends GraphObject{
 	}
 
 	
+	
+
+	public void lurk(){
+		ai.lurk(this);
+	}
+	
+	
+	public void attack(AbstractCreature victum){
+		ai.attack(this, victum);
+	}
+	
+	
 	public boolean isAlive() {
 		if(hp.getCurrent() > 0) return true;
 		else return false;

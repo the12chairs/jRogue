@@ -531,13 +531,9 @@ public class KeyboardControl extends Thread{
 		Mob c = (Mob)TileRenderer.getDungeon().getCreature(controlled.getX()+dx, controlled.getY()+dy);
 		if(c != null && c.isAlive()){
 			controlled.hit(c);
-			if(c.isAlive()){
-				c.hit(controlled);
-			}
-			else {
-				death(c);
-			}
-		}
+
+		} 
+		else 
 		if(isPassable(t) && t != null){
 			controlled.move(dx, dy);
 		}
@@ -553,14 +549,16 @@ public class KeyboardControl extends Thread{
 				if(c != controlled && c.isAlive()){
 					c.getAi().setVisible(TileRenderer.getDungeon());
 					c.getAi().setDivide((int)TileRenderer.getDungeon().getWidth(), (int)TileRenderer.getDungeon().getHeight());
-					c.getAi().attack(c, controlled);
-					// Не ушел ли засранец в туман войны?
-					if(TileRenderer.getDungeon().getTile(c.getX(), c.getY()).getVisible() == false){
-						c.setVisible(false);
-					}
+					c.attack(controlled);
+
 				}
-				oldTurns = turns;
+				
 		
+				if(!c.isAlive()){
+					death(c);
+				}
+				
+				oldTurns = turns;
 			}
 		}
 	}

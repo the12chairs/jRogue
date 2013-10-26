@@ -45,7 +45,7 @@ public class AStar {
 				}
 				*/
 				t = d.getTile(j,  i);
-				if( t != null && t.getPassable()){
+				if( t != null){
 					//System.out.println((center.getX()+1)+":"+(center.getY()+1));
 					if((t.getX() != center.getX()) || (t.getY() != center.getY())){
 						open.add(t);
@@ -78,7 +78,7 @@ public class AStar {
 			Tile mint = null;
 			for(Tile t : open){
 				//System.out.println(t.getX()+":"+t.getY());
-				if(!closed.contains(t)){
+				if(!closed.contains(t) && t.getPassable()){
 					// Диагональ
 					
 					g = 10;
