@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import ai.AI;
+import lowlevel.Tile;
 import items.Weapon;
 import dnd.Dice;
 import primitives.GraphObject;
@@ -67,6 +68,9 @@ public abstract class AbstractCreature extends GraphObject{
 		ai.attack(this, victum);
 	}
 	
+	public void march(Tile t){
+		ai.march(this, t);
+	}
 	
 	public boolean isAlive() {
 		if(hp.getCurrent() > 0) return true;

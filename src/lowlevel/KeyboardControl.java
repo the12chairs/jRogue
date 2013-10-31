@@ -4,6 +4,7 @@ package lowlevel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import items.Weapon;
 
@@ -537,6 +538,10 @@ public class KeyboardControl extends Thread{
 		if(isPassable(t) && t != null){
 			controlled.move(dx, dy);
 		}
+		int hilKoef = 5;
+		if(turns%hilKoef == 0 && controlled.hp().getCurrent() < controlled.hp().getFull()){
+			controlled.hp().setCurrent(controlled.hp().getCurrent() + 1);
+		}
 	}
 	
 	// Ход всех существ карты
@@ -549,7 +554,15 @@ public class KeyboardControl extends Thread{
 				if(c != controlled && c.isAlive()){
 					c.getAi().setVisible(TileRenderer.getDungeon());
 					c.getAi().setDivide((int)TileRenderer.getDungeon().getWidth(), (int)TileRenderer.getDungeon().getHeight());
-					c.attack(controlled);
+					//c.lurk();
+					
+					Random rnd = new Random();
+					
+					
+					Tile go = TileRenderer.getDungeon().getTile(controlled.getX(), controlled.getY());
+					//Tile go = TileRenderer.getDungeon().getTile(25, 25);
+					c.march(go);
+					//c.attack(controlled);
 
 				}
 				

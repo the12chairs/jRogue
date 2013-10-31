@@ -3,7 +3,6 @@ package rendering;
 
 
 import ai.PassiveAI;
-
 import items.Armor;
 import items.Weapon;
 import items.Weapon.Type;
@@ -12,6 +11,7 @@ import java.awt.Font;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Set;
 
 import lifeforms.AbstractCreature;
@@ -497,27 +497,39 @@ public class TileRenderer extends Thread {
 		Race gobo = (Race) ruby.get("gobo");
 		//Dice 
 		//Race dwarf = new Race("Dwarf", 5, 0, -3, -1, -1, 4);
-		Hero you = new Hero("Urist", "./modules/TestModule/heros/hero.png", 10, 15, test_race, 4, Profession.WARRIOR);
-		Mob enemy = new Mob("Urist", "./modules/TestModule/heros/hero.png", 5, 5, gobo, 4, true);
+		Hero you = new Hero("Maga", "./res/mobs/human.png", 10, 15, test_race, 4, Profession.WARRIOR);
+		
+		//Mob enemy = new Mob("Grusk'ar", "./res/mobs/gobbo.png", 5, 5, gobo, 4, true);
+		
+		
 		
 		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/basic_forest.rb");
 		DungeonGenerator generator = new DungeonGenerator(30, 31, 5, 5);
 		//Dungeon d = generator.generateDungeon();//new Dungeon("./modules/TestModule/locations/texture.json");
 		Dungeon d = (Dungeon) ruby.get("forest");
 		//loadTextures(d);
-		enemy.setAI(new PassiveAI());
+		//enemy.setAI(new PassiveAI());
 		//enemy.g
-		d.addLife(enemy);
-		enemy.setVisible(false);
+		Random rnd = new Random();
+		for(int i = 1; i < 10; ++i){ 
+		d.addLife(new Mob("Grusk'ar #" + i, "./res/mobs/gobbo.png", rnd.nextInt(30), rnd.nextInt(30), gobo, 4, true));
+		}
+		for(AbstractCreature c : d.getCreatures()){
+			if(c != d.getCreatures().getFirst())
+				c.setAI(new PassiveAI());
+		}
+		//d.addLife(enemy);
+		//enemy.setVisible(false);
 		you.setVisible(true);
 		//System.out.println(d.getCreature(5, 5));
 		
 		d.addThing(new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 6), 100, 10, 4, 4));
 		
-		d.addThing(new Weapon("Sword", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 8), 100, 10, 4, 5));
-		d.addThing(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3));
+		d.addThing(new Weapon("Sword", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 8), 100, 10, rnd.nextInt(30), rnd.nextInt(30)));
 		
-		enemy.takeItem(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3));
+		//d.addThing(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3));
+		
+		//enemy.takeItem(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3));
 		TileRenderer r = new TileRenderer(d);
 	
 		KeyboardControl controller = new KeyboardControl();
