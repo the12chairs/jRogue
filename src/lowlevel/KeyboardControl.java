@@ -555,15 +555,16 @@ public class KeyboardControl extends Thread{
 					c.getAi().setVisible(TileRenderer.getDungeon());
 					c.getAi().setDivide((int)TileRenderer.getDungeon().getWidth(), (int)TileRenderer.getDungeon().getHeight());
 					//c.lurk();
-					
+					/*
 					Random rnd = new Random();
 					
 					
 					Tile go = TileRenderer.getDungeon().getTile(controlled.getX(), controlled.getY());
 					//Tile go = TileRenderer.getDungeon().getTile(25, 25);
-					c.march(go);
-					//c.attack(controlled);
-
+					//c.march(go);
+					*/
+					c.attack(controlled);
+					
 				}
 				
 		

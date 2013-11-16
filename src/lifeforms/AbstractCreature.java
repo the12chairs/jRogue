@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import ai.AI;
 import lowlevel.Tile;
+import items.Armor;
 import items.Weapon;
 import dnd.Dice;
 import primitives.GraphObject;
@@ -40,12 +41,55 @@ public abstract class AbstractCreature extends GraphObject{
 	protected Stat age; // Смари, current значение - текущий возраст, full значение - возраст смерти.
 	protected boolean weaponed;
 	protected Weapon hands; // Что в руках
-	
+	protected Armor head;
+	protected Armor body;
+	protected Armor legs;
+	protected Armor foots;
 	protected AI ai;
 	
-	protected Stat pd; // Подвижность
+	protected Stat dp; // Защита
 	
-	protected int armorClass;
+
+	
+	public void head(Armor head){
+		this.head = head;
+	}
+	
+	public Armor head(){
+		return head;
+	}
+	
+	public void body(Armor body){
+		this.body = body;
+	}
+	
+	public Armor body(){
+		return body;
+	}
+	public void legs(Armor legs){
+		this.legs = legs;
+	}
+	
+	public Armor legs(){
+		return legs;
+	}
+	
+	public void foots(Armor foots){
+		this.foots = foots;
+	}
+	
+	public Armor foots(){
+		return foots;
+	}
+	
+	public void dp(Stat dp){
+		this.dp = dp;
+	}
+	
+	public Stat dp(){
+		return dp;
+	}
+	
 	
 	public void hit(AbstractCreature c){
 		c.hp.setCurrent(c.hp.getCurrent() - damage.throwDice());
@@ -114,6 +158,38 @@ public abstract class AbstractCreature extends GraphObject{
 		return age;
 	}
 	
+	
+	
+	public int modifStr(){
+		return (int)(str.getCurrent() - 10) / 2;
+	}
+	
+	public int modifDex(){
+		return (int)(dex.getCurrent() - 10) / 2;
+	}
+	
+	public int modifWis(){
+		return (int)(wisdom.getCurrent() - 10) / 2;
+	}
+	
+	public int modifCha(){
+		return (int)(charisma.getCurrent() - 10) / 2;
+	}
+	
+	public int modifSta(){
+		return (int)(stamina.getCurrent() - 10) / 2;
+	}
+	/*
+	 * 
+	public int modify(String atr){
+		atr = atr.toLowerCase();
+		switch(atr){
+		case "str":
+			atr = st
+		}
+		return 0;
+	}
+	*/
 	/*
 	public void takeItem(AbstractThing t){
 		

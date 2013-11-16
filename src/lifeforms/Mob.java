@@ -35,7 +35,7 @@ public class Mob extends AbstractCreature {
 		this.damage = new Dice(1, 3);//new Stat(str, str + damageCoef);
 		this.visionRadius = visionRadius;
 		// HP = stamina / 2
-		this.hp = new Stat(stamina.getCurrent()/2);
+		this.hp = new Stat(modifSta()+6);
 		visible = true;
 		agressive = agro;
 		ai = new AgressiveAI();

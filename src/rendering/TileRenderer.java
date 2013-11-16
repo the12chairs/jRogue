@@ -512,7 +512,7 @@ public class TileRenderer extends Thread {
 		//enemy.g
 		Random rnd = new Random();
 		for(int i = 1; i < 10; ++i){ 
-		d.addLife(new Mob("Grusk'ar #" + i, "./res/mobs/gobbo.png", rnd.nextInt(30), rnd.nextInt(30), gobo, 4, true));
+			d.addLife(new Mob("Grusk'ar #" + i, "./res/mobs/gobbo.png", rnd.nextInt(30), rnd.nextInt(30), gobo, 4, true));
 		}
 		for(AbstractCreature c : d.getCreatures()){
 			if(c != d.getCreatures().getFirst())
