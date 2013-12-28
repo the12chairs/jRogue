@@ -1,5 +1,6 @@
 package primitives;
 
+import items.Armor;
 import items.Weapon;
 
 import java.util.ArrayList;
@@ -47,7 +48,19 @@ public class Inventory {
 	}
 
 	
+	public Map<Integer, Armor> getAllArmor(){
+		Map<Integer, Armor> armors = new HashMap<Integer, Armor>();
 	
+		for (Entry<Integer, AbstractThing> entry : inventory.entrySet()){
+			if(entry.getValue().getMType() == AbstractThing.MainType.ARMOR){
+				armors.put(entry.getKey(), (Armor) entry.getValue());
+				//System.out.println(entry.getValue().getName());
+			}
+			
+		}
+		
+		return armors;
+	}
 
 	public AbstractThing findByName(String name){
 		for(AbstractThing i : this.inventory.values()){

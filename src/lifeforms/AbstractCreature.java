@@ -1,7 +1,6 @@
 package lifeforms;
 
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Map.Entry;
 
 import ai.AI;
@@ -23,7 +22,6 @@ public abstract class AbstractCreature extends GraphObject{
 	public static enum Profession { WARRIOR, ROGUE, MAGE }; // Читать из директории profession
 	
 	protected String name;
-	//protected String face;
 	protected Race race;
 	protected Profession profession;
 	protected Stat hp;
@@ -40,11 +38,16 @@ public abstract class AbstractCreature extends GraphObject{
 	protected int visionRadius;
 	protected Stat age; // Смари, current значение - текущий возраст, full значение - возраст смерти.
 	protected boolean weaponed;
+	
+	
 	protected Weapon hands; // Что в руках
+
+	protected Armor shield;
 	protected Armor head;
 	protected Armor body;
 	protected Armor legs;
 	protected Armor foots;
+	
 	protected AI ai;
 	
 	protected Stat dp; // Защита
@@ -179,22 +182,14 @@ public abstract class AbstractCreature extends GraphObject{
 	public int modifSta(){
 		return (int)(stamina.getCurrent() - 10) / 2;
 	}
-	/*
-	 * 
-	public int modify(String atr){
-		atr = atr.toLowerCase();
-		switch(atr){
-		case "str":
-			atr = st
-		}
-		return 0;
+
+	public int modifAge(){
+		return (int)(age.getCurrent() - 10) / 2;
 	}
-	*/
-	/*
-	public void takeItem(AbstractThing t){
-		
+
+	public int modifHp(){
+		return (int)(hp.getCurrent() - 10) / 2;
 	}
-	*/
 	
 	public Inventory inventory(){
 		return inventory;
@@ -208,11 +203,11 @@ public abstract class AbstractCreature extends GraphObject{
 		return visionRadius;
 	}
 	
-	public long getPurse(){
+	public long getGold(){
 		return this.purse;
 	}
 	
-	public void setPurse(long gold){
+	public void addGold(long gold){
 		this.purse += gold;
 	}
 	
@@ -278,6 +273,38 @@ public abstract class AbstractCreature extends GraphObject{
 	}
 	
 	
+	
+	//TODO: доделать!
+	public void wearArmor(Armor armor){
+		
+		for(Entry<Integer, Armor> p : inventory.getAllArmor().entrySet()){
+			if(p.getValue() == armor){
+				
+				
+				if(p.getValue().getType() == Armor.Type.HEAD && head == null){
+					
+				}
+				/*
+				// Если руки заняты, меняем оружие
+				if(head != null){
+					//System.out.println("Ololo");
+					//inventory.pushItem(hands);
+					//takeItem(hands);
+					hands = p;
+					this.damage = p.getDamage();
+				}
+				else{
+					hands = p.getValue();
+					damage = hands.getDamage();
+					//dropItem(p.getKey());
+				}
+				break;
+				*/
+			}
+				
+		}
+
+	}
 	
 	public Weapon getHands(){
 		return hands;
