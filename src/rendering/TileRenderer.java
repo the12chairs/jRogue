@@ -137,6 +137,8 @@ public class TileRenderer extends Thread {
 	
 	public void renderWeapon(){
 		
+		// Magic numbers, baka
+		
 		headFont.drawString(WIDTH / 2 + 40, 20, "Weapon");
 		
 		int w = 50;
@@ -510,6 +512,7 @@ public class TileRenderer extends Thread {
 		//loadTextures(d);
 		//enemy.setAI(new PassiveAI());
 		//enemy.g
+		/*
 		Random rnd = new Random();
 		for(int i = 1; i < 10; ++i){ 
 			d.addLife(new Mob("Grusk'ar #" + i, "./res/mobs/gobbo.png", rnd.nextInt(30), rnd.nextInt(30), gobo, 4, true));
@@ -520,16 +523,18 @@ public class TileRenderer extends Thread {
 		}
 		//d.addLife(enemy);
 		//enemy.setVisible(false);
+		*/
 		you.setVisible(true);
 		//System.out.println(d.getCreature(5, 5));
 		
 		d.addThing(new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 6), 100, 10, 4, 4));
 		
-		d.addThing(new Weapon("Sword", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 8), 100, 10, rnd.nextInt(30), rnd.nextInt(30)));
+		//d.addThing(new Weapon("Sword", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 8), 100, 10, rnd.nextInt(30), rnd.nextInt(30)));
 		
 		//d.addThing(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3));
 		
-		//enemy.takeItem(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3));
+		d.addThing(new Armor("cup", "./res/items/star.png", 100, 10, 1, 1, Armor.Type.HEAD));
+		d.addThing(new Armor("chainmail", "./res/items/star.png", 100, 10, 2, 2, Armor.Type.BODY));
 		TileRenderer r = new TileRenderer(d);
 	
 		KeyboardControl controller = new KeyboardControl();

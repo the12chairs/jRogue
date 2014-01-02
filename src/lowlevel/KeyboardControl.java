@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import items.Armor;
 import items.Weapon;
 
 import org.lwjgl.input.Keyboard;
@@ -286,10 +287,71 @@ public class KeyboardControl extends Thread{
 					break;
 				
 				case ARMOR:
-					System.out.println("Not ready yet");
+					Armor a = (Armor)TileRenderer.check.getThing();
+					System.out.println(a.getType());
+					if(a.getType() == Armor.Type.HEAD){
+						if(controlled.head() == a){
+							controlled.unwearArmor(Armor.Type.HEAD);
+							System.out.println("Head armor unwearing!");
+						}
+						else{
+							controlled.wearArmor(a);
+							System.out.println("Head armor wearing!");
+						}
+					} else
+					if(a.getType() == Armor.Type.BODY){
+						if(controlled.body() == a){
+							controlled.unwearArmor(Armor.Type.BODY);
+							System.out.println("Body armor unwearing!");
+						}
+						else{
+							controlled.wearArmor(a);
+							System.out.println("Body armor wearing!");
+						}
+					} else
+					if(a.getType() == Armor.Type.FOOTS){
+						if(controlled.foots() == a){
+							controlled.unwearArmor(Armor.Type.FOOTS);
+							System.out.println("Foots armor unwearing!");
+						}
+						else{
+							controlled.wearArmor(a);
+							System.out.println("Foots armor wearing!");
+						}
+					} else
+					if(a.getType() == Armor.Type.ARMS){
+						if(controlled.arms() == a){
+							controlled.unwearArmor(Armor.Type.ARMS);
+							System.out.println("Arms armor unwearing!");
+						}
+						else{
+							controlled.wearArmor(a);
+							System.out.println("Arms armor wearing!");
+						}
+					} else
+					if(a.getType() == Armor.Type.LEGS){
+						if(controlled.legs() == a){
+							controlled.unwearArmor(Armor.Type.LEGS);
+							System.out.println("Legs armor unwearing!");
+						}
+						else{
+							controlled.wearArmor(a);
+							System.out.println("Legs armor wearing!");
+						}
+					} 
+					else {
+						System.out.println("Error while armor wearing");
+					}
+					/*
+					if(TileRenderer.check.getThing() == controlled.head()){
+						controlled.unwearArmor(Armor.Type.HEAD);
+					}
+					else{
+						controlled.wearArmor((Armor)TileRenderer.check.getThing());
+					}	
 					break;
 				
-				
+				*/
 				default:
 					break;
 				

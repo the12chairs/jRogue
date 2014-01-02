@@ -45,6 +45,7 @@ public abstract class AbstractCreature extends GraphObject{
 	protected Armor shield;
 	protected Armor head;
 	protected Armor body;
+	protected Armor arms;
 	protected Armor legs;
 	protected Armor foots;
 	
@@ -85,6 +86,13 @@ public abstract class AbstractCreature extends GraphObject{
 		return foots;
 	}
 	
+	public void arms(Armor arms){
+		this.arms = arms;
+	}
+	
+	public Armor arms(){
+		return arms;
+	}
 	public void dp(Stat dp){
 		this.dp = dp;
 	}
@@ -166,7 +174,7 @@ public abstract class AbstractCreature extends GraphObject{
 	public int modifStr(){
 		return (int)(str.getCurrent() - 10) / 2;
 	}
-	
+
 	public int modifDex(){
 		return (int)(dex.getCurrent() - 10) / 2;
 	}
@@ -274,32 +282,57 @@ public abstract class AbstractCreature extends GraphObject{
 	
 	
 	
+	public void unwearArmor(Armor.Type type){
+		switch(type){
+		case HEAD:
+			head = null;
+			break;
+		case BODY:
+			body = null;
+			break;
+		case ARMS:
+			arms = null;
+			break;
+		case FOOTS:
+			foots = null;
+			break;
+		case LEGS:
+			legs = null;
+			break;
+		default:
+			System.out.println("Error while armor unwearing");
+		}
+		
+	}
+	
 	//TODO: доделать!
 	public void wearArmor(Armor armor){
 		
 		for(Entry<Integer, Armor> p : inventory.getAllArmor().entrySet()){
+			// For each armor into inventory, if we take marked
 			if(p.getValue() == armor){
 				
+				// if this head armor 
+				if(p.getValue().getType() == Armor.Type.HEAD){
+					head = p.getValue();
+				}
+				// for our body
+				if(p.getValue().getType() == Armor.Type.BODY){
+					body = p.getValue();
+				}
+				// for arms
+				if(p.getValue().getType() == Armor.Type.ARMS){
+					arms = p.getValue();
+				}
+				// legs
+				if(p.getValue().getType() == Armor.Type.LEGS){
+					legs = p.getValue();
+				}
+				// and foots
+				if(p.getValue().getType() == Armor.Type.FOOTS){
+					foots = p.getValue();
+				}	
 				
-				if(p.getValue().getType() == Armor.Type.HEAD && head == null){
-					
-				}
-				/*
-				// Если руки заняты, меняем оружие
-				if(head != null){
-					//System.out.println("Ololo");
-					//inventory.pushItem(hands);
-					//takeItem(hands);
-					hands = p;
-					this.damage = p.getDamage();
-				}
-				else{
-					hands = p.getValue();
-					damage = hands.getDamage();
-					//dropItem(p.getKey());
-				}
-				break;
-				*/
 			}
 				
 		}
