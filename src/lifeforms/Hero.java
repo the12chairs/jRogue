@@ -75,7 +75,6 @@ public class Hero extends AbstractCreature{
 	}
 	
 	public Hero(String name, String face, int x, int y, Race race, int visionRadius, Profession profession){
-		
 		this.race = race;
 		this.name = name;
 		this.face = face;

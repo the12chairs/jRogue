@@ -51,7 +51,13 @@ public abstract class AbstractCreature extends GraphObject{
 	
 	protected AI ai;
 	
-	protected Stat dp; // Защита
+	// Статы защиты
+	
+	protected Stat headDP; // Защита
+	protected Stat bodyDP;
+	protected Stat legsDP;
+	protected Stat armsDP;
+	protected Stat footsDP;
 	
 
 	
@@ -93,14 +99,42 @@ public abstract class AbstractCreature extends GraphObject{
 	public Armor arms(){
 		return arms;
 	}
-	public void dp(Stat dp){
-		this.dp = dp;
+	public void headDP(Stat dp){
+		headDP = dp;
 	}
 	
-	public Stat dp(){
-		return dp;
+	public Stat headDP(){
+		return headDP;
 	}
 	
+	public void bodyDP(Stat dp){
+		bodyDP = dp;
+	}
+	
+	public Stat bodyDP(){
+		return bodyDP;
+	}
+	public void armsDP(Stat dp){
+		armsDP = dp;
+	}
+	
+	public Stat armsDP(){
+		return armsDP;
+	}
+	public void legsDP(Stat dp){
+		legsDP = dp;
+	}
+	
+	public Stat legsDP(){
+		return legsDP;
+	}
+	public void footsDP(Stat dp){
+		footsDP = dp;
+	}
+	
+	public Stat footsDP(){
+		return footsDP;
+	}
 	
 	public void hit(AbstractCreature c){
 		c.hp.setCurrent(c.hp.getCurrent() - damage.throwDice());
@@ -112,7 +146,14 @@ public abstract class AbstractCreature extends GraphObject{
 	}
 
 	
-	
+	public AbstractCreature(){
+		headDP = new Stat(4,4);
+		bodyDP = new Stat(4,4);
+		armsDP = new Stat(4,4);
+		legsDP = new Stat(4,4);
+		footsDP = new Stat(4,4);
+		
+	}
 
 	public void lurk(){
 		ai.lurk(this);
