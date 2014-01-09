@@ -9,6 +9,7 @@ import items.Weapon.Type;
 
 import java.awt.Font;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -94,8 +95,9 @@ public class TileRenderer extends Thread {
 		
 		int w = 50;
 		
+		Map<Integer, AbstractThing> buffer = new HashMap<Integer,AbstractThing>(cDungeon.getHero().inventory().allInvenory());
 		
-		for (Entry<Integer, AbstractThing> entry : cDungeon.getHero().inventory().allInvenory().entrySet()) {
+		for (Entry<Integer, AbstractThing> entry : buffer.entrySet()) {
 			int h = 20;
 			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName() + " " + "[e]quip", Color.white);
 			w += 12;

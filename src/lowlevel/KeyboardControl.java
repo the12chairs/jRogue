@@ -398,6 +398,21 @@ public class KeyboardControl extends Thread{
 			if(who.getHands() == dropped){
 				who.unuseWeapon();
 			}
+			if(who.head() == dropped){
+				who.unwearArmor(Armor.Type.HEAD);
+			}
+			if(who.body() == dropped){
+				who.unwearArmor(Armor.Type.BODY);
+			}
+			if(who.arms() == dropped){
+				who.unwearArmor(Armor.Type.ARMS);
+			}
+			if(who.legs() == dropped){
+				who.unwearArmor(Armor.Type.LEGS);
+			}
+			if(who.foots() == dropped){
+				who.unwearArmor(Armor.Type.FOOTS);
+			}
 			who.dropItem(/*TileRenderer.check.getPos()*/what);
 			TileRenderer.getDungeon().addThing(dropped, who.getX(), who.getY());
 		
