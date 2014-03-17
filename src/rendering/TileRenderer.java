@@ -246,13 +246,13 @@ public class TileRenderer extends Thread {
 		
 		
 		
-		
-		for(AbstractThing item : cDungeon.getItems()){
-			if(item.getVisible() == true){
-				item.getTexture().bind();
-				renderTile(item);
+		if (cDungeon.getItems() != null)
+			for(AbstractThing item : cDungeon.getItems()){
+				if(item.getVisible() == true){
+					item.getTexture().bind();
+					renderTile(item);
+				}
 			}
-		}
 		
 		for(AbstractCreature creature : cDungeon.getCreatures()){
 			if(creature.getVisible() == true && creature.isAlive()){
@@ -268,14 +268,25 @@ public class TileRenderer extends Thread {
 	
 
 	public static void loadTextures(){
+		
+		// Обходить случаи отсутствия элементов!!!!!
+		
+		
+	
+		
 		System.out.println("Loading textures...");
 		for(GraphObject tile : cDungeon.dungeon()){
 			tile.loadTexture();
 		}
+
 		
-		for(AbstractThing item : cDungeon.getItems()){
-			item.loadTexture();
-		}
+		//System.out.println("BUGGGGGGG====="+cDungeon.getItems());
+		
+		if(cDungeon.getItems() != null)
+			for(AbstractThing item : cDungeon.getItems()){
+				//System.out.println(item);
+				item.loadTexture();
+			}
 		
 		for(GraphObject creature : cDungeon.getCreatures()){
 			creature.loadTexture();
@@ -497,7 +508,7 @@ public class TileRenderer extends Thread {
 		Race gobo = (Race) ruby.get("gobo");
 		//Dice 
 		//Race dwarf = new Race("Dwarf", 5, 0, -3, -1, -1, 4);
-		Hero you = new Hero("Maga", "./res/mobs/human.png", 10, 15, test_race, 4, Profession.WARRIOR);
+		Hero you = new Hero("Maga", "./res/mobs/human.png", 3, 1, test_race, 4, Profession.WARRIOR);
 		
 		//Mob enemy = new Mob("Grusk'ar", "./res/mobs/gobbo.png", 5, 5, gobo, 4, true);
 		
@@ -506,11 +517,14 @@ public class TileRenderer extends Thread {
 		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/basic_forest.rb");
 		DungeonGenerator generator = new DungeonGenerator(30, 31, 5, 5);
 		//Dungeon d = generator.generateDungeon();//new Dungeon("./modules/TestModule/locations/texture.json");
-		Dungeon d = (Dungeon) ruby.get("forest");
+		//Dungeon d = (Dungeon) ruby.get("forest");
+		
+		Dungeon d = new Dungeon("./modules/TestModule/locations/texture.json");
 		//loadTextures(d);
 		//enemy.setAI(new PassiveAI());
 		//enemy.g
 		Random rnd = new Random();
+		
 		for(int i = 1; i < 10; ++i){ 
 			d.addLife(new Mob("Grusk'ar #" + i, "./res/mobs/gobbo.png", rnd.nextInt(30), rnd.nextInt(30), gobo, 4, true));
 		}
@@ -523,13 +537,14 @@ public class TileRenderer extends Thread {
 		you.setVisible(true);
 		//System.out.println(d.getCreature(5, 5));
 		
-		d.addThing(new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 6), 100, 10, 4, 4));
+		//d.addThing(new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 6), 100, 10, 4, 4));
 		
-		d.addThing(new Weapon("Sword", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 8), 100, 10, rnd.nextInt(30), rnd.nextInt(30)));
+		//d.addThing(new Weapon("Sword", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 8), 100, 10, rnd.nextInt(30), rnd.nextInt(30)));
 		
 		//d.addThing(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3));
 		
 		//enemy.takeItem(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3));
+		
 		TileRenderer r = new TileRenderer(d);
 	
 		KeyboardControl controller = new KeyboardControl();

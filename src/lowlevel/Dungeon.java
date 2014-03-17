@@ -90,7 +90,9 @@ public class Dungeon implements ILosBoard{
 	
 	
 	public LinkedList<AbstractThing> getItems(){
-		return this.sceneThings;
+		if(this.sceneThings.size() == 0) return null;
+		else
+			return this.sceneThings;
 	}
 	
 	
@@ -114,7 +116,15 @@ public class Dungeon implements ILosBoard{
 		
 		
 		
-		sceneLife = new LinkedList<AbstractCreature>();
+		this.sceneLife = new LinkedList<AbstractCreature>();
+		this.sceneQuests = new LinkedList<Quest>();
+		this.sceneThings = new LinkedList<AbstractThing>();
+		this.scenePortals = new LinkedList<Portal>();
+		
+		
+		
+		//System.out.println("BLDJAD!!!!" + sceneThings.size());
+		
 		
 		// Прочтем карту из json файла
 		// Ох и медленно эта хрень работать будет ><
@@ -217,9 +227,11 @@ public class Dungeon implements ILosBoard{
 	
 	public List<AbstractThing> getThings(long x, long y){
 		List<AbstractThing> things = new LinkedList<AbstractThing>();
-		for(AbstractThing t : sceneThings){
-			if((t.getX() == x) && (t.getY() == y)){
-				things.add(t);
+		if (things.size() != 0){
+			for(AbstractThing t : sceneThings){
+				if((t.getX() == x) && (t.getY() == y)){
+					things.add(t);
+				}
 			}
 		}
 		return things;
@@ -294,6 +306,7 @@ public class Dungeon implements ILosBoard{
 			getTile(x, y).setVisible(true);
 			
 			for(AbstractThing t : getThings(x, y)){
+				if (t == null) continue;
 				if(getTile(x,y).isVisited()){
 					t.setVisible(true);
 				}
@@ -302,7 +315,7 @@ public class Dungeon implements ILosBoard{
 				}
 			}
 			
-			
+			// Исправить!
 			for(AbstractCreature c : sceneLife){
 				if(c == sceneLife.getFirst()) continue;
 				if(getTile(c.getX(), c.getY()).isVisited()){

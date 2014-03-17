@@ -166,7 +166,7 @@ public abstract class AbstractCreature extends GraphObject{
 	public int modifStr(){
 		return (int)(str.getCurrent() - 10) / 2;
 	}
-	
+
 	public int modifDex(){
 		return (int)(dex.getCurrent() - 10) / 2;
 	}
@@ -298,7 +298,7 @@ public abstract class AbstractCreature extends GraphObject{
 					damage = hands.getDamage();
 					//dropItem(p.getKey());
 				}
-				break;
+3				break;
 				*/
 			}
 				
