@@ -18,6 +18,7 @@ public class Mob extends AbstractCreature {
 	
 	
 	public Mob(String name, String face, int x, int y, Race race, int visionRadius, boolean agro){
+		super();
 		this.name = name;
 		this.face = face;
 		this.setPos(x, y);

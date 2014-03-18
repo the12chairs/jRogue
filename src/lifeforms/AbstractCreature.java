@@ -45,12 +45,19 @@ public abstract class AbstractCreature extends GraphObject{
 	protected Armor shield;
 	protected Armor head;
 	protected Armor body;
+	protected Armor arms;
 	protected Armor legs;
 	protected Armor foots;
 	
 	protected AI ai;
 	
-	protected Stat dp; // Защита
+	// Статы защиты
+	
+	protected Stat headDP; // Защита
+	protected Stat bodyDP;
+	protected Stat legsDP;
+	protected Stat armsDP;
+	protected Stat footsDP;
 	
 
 	
@@ -85,14 +92,49 @@ public abstract class AbstractCreature extends GraphObject{
 		return foots;
 	}
 	
-	public void dp(Stat dp){
-		this.dp = dp;
+	public void arms(Armor arms){
+		this.arms = arms;
 	}
 	
-	public Stat dp(){
-		return dp;
+	public Armor arms(){
+		return arms;
+	}
+	public void headDP(Stat dp){
+		headDP = dp;
 	}
 	
+	public Stat headDP(){
+		return headDP;
+	}
+	
+	public void bodyDP(Stat dp){
+		bodyDP = dp;
+	}
+	
+	public Stat bodyDP(){
+		return bodyDP;
+	}
+	public void armsDP(Stat dp){
+		armsDP = dp;
+	}
+	
+	public Stat armsDP(){
+		return armsDP;
+	}
+	public void legsDP(Stat dp){
+		legsDP = dp;
+	}
+	
+	public Stat legsDP(){
+		return legsDP;
+	}
+	public void footsDP(Stat dp){
+		footsDP = dp;
+	}
+	
+	public Stat footsDP(){
+		return footsDP;
+	}
 	
 	public void hit(AbstractCreature c){
 		c.hp.setCurrent(c.hp.getCurrent() - damage.throwDice());
@@ -104,7 +146,14 @@ public abstract class AbstractCreature extends GraphObject{
 	}
 
 	
-	
+	public AbstractCreature(){
+		headDP = new Stat(4,4);
+		bodyDP = new Stat(4,4);
+		armsDP = new Stat(4,4);
+		legsDP = new Stat(4,4);
+		footsDP = new Stat(4,4);
+		
+	}
 
 	public void lurk(){
 		ai.lurk(this);
@@ -274,32 +323,62 @@ public abstract class AbstractCreature extends GraphObject{
 	
 	
 	
+	public void unwearArmor(Armor.Type type){
+		switch(type){
+		case HEAD:
+			head = null;
+			break;
+		case BODY:
+			body = null;
+			break;
+		case ARMS:
+			arms = null;
+			break;
+		case FOOTS:
+			foots = null;
+			break;
+		case LEGS:
+			legs = null;
+			break;
+		default:
+			System.out.println("Error while armor unwearing");
+		}
+		
+	}
+	
 	//TODO: доделать!
 	public void wearArmor(Armor armor){
 		
 		for(Entry<Integer, Armor> p : inventory.getAllArmor().entrySet()){
+			// For each armor into inventory, if we take marked
 			if(p.getValue() == armor){
 				
-				
-				if(p.getValue().getType() == Armor.Type.HEAD && head == null){
-					
+				// if this head armor 
+				if(p.getValue().getType() == Armor.Type.HEAD){
+					head = p.getValue();
 				}
-				/*
-				// Если руки заняты, меняем оружие
-				if(head != null){
-					//System.out.println("Ololo");
-					//inventory.pushItem(hands);
-					//takeItem(hands);
-					hands = p;
-					this.damage = p.getDamage();
+				// for our body
+				if(p.getValue().getType() == Armor.Type.BODY){
+					body = p.getValue();
 				}
-				else{
-					hands = p.getValue();
-					damage = hands.getDamage();
-					//dropItem(p.getKey());
+				// for arms
+				if(p.getValue().getType() == Armor.Type.ARMS){
+					arms = p.getValue();
 				}
+<<<<<<< HEAD
 3				break;
 				*/
+=======
+				// legs
+				if(p.getValue().getType() == Armor.Type.LEGS){
+					legs = p.getValue();
+				}
+				// and foots
+				if(p.getValue().getType() == Armor.Type.FOOTS){
+					foots = p.getValue();
+				}	
+				
+>>>>>>> 8dbecfd22131bad7bc0ab6fb9efd37c68aaa7e40
 			}
 				
 		}
