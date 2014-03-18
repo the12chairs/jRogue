@@ -554,7 +554,7 @@ public class KeyboardControl extends Thread{
 				if(c != controlled && c.isAlive()){
 					c.getAi().setVisible(TileRenderer.getDungeon());
 					c.getAi().setDivide((int)TileRenderer.getDungeon().getWidth(), (int)TileRenderer.getDungeon().getHeight());
-					//c.lurk();
+					c.lurk();
 					/*
 					Random rnd = new Random();
 					
@@ -563,7 +563,7 @@ public class KeyboardControl extends Thread{
 					//Tile go = TileRenderer.getDungeon().getTile(25, 25);
 					//c.march(go);
 					*/
-					c.attack(controlled);
+					//c.attack(controlled);
 					
 				}
 				

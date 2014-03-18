@@ -316,6 +316,7 @@ public class Dungeon implements ILosBoard{
 			}
 			
 			// Исправить!
+			
 			for(AbstractCreature c : sceneLife){
 				if(c == sceneLife.getFirst()) continue;
 				if(getTile(c.getX(), c.getY()).isVisited()){

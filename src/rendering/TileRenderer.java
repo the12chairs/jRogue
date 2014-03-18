@@ -56,7 +56,7 @@ public class TileRenderer extends Thread {
 	
 	private static final int HEIGHT = 800;
 	private static final int WIDTH = 600;
-	private static final int TILE_SIZE = 16;
+	private static final int TILE_SIZE = 32;
 	
 	private long lastFrame;
 	private long lastFPS;
@@ -307,9 +307,10 @@ public class TileRenderer extends Thread {
 			tile.destroyTexture();
 		}
 		
-		for(AbstractThing item : cDungeon.getItems()){
-			item.destroyTexture();
-		}
+		if (cDungeon.getItems() != null)
+			for(AbstractThing item : cDungeon.getItems()){
+				item.destroyTexture();
+			}
 		
 		for(GraphObject creature : cDungeon.getCreatures()){
 			creature.destroyTexture();
@@ -517,16 +518,16 @@ public class TileRenderer extends Thread {
 		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/basic_forest.rb");
 		DungeonGenerator generator = new DungeonGenerator(30, 31, 5, 5);
 		//Dungeon d = generator.generateDungeon();//new Dungeon("./modules/TestModule/locations/texture.json");
-		//Dungeon d = (Dungeon) ruby.get("forest");
+		Dungeon d = (Dungeon) ruby.get("forest");
 		
-		Dungeon d = new Dungeon("./modules/TestModule/locations/texture.json");
+		//Dungeon d = new Dungeon("./modules/TestModule/locations/texture.json");
 		//loadTextures(d);
 		//enemy.setAI(new PassiveAI());
 		//enemy.g
 		Random rnd = new Random();
 		
 		for(int i = 1; i < 10; ++i){ 
-			d.addLife(new Mob("Grusk'ar #" + i, "./res/mobs/gobbo.png", rnd.nextInt(30), rnd.nextInt(30), gobo, 4, true));
+			d.addLife(new Mob("Grusk'ar #" + i, "./res/mobs/gobbo.png", rnd.nextInt(10), rnd.nextInt(10), gobo, 4, true));
 		}
 		for(AbstractCreature c : d.getCreatures()){
 			if(c != d.getCreatures().getFirst())
@@ -534,7 +535,7 @@ public class TileRenderer extends Thread {
 		}
 		//d.addLife(enemy);
 		//enemy.setVisible(false);
-		you.setVisible(true);
+
 		//System.out.println(d.getCreature(5, 5));
 		
 		//d.addThing(new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 6), 100, 10, 4, 4));
@@ -550,8 +551,7 @@ public class TileRenderer extends Thread {
 		KeyboardControl controller = new KeyboardControl();
 		//r.controller.setDungeon(d);
 		//controller.setDungeon(d);
-		d.addHero(you);
-		controller.controlCreature(you);
+
 
 		
 		Thread keyboard = new Thread(controller);
@@ -562,7 +562,10 @@ public class TileRenderer extends Thread {
 		renderer.start();
 		keyboard.start();
 
-
+		d.addHero(you);
+		you.setVisible(true);
+		
+		controller.controlCreature(you);
 	}
 
 
