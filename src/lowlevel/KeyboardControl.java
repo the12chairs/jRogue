@@ -467,98 +467,33 @@ public class KeyboardControl extends Thread{
 			boolean right = false;
 			
 			if(Keyboard.getEventKeyState()){
-				if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
-
-					controlledMove(0, -1);
-				}
-				/*
-				Tile t = TileRenderer.getDungeon().getTile(x, y - 1);
-				Mob c = (Mob)TileRenderer.getDungeon().getCreature(x, y-1);
 				
-				if(c != null && c.isAgressive() && c.isAlive()){
-					controlled.hit(c);
-					if(c.isAlive()){
-						c.hit(controlled);
-					}
-					else {
-						death(c);
-					}
-					break;
+				
+				if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
+					
+					// TODO: работай
+					controlledMove(0, -1);
+					if(TileRenderer.HEIGHT-controlled.getY() <= 0)
+						TileRenderer.camera.move(1,0);
 					
 				}
-				/*
-				if(c!= null && !c.isAlive()){
-					long cx = c.getX();
-					long cy = c.getY();
-				}
-				
-				if(isPassable(t) && t != null){
-					controlled.move(0, -1);
-				}
-				*/
 
 			
 				if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
 					controlledMove(0, 1);
+					TileRenderer.camera.move(-1,0);
 				}
-				/*
-				Tile t = TileRenderer.getDungeon().getTile(x, y + 1);
-				Mob c = (Mob)TileRenderer.getDungeon().getCreature(x, y+1);
-				if(c != null && c.isAgressive() && c.isAlive()){
-					controlled.hit(c);
-					if(c.isAlive()){
-						c.hit(controlled);
-					}
-					else {
-						death(c);
-					}
-					break;
-				}
-				if(isPassable(t) && t != null){
-					controlled.move(0, 1);	
-				}
-*/
+
 				if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
 					controlledMove(-1, 0);
+					TileRenderer.camera.move(0,1);
 				}
-				/*
-				Tile t = TileRenderer.getDungeon().getTile(x - 1, y);
-				Mob c = (Mob)TileRenderer.getDungeon().getCreature(x-1, y);
-				if(c != null && c.isAgressive() && c.isAlive()){
-					controlled.hit(c);
-					if(c.isAlive()){
-						c.hit(controlled);
-					}
-					else {
-						death(c);
-					}
-					break;
-				}
-				
-				if(isPassable(t) && t != null){
-					controlled.move(-1, 0);
-				}
-				 */
+	
 				if(Keyboard.getEventKey() == Keyboard.KEY_RIGHT){
 					controlledMove(1, 0);
+					TileRenderer.camera.move(0,-1);
 				}
-				/*
-				Tile t = TileRenderer.getDungeon().getTile(x + 1, y);
-				Mob c = (Mob)TileRenderer.getDungeon().getCreature(x+1, y);
-				if(c != null && c.isAgressive() && c.isAlive()){
-					controlled.hit(c);
-					if(c.isAlive()){
-						c.hit(controlled);
-					}
-					else {
-						death(c);
-					}
-					break;
-				}
-				if(isPassable(t) && t != null){
-					controlled.move(1, 0);
-				}
-				*/
+
 			}
 			
 			// Взять предмет

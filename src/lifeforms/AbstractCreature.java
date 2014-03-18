@@ -365,10 +365,7 @@ public abstract class AbstractCreature extends GraphObject{
 				if(p.getValue().getType() == Armor.Type.ARMS){
 					arms = p.getValue();
 				}
-<<<<<<< HEAD
-3				break;
-				*/
-=======
+
 				// legs
 				if(p.getValue().getType() == Armor.Type.LEGS){
 					legs = p.getValue();
@@ -378,7 +375,6 @@ public abstract class AbstractCreature extends GraphObject{
 					foots = p.getValue();
 				}	
 				
->>>>>>> 8dbecfd22131bad7bc0ab6fb9efd37c68aaa7e40
 			}
 				
 		}

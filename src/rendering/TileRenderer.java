@@ -2,6 +2,7 @@ package rendering;
 
 
 
+import static org.lwjgl.opengl.GL11.glTranslatef;
 import ai.PassiveAI;
 import items.Armor;
 import items.Weapon;
@@ -14,6 +15,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
+
+import org.lwjgl.util.glu.GLU;
 
 import lifeforms.AbstractCreature;
 import lifeforms.AbstractCreature.Profession;
@@ -57,7 +60,7 @@ public class TileRenderer extends Thread {
 	
 	private static final int HEIGHT = 800;
 	private static final int WIDTH = 600;
-	private static final int TILE_SIZE = 32;
+	public static final int TILE_SIZE = 32;
 	
 	private long lastFrame;
 	private long lastFPS;
@@ -72,6 +75,8 @@ public class TileRenderer extends Thread {
 	
 	private static Dungeon cDungeon;
 	
+	
+	public static Camera camera;
 	
 	
 	
@@ -218,13 +223,53 @@ public class TileRenderer extends Thread {
 	}
 	*/
 	// Рисуем карту
+	
+	
+	
+	public Dungeon getPiece(int height, int width){
+		return null;
+	}
+	
+	
+	public void renderPiece(Dungeon d){
+		GraphObject tmp = d.dungeon().get(0);
+		
+		//Texture prev_tex = loadTexture(tmp.getFace());
+		//prev_tex.bind();
+		for(GraphObject tile : d.dungeon()){
+					
+			if(tile.getVisible() == true /*|| tile.isVisited() == true*/){
+				//Texture t = loadTexture(tile.getFace());
+				//t.bind();
+				//loadTexture(tile.getFace()).bind();
+				tile.getTexture().bind();
+				renderTile(tile);
+			
+				//t.release();
+			}
+			
+			
+			if(!tmp.getFace().equals(tile.getFace())){
+				//System.out.println(tile.getFace());
+				tmp = tile;
+				tile.getTexture().bind();
+
+
+			}
+		}
+	}
+	
 	public void renderDungeon(){
 
+		/* zdfhsdghsdgs
+		*dgs
+		*dgsedgsdfgsdfg
+		*/
+		
 		GraphObject tmp = cDungeon.dungeon().get(0);
 		
 		//Texture prev_tex = loadTexture(tmp.getFace());
 		//prev_tex.bind();
-		
 		for(GraphObject tile : cDungeon.dungeon()){
 					
 			if(tile.getVisible() == true /*|| tile.isVisited() == true*/){
@@ -246,6 +291,8 @@ public class TileRenderer extends Thread {
 
 			}
 			//updateFPS();
+			
+			//moveCamera(0, 0.1);
 		}
 		
 		
@@ -435,8 +482,11 @@ public class TileRenderer extends Thread {
 			*/
 			//--------------			
 			renderState();
+			//GL11.glTranslatef((float) -0.1, 0, 0);
+			camera.use();
 			//--------------
 			Display.update();
+			
 			Display.sync(100);
 
 		if (Display.isCloseRequested()) {
@@ -450,6 +500,40 @@ public class TileRenderer extends Thread {
 
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public static void moveCamera(double x, double y)
+	{
+
+		
+		GL11.glLoadIdentity();
+		GL11.glTranslated((float)x, (float)y, 0.0f);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	private void initGL(int width, int height) {
 
 		try {		
@@ -457,6 +541,7 @@ public class TileRenderer extends Thread {
 			Display.setDisplayMode(new DisplayMode(width,height));
 			Display.create();
 			Display.setVSyncEnabled(true);
+			
 			Keyboard.create();
 		} 
 		catch (LWJGLException e) {
@@ -481,11 +566,21 @@ public class TileRenderer extends Thread {
 		GL11.glOrtho(0, width, height, 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		System.out.println("Done!");
-		
+		//GL11.glTranslatef(0.0f, -4.0f*32, 0.0f);
 		System.out.println("Fonts initializing.");
 		initFonts();
 		System.out.println("Done!");
+		//camera = new Camera();
+		//camera.use();
+		
+		
+		//GL11.glMatrixMode(GL11.GL_PROJECTION);
+		//GL11.glLoadIdentity();
+
+		//
 	}
+	
+	
 	
 	public void initFonts() {
 		// load a default java font
@@ -540,12 +635,10 @@ public class TileRenderer extends Thread {
 		}
 		//d.addLife(enemy);
 		//enemy.setVisible(false);
-<<<<<<< HEAD
 
-=======
 		*/
 		you.setVisible(true);
->>>>>>> 8dbecfd22131bad7bc0ab6fb9efd37c68aaa7e40
+
 		//System.out.println(d.getCreature(5, 5));
 		
 		//d.addThing(new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 6), 100, 10, 4, 4));
@@ -554,13 +647,13 @@ public class TileRenderer extends Thread {
 		
 		//d.addThing(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3));
 		
-<<<<<<< HEAD
+
 		//enemy.takeItem(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3));
 		
-=======
+
 		d.addThing(new Armor("cup", "./res/items/star.png", 100, 10, 1, 1, Armor.Type.HEAD));
 		d.addThing(new Armor("chainmail", "./res/items/star.png", 100, 10, 2, 2, Armor.Type.BODY));
->>>>>>> 8dbecfd22131bad7bc0ab6fb9efd37c68aaa7e40
+
 		TileRenderer r = new TileRenderer(d);
 	
 		KeyboardControl controller = new KeyboardControl();
@@ -568,6 +661,8 @@ public class TileRenderer extends Thread {
 		//controller.setDungeon(d);
 
 
+		d.addHero(you);
+		you.setVisible(true);
 		
 		Thread keyboard = new Thread(controller);
 		Thread renderer = new Thread(r);
@@ -577,9 +672,10 @@ public class TileRenderer extends Thread {
 		renderer.start();
 		keyboard.start();
 
-		d.addHero(you);
-		you.setVisible(true);
+		camera = new Camera();
 		
+		//moveCamera(300,0);
+		//moveCamera(12,13);
 		controller.controlCreature(you);
 	}
 
