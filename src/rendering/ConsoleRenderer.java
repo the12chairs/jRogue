@@ -1,5 +1,6 @@
 package rendering;
 
+
 import lifeforms.AbstractCreature;
 import lowlevel.AbstractThing;
 import lowlevel.Dungeon;

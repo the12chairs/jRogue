@@ -16,7 +16,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
-import org.lwjgl.util.glu.GLU;
+
 
 import lifeforms.AbstractCreature;
 import lifeforms.AbstractCreature.Profession;
@@ -58,8 +58,8 @@ public class TileRenderer extends Thread {
 						DROP_ITEM, WEAR_ARMOR, TAKE_WEAPON,
 						MAGICK, ALCHEMY, RUNES, CRAFT, DEATH };
 	
-	private static final int HEIGHT = 800;
-	private static final int WIDTH = 600;
+	public static final int HEIGHT = 800;
+	public static final int WIDTH = 600;
 	public static final int TILE_SIZE = 32;
 	
 	private long lastFrame;
@@ -86,7 +86,7 @@ public class TileRenderer extends Thread {
 	
 	
 	public TileRenderer(Dungeon cDungeon){
-		this.cDungeon = cDungeon;
+		TileRenderer.cDungeon = cDungeon;
 		gameState = State.DUNGEON;
 		check = new Checkbox(">");
 	}
@@ -482,7 +482,7 @@ public class TileRenderer extends Thread {
 			*/
 			//--------------			
 			renderState();
-			//GL11.glTranslatef((float) -0.1, 0, 0);
+			
 			camera.use();
 			//--------------
 			Display.update();
@@ -499,16 +499,7 @@ public class TileRenderer extends Thread {
 	}
 
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	
 	public static void moveCamera(double x, double y)
@@ -518,17 +509,6 @@ public class TileRenderer extends Thread {
 		GL11.glLoadIdentity();
 		GL11.glTranslated((float)x, (float)y, 0.0f);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
@@ -671,8 +651,8 @@ public class TileRenderer extends Thread {
 		
 		renderer.start();
 		keyboard.start();
-
-		camera = new Camera();
+		// Центровака по герою? ljltkfnm
+		camera = new Camera((int)you.getY()+6, (int)you.getX()+6);
 		
 		//moveCamera(300,0);
 		//moveCamera(12,13);

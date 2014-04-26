@@ -7,6 +7,12 @@ public class Camera
 {
     private float x, y, scale;
 
+    
+    public Camera(int x, int y){
+    	this.x = x;
+    	this.y = y;
+    	scale = 0;
+    }
     public Camera()
     {
         x = y = 0;
@@ -23,36 +29,37 @@ public class Camera
 
     public void move(float x, float y)
     {
-        //x /= scale;
-        //y /= scale;
+
         this.x += x;
         this.y += y;
         
         
     }
-
-    public void zoom(float scale)
-    {
+    public void centrize(){
+    	
+    }
+    
+    public void set(float x, float y) {
+    	this.x = x + 12;
+    	this.y = y + 9;
+    }
+    public void zoom(float scale) {
         this.scale += scale * this.scale;
     }
 
-    public float getX()
-    {
+    public float getX() {
         return x;
     }
 
-    public float getY()
-    {
+    public float getY() {
         return y;
     }
 
-    public float getScale()
-    {
+    public float getScale() {
         return scale;
     }
 
-    public void setX(float x)
-    {
+    public void setX(float x) {
         this.x = x;
     }
 

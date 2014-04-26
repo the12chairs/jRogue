@@ -473,27 +473,28 @@ public class KeyboardControl extends Thread{
 					
 					// TODO: работай
 					controlledMove(0, -1);
-					if(TileRenderer.HEIGHT-controlled.getY() <= 0)
-						TileRenderer.camera.move(1,0);
+					//if(TileRenderer.HEIGHT-controlled.getY() <= 0)
+					//TileRenderer.camera.move(1,0);
 					
 				}
 
 			
 				if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
 					controlledMove(0, 1);
-					TileRenderer.camera.move(-1,0);
+					//TileRenderer.camera.move(-1,0);
 				}
 
 				if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
 					controlledMove(-1, 0);
-					TileRenderer.camera.move(0,1);
+					//TileRenderer.camera.move(0,1);
 				}
 	
 				if(Keyboard.getEventKey() == Keyboard.KEY_RIGHT){
 					controlledMove(1, 0);
-					TileRenderer.camera.move(0,-1);
+					//TileRenderer.camera.move(0,-1);
 				}
-
+				//TileRenderer.camera.set(controlled.getX(), controlled.getY());
+				//TileRenderer.camera.centrize();
 			}
 			
 			// Взять предмет
@@ -549,6 +550,8 @@ public class KeyboardControl extends Thread{
 		else 
 		if(isPassable(t) && t != null){
 			controlled.move(dx, dy);
+			TileRenderer.camera.move(-dy,-dx);
+			
 		}
 		int hilKoef = 5;
 		if(turns%hilKoef == 0 && controlled.hp().getCurrent() < controlled.hp().getFull()){
