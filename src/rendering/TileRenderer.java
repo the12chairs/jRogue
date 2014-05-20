@@ -2,11 +2,10 @@ package rendering;
 
 
 
-import static org.lwjgl.opengl.GL11.glTranslatef;
+import ai.AgressiveAI;
 import ai.PassiveAI;
 import items.Armor;
 import items.Weapon;
-import items.Weapon.Type;
 
 import java.awt.Font;
 import java.io.IOException;
@@ -15,6 +14,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
+
 
 
 
@@ -37,9 +37,6 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
 
 import dnd.Dice;
 import primitives.GraphObject;
@@ -51,12 +48,9 @@ public class TileRenderer extends Thread {
 
 	
 
-	
-	
-	// TODO: Сделать обработку этих состояний
 	public enum State { MAIN_MENU, DUNGEON, INVENTORY,
 						DROP_ITEM, WEAR_ARMOR, TAKE_WEAPON,
-						MAGICK, ALCHEMY, RUNES, CRAFT, DEATH };
+						MAGIC, ALCHEMY, RUNES, CRAFT, DEATH };
 	
 	public static final int HEIGHT = 800;
 	public static final int WIDTH = 600;
@@ -95,7 +89,7 @@ public class TileRenderer extends Thread {
 	public void renderInventory(){
 		// Отрисовка инвентаря
 		
-		
+		//camera.set(0, 0);
 		headFont.drawString(WIDTH / 2 + 40, 20, "Inventory");
 		
 		int w = 50;
@@ -603,20 +597,20 @@ public class TileRenderer extends Thread {
 		//loadTextures(d);
 		//enemy.setAI(new PassiveAI());
 		//enemy.g
-		/*
+		
 		Random rnd = new Random();
 		
-		for(int i = 1; i < 10; ++i){ 
+		for(int i = 1; i < 4; ++i){ 
 			d.addLife(new Mob("Grusk'ar #" + i, "./res/mobs/gobbo.png", rnd.nextInt(10), rnd.nextInt(10), gobo, 4, true));
 		}
 		for(AbstractCreature c : d.getCreatures()){
 			if(c != d.getCreatures().getFirst())
-				c.setAI(new PassiveAI());
+				c.setAI(new AgressiveAI());
 		}
 		//d.addLife(enemy);
 		//enemy.setVisible(false);
 
-		*/
+		
 		you.setVisible(true);
 
 		//System.out.println(d.getCreature(5, 5));

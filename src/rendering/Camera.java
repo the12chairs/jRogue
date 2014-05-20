@@ -5,7 +5,7 @@ import org.lwjgl.opengl.Display;
 
 public class Camera
 {
-    private float x, y, scale;
+    private float x, y, scale, cent_x, cent_y;
 
     
     public Camera(int x, int y){
@@ -21,8 +21,7 @@ public class Camera
 
     public void use()
     {
-    	//glTranslatef(Display.getWidth() / 2, Display.getHeight() / 2, 0);
-        //glScalef(scale, scale, 1);
+
         glTranslatef(y*TileRenderer.TILE_SIZE, x*TileRenderer.TILE_SIZE, 0);
         this.x = this.y = 0;
     }
@@ -32,17 +31,11 @@ public class Camera
 
         this.x += x;
         this.y += y;
+        setCent_x(x);
+        setCent_y(y);
         
-        
-    }
-    public void centrize(){
-    	
     }
     
-    public void set(float x, float y) {
-    	this.x = x + 12;
-    	this.y = y + 9;
-    }
     public void zoom(float scale) {
         this.scale += scale * this.scale;
     }
@@ -72,4 +65,16 @@ public class Camera
     {
         this.scale = scale;
     }
+	public float getCent_x() {
+		return cent_x;
+	}
+	public void setCent_x(float cent_x) {
+		this.cent_x = cent_x;
+	}
+	public float getCent_y() {
+		return cent_y;
+	}
+	public void setCent_y(float cent_y) {
+		this.cent_y = cent_y;
+	}
 }
