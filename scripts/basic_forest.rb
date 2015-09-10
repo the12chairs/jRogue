@@ -12,9 +12,6 @@ require $adder + 'lib/lifeforms.jar'
 require $adder + 'lib/primitives.jar'
 require $adder + 'lib/dnd.jar'
 
-
-
-
 class BasicForest
 
   @@tree1_proto = Java::lowlevel::Tile.new 'Tree', $adder + 'res/tree1.png', true, false

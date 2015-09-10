@@ -13,10 +13,10 @@ puts "Making village"
 
 village = Java::lowlevel::Dungeon.new 30, 30
 
-
-num_houses = Java::dnd::Dice.new(2, 6).throwDice 
+num_houses = Java::dnd::Dice.new(2, 6).throwDice
 grass_proto = Java::lowlevel::Tile.new 'Grass', adder + 'res/grass.png', true, true
 tree1_proto = Java::lowlevel::Tile.new 'Tree', adder + 'res/tree1.png', true, false
+
 (village.getHeight).times {
   |i|
   (village.getWidth).times {
@@ -24,7 +24,6 @@ tree1_proto = Java::lowlevel::Tile.new 'Tree', adder + 'res/tree1.png', true, fa
     village.addTile(Java::lowlevel::Tile.new(grass_proto, i, j))
   }
 }
-
 
 num_houses.times {
   hlx = Random::rand(1 .. village.getHeight)

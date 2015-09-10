@@ -423,32 +423,23 @@ public class KeyboardControl extends Thread{
 	
 	// При смерти существа
 	
-	public void death(AbstractCreature who){
-		
+	public void death(AbstractCreature who) {
+
 		// Сохраняем оставшиеся предметы в инвентаре
 		List<Integer> buffer = new ArrayList<Integer>();
-		for(Entry<Integer, AbstractThing> t: who.inventory().allInvenory().entrySet()){
+		for (Entry<Integer, AbstractThing> t : who.inventory().allInvenory().entrySet()) {
 			buffer.add(t.getKey());
-		}	
-				
+		}
+
 		// Зачищаем инвентарь
-		for(Integer i : buffer){
+		for (Integer i : buffer) {
 			drop(who, i);
 		}
-	
-		
+
 	}
-	
-	
-	public void dropAll(AbstractCreature c) {
-		
-	}
-	
-	
+
 	public synchronized void commandAction(){
-		
-		
-		
+
 		// Старушка умерла
 		if(!controlled.isAlive()){
 			TileRenderer.gameState = TileRenderer.State.DEATH;
@@ -456,45 +447,24 @@ public class KeyboardControl extends Thread{
 		
 		long x = controlled.getX();
 		long y = controlled.getY();
-		
-		
+
 		//Keyboard.
 		while(Keyboard.next()){
-			
-			boolean up = false;
-			boolean down = false;
-			boolean left = false;
-			boolean right = false;
-			
 			if(Keyboard.getEventKeyState()){
-				
-				
 				if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
-					
-					// TODO: работай
 					controlledMove(0, -1);
-					//if(TileRenderer.HEIGHT-controlled.getY() <= 0)
-					//TileRenderer.camera.move(1,0);
-					
-				}
 
-			
+				}
 				if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
 					controlledMove(0, 1);
-					//TileRenderer.camera.move(-1,0);
 				}
-
 				if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
 					controlledMove(-1, 0);
-					//TileRenderer.camera.move(0,1);
 				}
 	
 				if(Keyboard.getEventKey() == Keyboard.KEY_RIGHT){
 					controlledMove(1, 0);
-					//TileRenderer.camera.move(0,-1);
 				}
-				//TileRenderer.camera.set(controlled.getX(), controlled.getY());
-				//TileRenderer.camera.centrize();
 			}
 			
 			// Взять предмет
@@ -502,7 +472,7 @@ public class KeyboardControl extends Thread{
 				turns++;
 				AbstractThing getted = null;
 				for(AbstractThing t : TileRenderer.getDungeon().getThings(x, y)){
-					if(t.getVisible() == true && t.isAllowed() == true){
+					if(t.getVisible() && t.isAllowed()){
 						getted = t;
 						TileRenderer.getDungeon().getItems().remove(getted);
 						break;
@@ -518,7 +488,6 @@ public class KeyboardControl extends Thread{
 				TileRenderer.gameState = TileRenderer.State.INVENTORY;
 			}
 
-			
 			// Переход на другую карту
 			if(Keyboard.isKeyDown(Keyboard.KEY_G)){
 				Portal port = TileRenderer.getDungeon().getPortal(x, y);
@@ -532,12 +501,8 @@ public class KeyboardControl extends Thread{
 			}
 			surroundTurn();
 			recreateVisible();
-			
 		}
-		
 	}
-
-	
 	
 	public void controlledMove(int dx, int dy) {
 		turns++;
@@ -547,12 +512,14 @@ public class KeyboardControl extends Thread{
 			controlled.hit(c);
 
 		} 
-		else 
-		if(isPassable(t) && t != null){
-			controlled.move(dx, dy);
-			TileRenderer.camera.move(-dy,-dx);
-			
+		else {
+			if(isPassable(t) && t != null){
+				controlled.move(dx, dy);
+				//TileRenderer.camera.move(-dy,-dx);
+			}
 		}
+
+		// лечение тут
 		int hilKoef = 5;
 		if(turns%hilKoef == 0 && controlled.hp().getCurrent() < controlled.hp().getFull()){
 			controlled.hp().setCurrent(controlled.hp().getCurrent() + 1);
@@ -562,35 +529,18 @@ public class KeyboardControl extends Thread{
 	// Ход всех существ карты
 	public void surroundTurn(){
 		if(turns>oldTurns){
-			//System.out.println("entry");
 			List<AbstractCreature> creatures = TileRenderer.getDungeon().getCreatures();
-			//int i = 0;
 			for(AbstractCreature c : creatures){
 				if(c != controlled && c.isAlive()){
 					c.getAi().setVisible(TileRenderer.getDungeon());
 					c.getAi().setDivide((int)TileRenderer.getDungeon().getWidth(), (int)TileRenderer.getDungeon().getHeight());
 					c.lurk();
-					/*
-					Random rnd = new Random();
-					
-					
-					Tile go = TileRenderer.getDungeon().getTile(controlled.getX(), controlled.getY());
-					//Tile go = TileRenderer.getDungeon().getTile(25, 25);
-					//c.march(go);
-					*/
-					//c.attack(controlled);
-					
 				}
-				
-		
 				if(!c.isAlive()){
 					death(c);
 				}
-				
 				oldTurns = turns;
 			}
 		}
 	}
-	
-	
 }

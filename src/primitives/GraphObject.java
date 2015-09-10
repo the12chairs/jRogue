@@ -46,9 +46,7 @@ public class GraphObject {
 	public Texture getTexture(){
 		return texture;
 	}
-	
-	
-	
+
 	public GraphObject(){
 		
 	}

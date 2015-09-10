@@ -7,7 +7,6 @@ public class Camera
 {
     private float x, y, scale, cent_x, cent_y;
 
-    
     public Camera(int x, int y){
     	this.x = x;
     	this.y = y;
@@ -21,21 +20,19 @@ public class Camera
 
     public void use()
     {
-
         glTranslatef(y*TileRenderer.TILE_SIZE, x*TileRenderer.TILE_SIZE, 0);
         this.x = this.y = 0;
     }
 
     public void move(float x, float y)
     {
-
         this.x += x;
         this.y += y;
         setCent_x(x);
         setCent_y(y);
         
     }
-    
+
     public void zoom(float scale) {
         this.scale += scale * this.scale;
     }

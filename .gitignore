@@ -1,5 +1,11 @@
 .metadata
 .gradle
+.idea/*
+*.iml
+
+*.ipr
+*.iws
+
 bin/
 tmp/
 *.tmp
@@ -9,7 +15,7 @@ tmp/
 local.properties
 .settings/
 .loadpath
-
+/out/
 # External tool builders
 .externalToolBuilders/
 
