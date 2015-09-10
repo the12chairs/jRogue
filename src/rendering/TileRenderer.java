@@ -325,16 +325,16 @@ public class TileRenderer extends Thread {
 	
 	 public void renderState(){
 		 // Состояния рендерера
+
 		 switch(gameState){
 		 case INVENTORY:
-			 camera.warp(1, 2);
-
 			 renderInventory();
 			 break;
 		 case DROP_ITEM:
 			 renderDrop();
 			 break;
 		 case DUNGEON:
+			 camera.use();
 			 renderDungeon();
 			 break;
 		 case TAKE_WEAPON:
@@ -363,8 +363,6 @@ public class TileRenderer extends Thread {
 			}
 			//--------------
 			renderState();
-			
-			camera.use();
 			//--------------
 			Display.update();
 			

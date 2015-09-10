@@ -1,38 +1,10 @@
-The graphic roguelike. The main goal is creating module structure of game content (maps, textures, etc)
-
-TODO:
-1 Map designer
-2 Races
-3 Scripting system (jruby)
-4 Quests
-5 Inventory # We are working on in
-6 Game objects
-  ' Food
-  ' Sleep
-  ' Doors
-  ' Traps
-  ' Fight system
-  ' Trade system
-  ' Dialogs (json- or xml-based)
-  ' Magic
-    - Spells
-    - Scrolls
-    - Alchemy
-    - Runes
-  ' Craft system
-6 Professions
-7 Using ruby scripts at the most
-
-
 Графический rogue-like RPG. Конечной целью является достижение модульности всего игрового контента.
+
 TODO:
-1. Редактор карт
-//2. Веб-морда для конвертера старого формата в новый
-3. Модули рас
-4. Скриптовый движок для квестов
-   ' К классу Quest добавить дерево из целей (Aims)
-5. ! Инвентарь # Мы работаем над этим
-6. Взаимодействие игровых объектов
+Редактор карт
+Модули рас
+Скриптовый движок для квестов
+Взаимодействие игровых объектов
    ' Еда
    ' Сон
    ' Двери
@@ -45,7 +17,6 @@ TODO:
      - Руны
    ' Крафт
    ' Алхимия
-7. Модули профессий
-   ' Бонусы ко всему вышеперечисленному
-8. Перенос всех модулей с json-формата в ruby-скрипты
+Модули профессий
+
 

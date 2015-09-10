@@ -30,7 +30,14 @@ public class Camera
         this.y += y;
         setCent_x(x);
         setCent_y(y);
-        
+    }
+
+    public void warp(float x, float y)
+    {
+        this.x = x;
+        this.y = y;
+        setCent_x(x);
+        setCent_y(y);
     }
 
     public void zoom(float scale) {
