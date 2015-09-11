@@ -2,6 +2,7 @@ package rendering;
 
 import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.glu.GLU;
 
 public class Camera
 {
@@ -20,6 +21,7 @@ public class Camera
 
     public void use()
     {
+
         glTranslatef(y*TileRenderer.TILE_SIZE, x*TileRenderer.TILE_SIZE, 0);
         this.x = this.y = 0;
     }
@@ -34,10 +36,7 @@ public class Camera
 
     public void warp(float x, float y)
     {
-        this.x = x;
-        this.y = y;
-        setCent_x(x);
-        setCent_y(y);
+        //GLU.gluLookAt(this.x, this.y, );
     }
 
     public void zoom(float scale) {

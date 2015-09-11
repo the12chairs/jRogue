@@ -12,16 +12,12 @@ require $adder + 'lib/lifeforms.jar'
 require $adder + 'lib/primitives.jar'
 require $adder + 'lib/dnd.jar'
 
+# Простой лес
 class BasicForest
 
-  @@tree1_proto = Java::lowlevel::Tile.new 'Tree', $adder + 'res/tree1.png', true, false
-
-  @@tree2_proto = Java::lowlevel::Tile.new 'Tree', $adder + 'res/tree2.png', true, false
-  @@grass_proto = Java::lowlevel::Tile.new 'Grass', $adder + 'res/grass.png', false, true
+  GRASS_PROTO = Java::lowlevel::Tile.new 'Grass', $adder + 'res/grass.png', false, true
   
-
   attr_accessor :num_groups, :in_group, :groups, :height, :width, :forest
-  
 
   def tree 
     if Random.rand(1 .. 2) == 1 
@@ -45,7 +41,7 @@ class BasicForest
       |i|
       @width.times {
         |j|
-        @forest.addTile(Java::lowlevel::Tile.new(@@grass_proto, i, j))
+        @forest.addTile(Java::lowlevel::Tile.new(GRASS_PROTO, i, j))
       }
     }
   end
@@ -67,14 +63,12 @@ class BasicForest
       end
       prew_w = w
       prew_h = h
-
     }
   end
 
   def seed_around
     @groups.each{
       |g|
-      
       @in_group.times {
         |i|
         w = g.getY
@@ -97,37 +91,37 @@ class BasicForest
   end
 end
 
-groups = Java::dnd::Dice.new 3, 8
-trees = Java::dnd::Dice.new 3, 6
 
-
+# Массив с локациями
 forests = []
 
-# Пачка леса. Генерится очень долго. Варьируй их количество
-forests_number = 30
+# Сколько будет локаций
+forests_number = 20
 
 forests_number.times {
+    |i|
+  groups = Java::dnd::Dice.new(3, 3 + i)
+  trees = Java::dnd::Dice.new(3, 3)
   forests.push(BasicForest.new(30,30, groups.throwDice, trees.throwDice).generate)
 }
 
 forests.each_with_index {
-  |f, i|
+    |f, i|
   common_f = f
   next_f = forests[i+1].nil? ? 0 : forests[i+1]
   if next_f != 0
-    common_f.addPortal(Java::lowlevel::Portal.new(common_f, next_f, 0, 0))
-    next_f.addPortal(Java::lowlevel::Portal.new(next_f, common_f, 0, 1))
+
+    common_f.getHeight.times {
+        |k|
+      common_f.addPortal(Java::lowlevel::Portal.new(common_f, next_f, common_f.getWidth-1, k, 0, k))
+    }
+
+    next_f.getHeight.times {
+        |k|
+      next_f.addPortal(Java::lowlevel::Portal.new(next_f, common_f, 0, k, common_f.getWidth-1, k))
+    }
   end
 
 }
 #Начальная локация
 forest = forests[0]
-
-#forest = BasicForest.new(10, 10, 1, 1).generate
-#forest1 = BasicForest.new(10, 10, 1, 1).generate
-
-#Java::lowlevel::AbstractThing::MainType.value_of("WEAPON")
-#forest.addPortal(Java::lowlevel::Portal.new(forest, forest1, 1, 1))
-#forest1.addPortal(Java::lowlevel::Portal.new(forest1, forest, 1, 1))
-
-

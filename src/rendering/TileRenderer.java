@@ -428,7 +428,7 @@ public class TileRenderer extends Thread {
 		Race gobo = (Race) ruby.get("gobo");
 		//Dice 
 		//Race dwarf = new Race("Dwarf", 5, 0, -3, -1, -1, 4);
-		Hero you = new Hero("Maga", "./res/mobs/human.png", 3, 1, test_race, 4, Profession.WARRIOR);
+		Hero you = new Hero("Maga", "./res/mobs/human.png", 10, 10, test_race, 4, Profession.WARRIOR);
 		
 		//Mob enemy = new Mob("Grusk'ar", "./res/mobs/gobbo.png", 5, 5, gobo, 4, true);
 		

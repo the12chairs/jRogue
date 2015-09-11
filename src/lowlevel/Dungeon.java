@@ -268,12 +268,12 @@ public class Dungeon implements ILosBoard{
 
 	@Override
 	public boolean isObstacle(int x, int y) {
-		return getTile(x, y).getPassable();
+		return !getTile(x, y).getPassable();
 	}
 
 	@Override
 	public void visit(int x, int y) {
-		if( x < width && y < height){
+		if(x < width && y < height) {
 			getTile(x, y).visit(); // Нужен для определения, надо ли его рисовать
 			getTile(x, y).setVisible(true);
 
