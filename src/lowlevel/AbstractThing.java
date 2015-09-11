@@ -4,9 +4,7 @@ import primitives.GraphObject;
 
 
 public abstract class AbstractThing extends GraphObject{
-	
-	
-	
+
 	public static enum MainType{
 		WEAPON,
 		ARMOR,
@@ -24,8 +22,9 @@ public abstract class AbstractThing extends GraphObject{
 	
 	protected int bonus;
 	protected boolean allowed; // Запрет/разрешение подбирать предмет
-	
-	
+	protected boolean equipped;
+	protected boolean equippable; // Можно натянуть на себя?
+
 	public AbstractThing(String name, String face, int heavy, int cost, long x, long y, MainType mType){
 		super(face, x, y);
 		this.name = name;
@@ -33,7 +32,19 @@ public abstract class AbstractThing extends GraphObject{
 		this.cost = cost;
 		this.mType = mType;
 		allowed = true;
+		equipped = false;
 	}
+
+	public AbstractThing(String name, String face, int heavy, int cost, MainType mType){
+		super(face);
+		this.name = name;
+		this.heavy = heavy;
+		this.cost = cost;
+		this.mType = mType;
+		allowed = true;
+		equipped = false;
+	}
+
 
 	public AbstractThing() {
 		
@@ -48,9 +59,7 @@ public abstract class AbstractThing extends GraphObject{
 	public void setName(String name){
 		this.name = name;
 	}
-	
-	
-	
+
 	public void setBonus(int bonus){
 		this.bonus = bonus;
 	}
@@ -92,11 +101,34 @@ public abstract class AbstractThing extends GraphObject{
 		return visible;
 	}
 
-
 	public MainType getMType() {
 		return mType;
 	}
 
+	public boolean isEquipped()
+	{
+		return equipped;
+	}
+
+	public void equip()
+	{
+		equipped = true;
+	}
+
+	public void unequip()
+	{
+		equipped = false;
+	}
+
+	public boolean getEquippable()
+	{
+		return equippable;
+	}
+
+	public void setEquippable(boolean equippable)
+	{
+		this.equippable = equippable;
+	}
 
 	public void setMType(MainType mType) {
 		this.mType = mType;

@@ -260,7 +260,7 @@ public class KeyboardControl extends Thread{
 				case WEAPON:
 					
 					if(TileRenderer.check.getThing() == controlled.getHands()){
-						controlled.unuseWeapon();
+						controlled.unuseWeapon(controlled.getHands());
 					}
 					else{
 						controlled.useWeapon((Weapon)TileRenderer.check.getThing());
@@ -273,7 +273,7 @@ public class KeyboardControl extends Thread{
 					System.out.println(a.getType());
 					if(a.getType() == Armor.Type.HEAD){
 						if(controlled.head() == a){
-							controlled.unwearArmor(Armor.Type.HEAD);
+							controlled.unwearArmor(a);
 							System.out.println("Head armor unwearing!");
 						}
 						else{
@@ -283,7 +283,7 @@ public class KeyboardControl extends Thread{
 					} else
 					if(a.getType() == Armor.Type.BODY){
 						if(controlled.body() == a){
-							controlled.unwearArmor(Armor.Type.BODY);
+							controlled.unwearArmor(a);
 							System.out.println("Body armor unwearing!");
 						}
 						else{
@@ -293,7 +293,7 @@ public class KeyboardControl extends Thread{
 					} else
 					if(a.getType() == Armor.Type.FOOTS){
 						if(controlled.foots() == a){
-							controlled.unwearArmor(Armor.Type.FOOTS);
+							controlled.unwearArmor(a);
 							System.out.println("Foots armor unwearing!");
 						}
 						else{
@@ -303,7 +303,7 @@ public class KeyboardControl extends Thread{
 					} else
 					if(a.getType() == Armor.Type.ARMS){
 						if(controlled.arms() == a){
-							controlled.unwearArmor(Armor.Type.ARMS);
+							controlled.unwearArmor(a);
 							System.out.println("Arms armor unwearing!");
 						}
 						else{
@@ -313,7 +313,7 @@ public class KeyboardControl extends Thread{
 					} else
 					if(a.getType() == Armor.Type.LEGS){
 						if(controlled.legs() == a){
-							controlled.unwearArmor(Armor.Type.LEGS);
+							controlled.unwearArmor(a);
 							System.out.println("Legs armor unwearing!");
 						}
 						else{
@@ -353,22 +353,22 @@ public class KeyboardControl extends Thread{
 			dropped = who.inventory().allInvenory().get(what);
 			// Попытка выбросить экипированное
 			if(who.getHands() == dropped){
-				who.unuseWeapon();
+				who.unuseWeapon((Weapon)dropped);
 			}
 			if(who.head() == dropped){
-				who.unwearArmor(Armor.Type.HEAD);
+				who.unwearArmor((Armor)dropped);
 			}
 			if(who.body() == dropped){
-				who.unwearArmor(Armor.Type.BODY);
+				who.unwearArmor((Armor)dropped);
 			}
 			if(who.arms() == dropped){
-				who.unwearArmor(Armor.Type.ARMS);
+				who.unwearArmor((Armor)dropped);
 			}
 			if(who.legs() == dropped){
-				who.unwearArmor(Armor.Type.LEGS);
+				who.unwearArmor((Armor)dropped);
 			}
 			if(who.foots() == dropped){
-				who.unwearArmor(Armor.Type.FOOTS);
+				who.unwearArmor((Armor)dropped);
 			}
 			who.dropItem(what);
 			TileRenderer.getDungeon().addThing(dropped, who.getX(), who.getY());

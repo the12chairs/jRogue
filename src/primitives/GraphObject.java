@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
-
+import java.io.FileInputStream;
+import java.io.File;
 public class GraphObject {
 	
 	protected String face;
@@ -17,10 +17,7 @@ public class GraphObject {
 	protected boolean visited;
 	protected Texture texture; 
 	
-	public String getFace(){
-		return this.face;
-	}
-	
+
 	public void visit(){
 		visited = true;
 	}
@@ -33,11 +30,14 @@ public class GraphObject {
 			GL11.glDeleteTextures(texture.getTextureID());
 	}
 	public void loadTexture(){
+
 		Texture t = null;
+		FileInputStream fi = null;
 		try {
-			texture = TextureLoader.getTexture
-					("PNG", ResourceLoader.getResourceAsStream(face));
-			
+			fi = new FileInputStream(new File(face));
+			texture = TextureLoader.getTexture("PNG", fi);//ResourceLoader.getResourceAsStream(face));
+			fi.close();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -56,15 +56,19 @@ public class GraphObject {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	public GraphObject(String face){
 		this.face = face;
 	}
-	
+
 	public void setFace(String face){
 		this.face = face;
 	}
-	
+
+	public String getFace(){
+		return this.face;
+	}
+
 	public long getX(){
 		return this.x;
 	}

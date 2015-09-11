@@ -263,7 +263,8 @@ public abstract class AbstractCreature extends GraphObject{
 	public Race getRace(){
 		return race;
 	}
-	public void setPos(int x, int y){
+	public void setPos(int x, int y)
+	{
 		this.x = x;
 		this.y = y;
 	}
@@ -283,13 +284,15 @@ public abstract class AbstractCreature extends GraphObject{
 		return damage;
 	}
 	
-	public Dice calculateDamage(){
+	public Dice calculateDamage()
+	{
 		return new Dice(1,3);
 	}
 	
 
-	public String getProfession(){
-		switch (this.profession){
+	public String getProfession()
+	{
+		switch (this.profession) {
 		case WARRIOR:
 			return "Воин";
 		case ROGUE:
@@ -302,43 +305,52 @@ public abstract class AbstractCreature extends GraphObject{
 	}
 	
 	// Обертки для взятия/выкидывания предметов, учитывающие изменение переносимого веса
-	public void takeItem(AbstractThing item){
+	public void takeItem(AbstractThing item)
+	{
 		this.inventory.pushItem(item);
 		this.mass.setCurrent(this.mass.getCurrent() + item.getHeavy());
 	}
 	
 	
-	public void dropItem(Integer item){
+	public void dropItem(Integer item)
+	{
 		AbstractThing t = inventory.allInvenory().get(item);
 		this.inventory.dropItem(item);
 		this.mass.setCurrent(this.mass.getCurrent() - t.getHeavy());
 	}
 	
 	
-	public void dropItem(AbstractThing item){
+	public void dropItem(AbstractThing item)
+	{
 		//AbstractThing t = inventory.findByKey(key);
 		this.inventory.dropItem(item);
 		this.mass.setCurrent(this.mass.getCurrent() - item.getHeavy());
 	}
-	
-	
-	
-	public void unwearArmor(Armor.Type type){
+
+	public void unwearArmor(Armor armor)
+	{
+		Armor.Type type = armor.getType();
+
 		switch(type){
 		case HEAD:
 			head = null;
+			armor.unequip();
 			break;
 		case BODY:
 			body = null;
+			armor.unequip();
 			break;
 		case ARMS:
 			arms = null;
+			armor.unequip();
 			break;
 		case FOOTS:
 			foots = null;
+			armor.unequip();
 			break;
 		case LEGS:
 			legs = null;
+			armor.unequip();
 			break;
 		default:
 			System.out.println("Error while armor unwearing");
@@ -347,62 +359,66 @@ public abstract class AbstractCreature extends GraphObject{
 	}
 	
 	//TODO: доделать!
-	public void wearArmor(Armor armor){
+	public void wearArmor(Armor armor)
+	{
 		
 		for(Entry<Integer, Armor> p : inventory.getAllArmor().entrySet()){
 			// For each armor into inventory, if we take marked
-			if(p.getValue() == armor){
-				
+			if(p.getValue() == armor) {
+
 				// if this head armor 
-				if(p.getValue().getType() == Armor.Type.HEAD){
+				if (p.getValue().getType() == Armor.Type.HEAD) {
 					head = p.getValue();
+					armor.equip();
 				}
 				// for our body
-				if(p.getValue().getType() == Armor.Type.BODY){
+				if (p.getValue().getType() == Armor.Type.BODY) {
 					body = p.getValue();
+					armor.equip();
 				}
 				// for arms
-				if(p.getValue().getType() == Armor.Type.ARMS){
+				if (p.getValue().getType() == Armor.Type.ARMS) {
 					arms = p.getValue();
+					armor.equip();
 				}
-
 				// legs
-				if(p.getValue().getType() == Armor.Type.LEGS){
+				if (p.getValue().getType() == Armor.Type.LEGS) {
 					legs = p.getValue();
+					armor.equip();
 				}
 				// and foots
-				if(p.getValue().getType() == Armor.Type.FOOTS){
+				if (p.getValue().getType() == Armor.Type.FOOTS) {
 					foots = p.getValue();
-				}	
-				
+					armor.equip();
+				}
 			}
-				
 		}
-
 	}
 	
 	public Weapon getHands(){
 		return hands;
 	}
 	
-	public void useWeapon(Weapon w) {
-		 
+	public void useWeapon(Weapon w)
+	{
 		//Чорная магия, не трожь! 
 		for(Entry<Integer, Weapon> p : inventory.getAllWeapon().entrySet()){
 			if(p.getValue() == w){
-				
 				// Если руки заняты, меняем оружие
 				if(hands != null){
-					//System.out.println("Ololo");
-					//inventory.pushItem(hands);
-					//takeItem(hands);
+					getHands().unequip();
 					hands = w;
 					this.damage = w.getDamage();
+					w.equip();
+					weaponed = true;
+					System.out.println("Switch weapons");
 				}
 				else{
 					hands = p.getValue();
 					damage = hands.getDamage();
-					//dropItem(p.getKey());
+					w.equip();
+					weaponed = true;
+					System.out.println("Use weapon");
 				}
 				break;
 			}
@@ -410,8 +426,7 @@ public abstract class AbstractCreature extends GraphObject{
 		}
 		
 	}
-	
-	
+
 	public void setAI(AI ai){
 		this.ai = ai;
 	}
@@ -419,16 +434,15 @@ public abstract class AbstractCreature extends GraphObject{
 		return ai;
 	}
 
-	public void unuseWeapon() {
+	public void unuseWeapon(Weapon w) {
 		this.damage = new Dice(1, 3);
 		hands = null;
+		weaponed = false;
+		w.unequip();
+		System.out.println("Unuse weapon");
 	}
 
 	public boolean isWeaponed() {
 		return weaponed;
 	}
-
-	
-	
-	
 }

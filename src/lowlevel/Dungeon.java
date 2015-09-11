@@ -8,6 +8,7 @@ import lifeforms.AbstractCreature;
 import lifeforms.Hero;
 import lifeforms.AbstractCreature.Profession;
 
+import org.jruby.RubyProcess;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -34,7 +35,6 @@ public class Dungeon implements ILosBoard{
 	private long height;
 	private long width;
 	
-	
 	public void addPortal(Portal p){
 		scenePortals.push(p);
 	}
@@ -59,13 +59,10 @@ public class Dungeon implements ILosBoard{
 		thing.setY(y);
 		sceneThings.push(thing);
 	}
-	
-	
-	
+
 	public void addLife(AbstractCreature life){
 		sceneLife.push(life);
 	}
-	
 	
 	public void addQuest(Quest quest){
 		sceneQuests.push(quest);
@@ -82,8 +79,7 @@ public class Dungeon implements ILosBoard{
 	public void setDungeon(LinkedList<Tile> dungeon) {
 		this.dungeon = dungeon;
 	}
-	
-	
+
 	public LinkedList<AbstractCreature> getCreatures(){
 		return this.sceneLife;
 	}
@@ -113,19 +109,12 @@ public class Dungeon implements ILosBoard{
 	}
 	
 	public Dungeon(String filePath){
-		
-		
-		
+
 		this.sceneLife = new LinkedList<AbstractCreature>();
 		this.sceneQuests = new LinkedList<Quest>();
 		this.sceneThings = new LinkedList<AbstractThing>();
 		this.scenePortals = new LinkedList<Portal>();
-		
-		
-		
-		//System.out.println("BLDJAD!!!!" + sceneThings.size());
-		
-		
+
 		// Прочтем карту из json файла
 		// Ох и медленно эта хрень работать будет ><
 		dungeon = new LinkedList<Tile>();
@@ -167,15 +156,8 @@ public class Dungeon implements ILosBoard{
 			long x = (long) parsableTile.get("x"); 
 			long y = (long) parsableTile.get("y");
 			dungeon.add(new Tile(title, tile, passable, visible, x, y));
-			
-
 		}
-
-		
 	}
-	
-	
-	
 
 	public int getDungeonSize(){
 		return this.dungeon.size();
@@ -184,12 +166,10 @@ public class Dungeon implements ILosBoard{
 	public void generateDungeon(int x, int y, int rooms){
 
 	}
-	
-	
+
 	public int getNumRooms() {
 		return numRooms;
 	}
-
 
 	public void setNumRooms(int numRooms) {
 		this.numRooms = numRooms;
@@ -200,7 +180,6 @@ public class Dungeon implements ILosBoard{
 	public void addTile(Tile t){
 		dungeon.push(t);
 	}
-	
 	
 	public void removeTile(int x, int y){
 		Tile t = getTile(x, y);
@@ -223,20 +202,21 @@ public class Dungeon implements ILosBoard{
 		}
 		return creature;
 	}
-	
-	
+
 	public List<AbstractThing> getThings(long x, long y){
 		List<AbstractThing> things = new LinkedList<AbstractThing>();
-		if (things.size() != 0){
-			for(AbstractThing t : sceneThings){
-				if((t.getX() == x) && (t.getY() == y)){
-					things.add(t);
-				}
-			}
-		}
+        for(AbstractThing t : sceneThings){
+            if((t.getX() == x) && (t.getY() == y)){
+                things.add(t);
+            }
+        }
 		return things;
 	}
-	
+
+    public List<AbstractThing> getThings(){
+        return sceneThings;
+    }
+
 	public Portal getPortal(long x, long y){
 		Portal portal = null;
 		for(Portal p : scenePortals){
@@ -263,8 +243,6 @@ public class Dungeon implements ILosBoard{
 		return t;
 	}
 	
-	
-	
 
 	public static void main(String[] args) {
 		// Тесты
@@ -290,21 +268,15 @@ public class Dungeon implements ILosBoard{
 
 	@Override
 	public boolean isObstacle(int x, int y) {
-	
-		if(getTile(x, y).getPassable() == false){
-			return true;
-		}
-		else{
-			return false;
-		}
+		return getTile(x, y).getPassable();
 	}
 
 	@Override
 	public void visit(int x, int y) {
 		if( x < width && y < height){
-			getTile(x, y).visit();//setVisible(true); Нужен для определения, надо ли его рисовать
+			getTile(x, y).visit(); // Нужен для определения, надо ли его рисовать
 			getTile(x, y).setVisible(true);
-			
+
 			for(AbstractThing t : getThings(x, y)){
 				if (t == null) continue;
 				if(getTile(x,y).isVisited()){
@@ -316,7 +288,6 @@ public class Dungeon implements ILosBoard{
 			}
 			
 			// Исправить!
-			
 			for(AbstractCreature c : sceneLife){
 				if(c == sceneLife.getFirst()) continue;
 				if(getTile(c.getX(), c.getY()).isVisited()){
@@ -326,21 +297,6 @@ public class Dungeon implements ILosBoard{
 					c.setVisible(false);
 				}
 			}
-			
-			
-			
-			/*
-			if(getCreature(x, y) != null){
-				if(getTile(x,y).isVisited()){
-					getCreature(x,y).setVisible(true);
-				}
-				else{
-					getCreature(x,y).setVisible(false);
-				}
-				//getCreature(x,y).setVisible(true);
-			}
-			*/
-			
 		}
 	}
 

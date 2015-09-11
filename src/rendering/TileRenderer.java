@@ -53,7 +53,7 @@ public class TileRenderer extends Thread {
 	
 	public static final int HEIGHT = 600;
 	public static final int WIDTH = 800;
-	public static final int TILE_SIZE = 32;
+	public static final int TILE_SIZE = 16;
 	
 	private long lastFrame;
 	private long lastFPS;
@@ -76,10 +76,11 @@ public class TileRenderer extends Thread {
 		gameState = State.DUNGEON;
 		check = new Checkbox(">");
 	}
-	
+
+	/**
+	 * Отрисовка инвентаря
+	 */
 	public void renderInventory(){
-		// Отрисовка инвентаря
-		
 		headFont.drawString(WIDTH / 2 + 40, 20, "Inventory");
 		
 		int w = 50;
@@ -88,7 +89,15 @@ public class TileRenderer extends Thread {
 		
 		for (Entry<Integer, AbstractThing> entry : buffer.entrySet()) {
 			int h = 20;
-			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName() + " " + "[e]quip", Color.white);
+
+			String actionString = null;
+			if(!entry.getValue().isEquipped()) {
+				actionString = "[e]quip";
+			} else {
+				actionString = "un[e]quip";
+			}
+
+			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName() + " " + actionString, Color.white);
 			w += 12;
 
 		}
@@ -98,10 +107,12 @@ public class TileRenderer extends Thread {
 	public Checkbox getCheckbox(){
 		return check;
 	}
-	
+
+	/**
+	 * Отрисовка меню выбрасывания предмета
+	 * @deprecated
+	 */
 	public void renderDrop(){
-		// Отрисовка меню выбрасывания предмета
-			
 		headFont.drawString(WIDTH / 2 + 40, 20, "Drop item");
 		
 		int w = 50;
@@ -117,7 +128,7 @@ public class TileRenderer extends Thread {
 	
 	public void renderWeapon(){
 		
-		// Magic numbers, baka
+		//TODO: Magic numbers, baka
 		
 		headFont.drawString(WIDTH / 2 + 40, 20, "Weapon");
 		
@@ -168,28 +179,6 @@ public class TileRenderer extends Thread {
 				+ cDungeon.getHero().cha().getCurrent() + " HP: " + cDungeon.getHero().hp().getPair());
 	}
 
-	// Рисуем карту
-	public Dungeon getPiece(int height, int width){
-		return null;
-	}
-
-	public void renderPiece(Dungeon d){
-		GraphObject tmp = d.dungeon().get(0);
-
-		for(GraphObject tile : d.dungeon()){
-					
-			if(tile.getVisible()){
-				tile.getTexture().bind();
-				renderTile(tile);
-			}
-
-			if(!tmp.getFace().equals(tile.getFace())){
-				tmp = tile;
-				tile.getTexture().bind();
-			}
-		}
-	}
-	
 	public void renderDungeon(){
 
 		GraphObject tmp = cDungeon.dungeon().get(0);
@@ -200,7 +189,7 @@ public class TileRenderer extends Thread {
 				tile.getTexture().bind();
 				renderTile(tile);
 			}
-			
+
 			if(!tmp.getFace().equals(tile.getFace())){
 				tmp = tile;
 				tile.getTexture().bind();
@@ -235,8 +224,7 @@ public class TileRenderer extends Thread {
 		}
 		
 		if(cDungeon.getItems() != null)
-			for(AbstractThing item : cDungeon.getItems()){
-				//System.out.println(item);
+			for(AbstractThing item : cDungeon.getItems()) {
 				item.loadTexture();
 			}
 		
@@ -334,7 +322,7 @@ public class TileRenderer extends Thread {
 			 renderDrop();
 			 break;
 		 case DUNGEON:
-			 camera.use();
+			 //camera.use();
 			 renderDungeon();
 			 break;
 		 case TAKE_WEAPON:
@@ -445,17 +433,12 @@ public class TileRenderer extends Thread {
 		//Mob enemy = new Mob("Grusk'ar", "./res/mobs/gobbo.png", 5, 5, gobo, 4, true);
 		
 		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/basic_forest.rb");
-		DungeonGenerator generator = new DungeonGenerator(30, 31, 5, 5);
 		//Dungeon d = generator.generateDungeon();//new Dungeon("./modules/TestModule/locations/texture.json");
 		Dungeon d = (Dungeon) ruby.get("forest");
 		
-		//Dungeon d = new Dungeon("./modules/TestModule/locations/texture.json");
-		//loadTextures(d);
-		//enemy.setAI(new PassiveAI());
-		//enemy.g
-		
+
 		Random rnd = new Random();
-		
+		/*
 		for(int i = 1; i < 4; ++i){ 
 			d.addLife(new Mob("Grusk'ar #" + i, "./res/mobs/gobbo.png", rnd.nextInt(10), rnd.nextInt(10), gobo, 4, true));
 		}
@@ -465,16 +448,18 @@ public class TileRenderer extends Thread {
 		}
 		//d.addLife(enemy);
 		//enemy.setVisible(false);
-
+		*/
 		you.setVisible(true);
 
 		//System.out.println(d.getCreature(5, 5));
+		Weapon w = new Weapon("Morgenshtern", "./res/items/star.png", Weapon.Type.ONE_HAND_SWORD, "Mace", new Dice(1, 6), 100, 10);
+		//w.setVisible(true);
+		//w.setEquippable(true);
+		d.addThing(w, 2, 2);
+
+		//d.addThing(new Weapon("Sword", "./res/items/star.png", Weapon.Type.ONE_HAND_SWORD, "Mace", new Dice(1, 8), 100, 10, 2,2));
 		
-		//d.addThing(new Weapon("Morgenshtern", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 6), 100, 10, 4, 4));
-		
-		//d.addThing(new Weapon("Sword", "./res/items/star.png", Type.ONE_HAND_SWORD, "Mace", new Dice(1, 8), 100, 10, rnd.nextInt(30), rnd.nextInt(30)));
-		
-		//d.addThing(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3));
+		//d.addThing(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3, Armor.Type.HEAD));
 		
 
 		//enemy.takeItem(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3));

@@ -11,8 +11,6 @@ public class Weapon extends AbstractThing{
 		TWO_HAND_SWORD,
 		MACE,
 		STAFF,
-		
-		
 	}
 	
 	
@@ -24,17 +22,22 @@ public class Weapon extends AbstractThing{
 	
 	public Weapon(String name, String face, Type type, String symType,
 			Dice damage, int heavy, int cost, long x, long y){
-		
-		
+
 		super(name, face, heavy, cost, x, y, AbstractThing.MainType.WEAPON);
 		this.type = type;
 		this.symType = symType;
 		this.damage = damage;
-		
-		
 	}
-	
-	
+
+	public Weapon(String name, String face, Type type, String symType,
+				  Dice damage, int heavy, int cost){
+
+		super(name, face, heavy, cost, AbstractThing.MainType.WEAPON);
+		this.type = type;
+		this.symType = symType;
+		this.damage = damage;
+	}
+
 	public Type getType(){
 		return this.type;
 	}

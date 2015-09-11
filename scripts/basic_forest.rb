@@ -25,9 +25,9 @@ class BasicForest
 
   def tree 
     if Random.rand(1 .. 2) == 1 
-      return Java::lowlevel::Tile.new 'Tree', $adder + 'res/tree1.png', false, false
+      Java::lowlevel::Tile.new 'Tree', $adder + 'res/tree1.png', false, false
     else
-      return Java::lowlevel::Tile.new 'Tree', $adder + 'res/tree2.png', false, false
+      Java::lowlevel::Tile.new 'Tree', $adder + 'res/tree2.png', false, false
     end
   end
 
@@ -93,21 +93,41 @@ class BasicForest
     seed_grass
     seed_centers
     seed_around
-    return @forest
+    @forest
   end
 end
 
-groups = Java::dnd::Dice.new 3, 6
+groups = Java::dnd::Dice.new 3, 8
 trees = Java::dnd::Dice.new 3, 6
 
-forest = BasicForest.new(30, 30, groups.throwDice, trees.throwDice).generate
-forest1 = BasicForest.new(10, 10, 1, 1).generate
 
-# Тесты - генерировать список карт, связывать их и профит
+forests = []
 
+# Пачка леса. Генерится очень долго. Варьируй их количество
+forests_number = 30
 
-Java::lowlevel::AbstractThing::MainType.value_of("WEAPON")
-forest.addPortal(Java::lowlevel::Portal.new(forest, forest1, 1, 1))
-forest1.addPortal(Java::lowlevel::Portal.new(forest1, forest, 1, 1))
+forests_number.times {
+  forests.push(BasicForest.new(30,30, groups.throwDice, trees.throwDice).generate)
+}
+
+forests.each_with_index {
+  |f, i|
+  common_f = f
+  next_f = forests[i+1].nil? ? 0 : forests[i+1]
+  if next_f != 0
+    common_f.addPortal(Java::lowlevel::Portal.new(common_f, next_f, 0, 0))
+    next_f.addPortal(Java::lowlevel::Portal.new(next_f, common_f, 0, 1))
+  end
+
+}
+#Начальная локация
+forest = forests[0]
+
+#forest = BasicForest.new(10, 10, 1, 1).generate
+#forest1 = BasicForest.new(10, 10, 1, 1).generate
+
+#Java::lowlevel::AbstractThing::MainType.value_of("WEAPON")
+#forest.addPortal(Java::lowlevel::Portal.new(forest, forest1, 1, 1))
+#forest1.addPortal(Java::lowlevel::Portal.new(forest1, forest, 1, 1))
 
 
