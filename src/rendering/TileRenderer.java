@@ -39,6 +39,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 
 import dnd.Dice;
+import org.newdawn.slick.opengl.Texture;
 import primitives.GraphObject;
 import properties.Race;
 import properties.Stat;
@@ -58,8 +59,7 @@ public class TileRenderer extends Thread {
 	private long lastFrame;
 	private long lastFPS;
 	private int fps;
-	
-	
+
 	private TrueTypeFont headFont;
 	private TrueTypeFont bodyFont;
 	
@@ -71,16 +71,39 @@ public class TileRenderer extends Thread {
 
 	public static Checkbox check;
 
-	public TileRenderer(Dungeon cDungeon){
+	public static Map<String, Texture> textures; // Словарик загруженных текстур
+
+	public TileRenderer(Dungeon cDungeon)
+	{
 		TileRenderer.cDungeon = cDungeon;
 		gameState = State.DUNGEON;
 		check = new Checkbox(">");
+		textures = new HashMap<>();
+	}
+
+	public static void storeTexture(String key, Texture value)
+	{
+		textures.put(key, value);
+	}
+
+	public static Texture getTexture(String path)
+	{
+		return textures.get(path);
+	}
+
+	public static boolean textureExists(String path)
+	{
+		if(textures.get(path) != null) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
 	 * Отрисовка инвентаря
 	 */
-	public void renderInventory(){
+	public void renderInventory()
+	{
 		headFont.drawString(WIDTH / 2 + 40, 20, "Inventory");
 		
 		int w = 50;
@@ -184,30 +207,39 @@ public class TileRenderer extends Thread {
 		GraphObject tmp = cDungeon.dungeon().get(0);
 
 		for(GraphObject tile : cDungeon.dungeon()){
-					
+			String face = tile.getFace();
+
 			if(tile.getVisible()){
-				tile.getTexture().bind();
+				getTexture(face).bind();
+				//tile.getTexture().bind();
 				renderTile(tile);
 			}
 
 			if(!tmp.getFace().equals(tile.getFace())){
 				tmp = tile;
-				tile.getTexture().bind();
+				getTexture(face).bind();
+				//tile.getTexture().bind();
 			}
 		}
 
 		if (cDungeon.getItems() != null)
 			for(AbstractThing item : cDungeon.getItems()){
+				String face = item.getFace();
 				if(item.getVisible()){
-					item.getTexture().bind();
+					getTexture(face).bind();
+					//item.getTexture().bind();
 					renderTile(item);
 				}
 			}
 		
 		for(AbstractCreature creature : cDungeon.getCreatures()){
 			if(creature.getVisible() && creature.isAlive()){
-				creature.getTexture().bind();
-				renderTile(creature);
+				String face = creature.getFace();
+				if(creature.getVisible()){
+					getTexture(face).bind();
+					//item.getTexture().bind();
+					renderTile(creature);
+				}
 			}
 		}
 		renderInfo();
@@ -215,27 +247,35 @@ public class TileRenderer extends Thread {
 	}
 
 	public static void loadTextures(){
-		
 		// Обходить случаи отсутствия элементов!!!!!
-		
+		// Теперь грузим текстурки в словарь. Если она там есть - не грузим
+
 		System.out.println("Loading textures...");
 		for(GraphObject tile : cDungeon.dungeon()){
-			tile.loadTexture();
+			if(!textureExists(tile.getFace())) {
+				textures.put(tile.getFace(), tile.loadTexture());
+			}
 		}
 		
 		if(cDungeon.getItems() != null)
 			for(AbstractThing item : cDungeon.getItems()) {
-				item.loadTexture();
+				if(!textureExists(item.getFace())) {
+					textures.put(item.getFace(), item.loadTexture());
+				}
 			}
 		
 		for(GraphObject creature : cDungeon.getCreatures()){
-			creature.loadTexture();
+			if(!textureExists(creature.getFace())) {
+				textures.put(creature.getFace(), creature.loadTexture());
+			}
 		}
-		
+
 		// Все предметы в карманах у тварей
 		for(AbstractCreature c : cDungeon.getCreatures()){
 			for(Entry<Integer, AbstractThing> t : c.inventory().allInvenory().entrySet()){
-				t.getValue().loadTexture();
+				if(!textureExists(t.getValue().getFace())) {
+					textures.put(t.getValue().getFace(), t.getValue().loadTexture());
+				}
 			}
 		}
 		
@@ -244,21 +284,33 @@ public class TileRenderer extends Thread {
 	
 	public void destroyTextures() {
 		for(GraphObject tile : cDungeon.dungeon()){
-			tile.destroyTexture();
+			if(textureExists(tile.getFace())) {
+				tile.destroyTexture();
+				textures.remove(tile.getFace());
+			}
 		}
 		
 		if (cDungeon.getItems() != null)
 			for(AbstractThing item : cDungeon.getItems()){
-				item.destroyTexture();
+				if(textureExists(item.getFace())) {
+					item.destroyTexture();
+					textures.remove(item.getFace());
+				}
 			}
 		
 		for(GraphObject creature : cDungeon.getCreatures()){
-			creature.destroyTexture();
+			if(textureExists(creature.getFace())) {
+				creature.destroyTexture();
+				textures.remove(creature.getFace());
+			}
 		}
 		
 		for(AbstractCreature c : cDungeon.getCreatures()){
 			for(Entry<Integer, AbstractThing> t : c.inventory().allInvenory().entrySet()){
-				t.getValue().loadTexture();
+				if(textureExists(t.getValue().getFace())) {
+					t.getValue().destroyTexture();
+					textures.remove(t.getValue().getFace());
+				}
 			}
 		}
 		

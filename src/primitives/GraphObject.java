@@ -15,8 +15,7 @@ public class GraphObject {
 	protected long y;
 	protected boolean visible;
 	protected boolean visited;
-	protected Texture texture; 
-	
+	protected Texture texture;
 
 	public void visit(){
 		visited = true;
@@ -29,18 +28,17 @@ public class GraphObject {
 		if (texture != null)
 			GL11.glDeleteTextures(texture.getTextureID());
 	}
-	public void loadTexture(){
+	public Texture loadTexture(){
 
-		Texture t = null;
-		FileInputStream fi = null;
+		Texture texture = null;
+		FileInputStream fi;
 		try {
 			fi = new FileInputStream(new File(face));
-			texture = TextureLoader.getTexture("PNG", fi);//ResourceLoader.getResourceAsStream(face));
-			fi.close();
-
+			texture = TextureLoader.getTexture("PNG", fi);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return texture;
 	}
 	
 	public Texture getTexture(){
