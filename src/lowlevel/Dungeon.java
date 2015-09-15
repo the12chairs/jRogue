@@ -63,6 +63,11 @@ public class Dungeon implements ILosBoard{
 	public void addLife(AbstractCreature life){
 		sceneLife.push(life);
 	}
+
+    public void removeLife(AbstractCreature life)
+    {
+        sceneLife.remove(life);
+    }
 	
 	public void addQuest(Quest quest){
 		sceneQuests.push(quest);

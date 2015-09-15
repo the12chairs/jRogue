@@ -1,22 +1,20 @@
 package lowlevel;
 
-
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import items.Armor;
 import items.Weapon;
 import org.lwjgl.input.Keyboard;
-import properties.Weaponable;
 import lifeforms.AbstractCreature;
 import lifeforms.Hero;
 import lifeforms.Mob;
 import rendering.TileRenderer;
 import rlforj.los.IFovAlgorithm;
 import rlforj.los.ShadowCasting;
-import rlforj.los.PrecisePermissive;
 
-public class KeyboardControl extends Thread{
+public class KeyboardControl extends Thread {
 	
 	private long turns;
 	private long oldTurns;
@@ -24,22 +22,15 @@ public class KeyboardControl extends Thread{
 
 	private IFovAlgorithm a = new ShadowCasting();
 
-	
-	public KeyboardControl(){
+	public KeyboardControl() {
+
 		Keyboard.enableRepeatEvents(true);
 		turns = oldTurns = 0;
 		System.out.println("Initializing keyboard controller...");
 
 		controlled = null;
 	}
-	
-	public KeyboardControl(AbstractCreature object){
-		Keyboard.enableRepeatEvents(true);
-		turns = oldTurns = 0;
-		System.out.println("Initializing keyboard controller...");
-		controlled = object;
-		System.out.println("Done!");
-	}
+
 	
 	public void controlCreature(AbstractCreature creature){
 		controlled = creature;
@@ -55,7 +46,7 @@ public class KeyboardControl extends Thread{
 			return false;
 		}
 	}
-	
+
 	@Override
 	public void run() {
 		try {
@@ -83,115 +74,18 @@ public class KeyboardControl extends Thread{
 		int width = TileRenderer.WIDTH;
 
 		if(TileRenderer.gameState == TileRenderer.State.INVENTORY){
-
 			inventoryAction();
 		}
-		if(TileRenderer.gameState == TileRenderer.State.DROP_ITEM){
-			dropAction();
-		}
-		
 		if(TileRenderer.gameState == TileRenderer.State.DUNGEON){
 			commandAction();
 		}
-		
-		if(TileRenderer.gameState == TileRenderer.State.TAKE_WEAPON){
-			takeWeaponAction();
-		}
-		
+
 		if(TileRenderer.gameState == TileRenderer.State.DEATH){
 			deathAction();
 		}
 	}
 
 	public synchronized void deathAction(){
-		
-	}
-	
-	public synchronized void takeWeaponAction(){
-		Weaponable w = (Weaponable) controlled;
-		while(Keyboard.next()){
-	
-			TileRenderer.check.mark(controlled.inventory().findByKey(TileRenderer.check.getPos()));
-
-			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
-				TileRenderer.check.next();
-			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
-				TileRenderer.check.prev();
-			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
-				w.useWeapon(controlled.inventory().getAllWeapon().get(TileRenderer.check.getPos()));
-				controlled = (AbstractCreature) w;
-			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_0)){
-				w.useWeapon(controlled.inventory().getAllWeapon().get(0));
-				controlled = (AbstractCreature) w;
-			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_1)){
-				w.useWeapon(controlled.inventory().getAllWeapon().get(1));
-				controlled = (AbstractCreature) w;
-			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_2)){
-				w.useWeapon(controlled.inventory().getAllWeapon().get(2));
-				controlled = (AbstractCreature) w;
-			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_3)){
-				w.useWeapon(controlled.inventory().getAllWeapon().get(3));
-				controlled = (AbstractCreature) w;
-			}
-			
-			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
-				TileRenderer.gameState = TileRenderer.State.DUNGEON;
-			}
-		}
-		
-	}
-	
-	public synchronized void dropAction(){
-		
-		long x = controlled.getX();
-		long y = controlled.getY();
-		TileRenderer.check.mark(controlled.inventory().findByKey(TileRenderer.check.getPos()));
-		
-		if(TileRenderer.check.getThing() != null)
-			System.out.println(TileRenderer.check.getPos() + ":" + TileRenderer.check.getThing().name);
-		else
-			System.out.println("Nothing");
-		while(Keyboard.next()){
-			// По нажатию на вверх/вниз меняем позицию маркера и кладем предмет в контейнер маркера
-
-			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
-				if(TileRenderer.check.getPos() < controlled.inventory().allInvenory().size()){
-					TileRenderer.check.next();
-					TileRenderer.check.mark(controlled.inventory().allInvenory().get(TileRenderer.check.getPos()));
-					//System.out.println(pos);
-				}
-			}
-			
-			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
-				if(TileRenderer.check.biggerNull()){
-					TileRenderer.check.prev();
-					TileRenderer.check.mark(controlled.inventory().allInvenory().get(TileRenderer.check.getPos()));
-			
-				}
-			}
-			
-			if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
-				AbstractThing dropped = null;
-				if(controlled.inventory().allInvenory().get(TileRenderer.check.getPos()) != null){
-					dropped = controlled.inventory().allInvenory().get(TileRenderer.check.getPos());
-					controlled.inventory().dropItem(TileRenderer.check.getPos());
-					
-					TileRenderer.getDungeon().addThing(dropped, x, y);
-				
-				}
-				
-			}
-
-			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
-				TileRenderer.gameState = TileRenderer.State.DUNGEON;
-			}
-		}
 		
 	}
 
@@ -222,14 +116,12 @@ public class KeyboardControl extends Thread{
 				switch(TileRenderer.check.getThing().getMType()){
 				
 				case WEAPON:
-					
-					if(TileRenderer.check.getThing() == controlled.getHands()){
-						controlled.unuseWeapon(controlled.getHands());
+					if(TileRenderer.check.getThing() == controlled.getRightHand()){
+						controlled.unuseRightWeapon(controlled.getRightHand());
 					}
 					else{
-						controlled.useWeapon((Weapon)TileRenderer.check.getThing());
-					}	
-					
+						controlled.useRightWeapon((Weapon) TileRenderer.check.getThing());
+					}
 					break;
 				
 				case ARMOR:
@@ -298,7 +190,6 @@ public class KeyboardControl extends Thread{
 			if(Keyboard.isKeyDown(Keyboard.KEY_D)){
 				turns++;
 				drop(controlled, TileRenderer.check.getPos());
-
 			}
 
 			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
@@ -308,14 +199,13 @@ public class KeyboardControl extends Thread{
 		}
 	}
 
-	
 	public void drop(AbstractCreature who, int what){
 		AbstractThing dropped;
 		if(who.inventory().allInvenory().get(TileRenderer.check.getPos()) != null){
 			dropped = who.inventory().allInvenory().get(what);
 			// Попытка выбросить экипированное
-			if(who.getHands() == dropped){
-				who.unuseWeapon((Weapon)dropped);
+			if(who.getRightHand() == dropped){
+				who.unuseRightWeapon((Weapon) dropped);
 			}
 			if(who.head() == dropped){
 				who.unwearArmor((Armor)dropped);
@@ -334,25 +224,23 @@ public class KeyboardControl extends Thread{
 			}
 			who.dropItem(what);
 			TileRenderer.getDungeon().addThing(dropped, who.getX(), who.getY());
-		
+
 		}
 	}
 
 	// При смерти существа
 	
 	public void death(AbstractCreature who) {
-
 		// Сохраняем оставшиеся предметы в инвентаре
 		List<Integer> buffer = new ArrayList<>();
 		for (Entry<Integer, AbstractThing> t : who.inventory().allInvenory().entrySet()) {
 			buffer.add(t.getKey());
 		}
-
 		// Зачищаем инвентарь
 		for (Integer i : buffer) {
 			drop(who, i);
 		}
-
+		// Уберем тушку
 	}
 
 	public synchronized void commandAction(){
@@ -429,7 +317,6 @@ public class KeyboardControl extends Thread{
 		Mob c = (Mob)TileRenderer.getDungeon().getCreature(controlled.getX()+dx, controlled.getY()+dy);
 		if(c != null && c.isAlive()){
 			controlled.hit(c);
-
 		} 
 		else {
 			if(isPassable(t) && t != null){
@@ -444,22 +331,25 @@ public class KeyboardControl extends Thread{
 			controlled.hp().setCurrent(controlled.hp().getCurrent() + 1);
 		}
 	}
-	
+
 	// Ход всех существ карты
 	public void surroundTurn(){
 		if(turns>oldTurns){
+			List<AbstractCreature> deadCreatures = new ArrayList<>();
 			List<AbstractCreature> creatures = TileRenderer.getDungeon().getCreatures();
 			for(AbstractCreature c : creatures){
 				if(c != controlled && c.isAlive()){
 					c.getAi().setVisible(TileRenderer.getDungeon());
 					c.getAi().setDivide((int)TileRenderer.getDungeon().getWidth(), (int)TileRenderer.getDungeon().getHeight());
-					c.lurk();
+					c.attack(this.controlled); // атакуем героя
 				}
 				if(!c.isAlive()){
 					death(c);
+					deadCreatures.add(c);
 				}
 				oldTurns = turns;
 			}
+			creatures.removeAll(deadCreatures);
 		}
 	}
 }

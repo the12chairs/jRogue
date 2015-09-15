@@ -39,8 +39,8 @@ public abstract class AbstractCreature extends GraphObject{
 	protected Stat age; // Смари, current значение - текущий возраст, full значение - возраст смерти.
 	protected boolean weaponed;
 	
-	
-	protected Weapon hands; // Что в руках
+	protected Weapon rightHand; // Что в руках
+    protected Weapon leftHand;
 
 	protected Armor shield;
 	protected Armor head;
@@ -52,79 +52,63 @@ public abstract class AbstractCreature extends GraphObject{
 	protected AI ai;
 	
 	// Статы защиты
-	
 	protected Stat headDP; // Защита
 	protected Stat bodyDP;
 	protected Stat legsDP;
 	protected Stat armsDP;
 	protected Stat footsDP;
-	
 
-	
 	public void head(Armor head){
 		this.head = head;
 	}
-	
 	public Armor head(){
 		return head;
 	}
-	
 	public void body(Armor body){
 		this.body = body;
 	}
-	
 	public Armor body(){
 		return body;
 	}
 	public void legs(Armor legs){
 		this.legs = legs;
 	}
-	
 	public Armor legs(){
 		return legs;
 	}
-	
 	public void foots(Armor foots){
 		this.foots = foots;
 	}
-	
 	public Armor foots(){
 		return foots;
 	}
-	
 	public void arms(Armor arms){
 		this.arms = arms;
 	}
-	
 	public Armor arms(){
 		return arms;
 	}
 	public void headDP(Stat dp){
 		headDP = dp;
 	}
-	
 	public Stat headDP(){
 		return headDP;
 	}
-	
 	public void bodyDP(Stat dp){
 		bodyDP = dp;
 	}
-	
 	public Stat bodyDP(){
 		return bodyDP;
 	}
 	public void armsDP(Stat dp){
 		armsDP = dp;
 	}
-	
 	public Stat armsDP(){
 		return armsDP;
 	}
 	public void legsDP(Stat dp){
 		legsDP = dp;
 	}
-	
 	public Stat legsDP(){
 		return legsDP;
 	}
@@ -145,7 +129,6 @@ public abstract class AbstractCreature extends GraphObject{
 		this.y += dy;
 	}
 
-	
 	public AbstractCreature(){
 		headDP = new Stat(4,4);
 		bodyDP = new Stat(4,4);
@@ -158,7 +141,6 @@ public abstract class AbstractCreature extends GraphObject{
 	public void lurk(){
 		ai.lurk(this);
 	}
-	
 	
 	public void attack(AbstractCreature victum){
 		ai.attack(this, victum);
@@ -176,42 +158,32 @@ public abstract class AbstractCreature extends GraphObject{
 	public Stat wis(){
 		return wisdom;
 	}
-	
-	
 	public Stat cha(){
 		return charisma;
 	}
-	
 	public Stat hp(){
 		return hp;
 	}
-	
 	public Stat str(){
 		return str;
 	}
-	
 	public Stat dex(){
 		return dex;
 	}
 	public Stat intel(){
 		return intel;
 	}
-
-	
 	public Stat stam(){
 		return stamina;
 	}
-	
 	public Stat mass(){
 		return mass;
 	}
-	
 	public Stat age(){
 		return age;
 	}
 	
-	
-	
+
 	public int modifStr(){
 		return (int)(str.getCurrent() - 10) / 2;
 	}
@@ -268,8 +240,7 @@ public abstract class AbstractCreature extends GraphObject{
 		this.x = x;
 		this.y = y;
 	}
-	
-	
+
 	public String getName(){
 		return this.name;
 	}
@@ -394,28 +365,41 @@ public abstract class AbstractCreature extends GraphObject{
 			}
 		}
 	}
+
+    public void setAI(AI ai){
+        this.ai = ai;
+    }
+    public AI getAi(){
+        return ai;
+    }
 	
-	public Weapon getHands(){
-		return hands;
+	public Weapon getRightHand()
+    {
+		return rightHand;
 	}
-	
-	public void useWeapon(Weapon w)
+
+    public Weapon getLeftHand()
+    {
+        return leftHand;
+    }
+
+	public void useRightWeapon(Weapon w)
 	{
 		//Чорная магия, не трожь! 
 		for(Entry<Integer, Weapon> p : inventory.getAllWeapon().entrySet()){
 			if(p.getValue() == w){
 				// Если руки заняты, меняем оружие
-				if(hands != null){
-					getHands().unequip();
-					hands = w;
-					this.damage = w.getDamage();
+				if(rightHand != null){
+                    rightHand.unequip();
+                    rightHand = w;
+					this.damage = rightHand.getDamage();
 					w.equip();
 					weaponed = true;
 					System.out.println("Switch weapons");
 				}
 				else{
-					hands = p.getValue();
-					damage = hands.getDamage();
+                    rightHand = p.getValue();
+					damage = rightHand.getDamage();
 					w.equip();
 					weaponed = true;
 					System.out.println("Use weapon");
@@ -424,23 +408,50 @@ public abstract class AbstractCreature extends GraphObject{
 			}
 				
 		}
-		
 	}
 
-	public void setAI(AI ai){
-		this.ai = ai;
-	}
-	public AI getAi(){
-		return ai;
-	}
-
-	public void unuseWeapon(Weapon w) {
+	public void unuseRightWeapon(Weapon w) {
 		this.damage = new Dice(1, 3);
-		hands = null;
+        rightHand = null;
 		weaponed = false;
 		w.unequip();
 		System.out.println("Unuse weapon");
 	}
+
+    public void useLeftWeapon(Weapon w)
+    {
+        //Чорная магия, не трожь!
+        for(Entry<Integer, Weapon> p : inventory.getAllWeapon().entrySet()){
+            if(p.getValue() == w){
+                // Если руки заняты, меняем оружие
+                if(leftHand != null){
+                    leftHand.unequip();
+                    leftHand = w;
+                    this.damage = leftHand.getDamage();
+                    w.equip();
+                    weaponed = true;
+                    System.out.println("Switch weapons");
+                }
+                else{
+                    leftHand = p.getValue();
+                    damage = leftHand.getDamage();
+                    w.equip();
+                    weaponed = true;
+                    System.out.println("Use weapon");
+                }
+                break;
+            }
+
+        }
+    }
+
+    public void unuseLeftWeapon(Weapon w) {
+        this.damage = new Dice(1, 3);
+        leftHand = null;
+        weaponed = false;
+        w.unequip();
+        System.out.println("Unuse weapon");
+    }
 
 	public boolean isWeaponed() {
 		return weaponed;

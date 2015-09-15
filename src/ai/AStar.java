@@ -17,8 +17,8 @@ import lowlevel.Tile;
 
 public class AStar {
 
-	private static ArrayList<Tile> open = new ArrayList<Tile>();
-	private static ArrayList<Tile> closed  = new ArrayList<Tile>();
+	private static ArrayList<Tile> open = new ArrayList<>();
+	private static ArrayList<Tile> closed  = new ArrayList<>();
 	private static long g; // Стоимость перемещения
 	private static long h; // Расстояние от точки до конечной
 	private static long f; // g+h
@@ -27,10 +27,7 @@ public class AStar {
 	private static long manhattan(Tile s, Tile f){
 		return (Math.abs(s.getX() - f.getX()) + Math.abs(s.getY() - f.getY()));
 	}
-	
 
-	
-	
 	private static void nein(Dungeon d, Tile center) {
 		for(int i = (int)center.getY()-1; i <= center.getY()+1; i++){
 			//if(i < 0 || i > d.getHeight()) continue;
@@ -55,9 +52,7 @@ public class AStar {
 			}
 		}
 	}
-	
-	
-	
+
 	public static ArrayList<Tile> search(Dungeon d, Tile start, Tile finish) {
 		
 		boolean found = false;
@@ -73,15 +68,16 @@ public class AStar {
 			nein(d, actual);
 			//closed.add(actual);
 			//open.remove(actual);
-			long min = 1000;
+			long min = 100000;
 			//System.out.println(manhattan(start, finish));
 			Tile mint = null;
+
 			for(Tile t : open){
+                //System.out.println(t.getPassable());
 				//System.out.println(t.getX()+":"+t.getY());
-				if(!closed.contains(t) && t.getPassable()){
+				if(!closed.contains(t)){
 					// Диагональ
-					
-					g = 10;
+					g = 40;
 					//Диагонали
 					if((t.getX() > actual.getX()) && (t.getY() > actual.getY())){
 						g = 14;
@@ -96,15 +92,13 @@ public class AStar {
 					if((t.getX() < actual.getX()) && (t.getY() > actual.getY())){
 						g = 14;
 					}
-					
 					if(!t.getPassable()){
 						g = 100000;
 					}
-					//System.out.println(t.getX()+":"+t.getY()+ "to "+finish.getX()+":"+finish.getY());
+
 					h = manhattan(t, finish);
 					f = g * h;
-					//System.out.println("h = " + f + " "+g+" = "+ " "+ actual.getX()+"-"+t.getX()+":"+actual.getY()+ "-"+t.getY());
-					
+
 				}
 				if(f < min) {
 					min = f;
@@ -133,17 +127,11 @@ public class AStar {
 		}
 		
 		return closed;
-		/*
-		for(Tile t : closed){
-			System.out.println(t.getX()+":"+t.getY());
-		}
-		*/
 	}
-	
-	
+
 	
 	public static void main(String args[]){
-ScriptingContainer ruby = new ScriptingContainer(LocalVariableBehavior.PERSISTENT);
+		ScriptingContainer ruby = new ScriptingContainer(LocalVariableBehavior.PERSISTENT);
 		
 		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/races.rb");
 		Race test_race = (Race) ruby.get("race");

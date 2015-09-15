@@ -1,23 +1,14 @@
 package rendering;
 
-
-
 import ai.AgressiveAI;
 import ai.PassiveAI;
 import items.Armor;
 import items.Weapon;
-
 import java.awt.Font;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-import java.util.Set;
-
-
-
-
 import lifeforms.AbstractCreature;
 import lifeforms.AbstractCreature.Profession;
 import lifeforms.Hero;
@@ -25,7 +16,6 @@ import lifeforms.Mob;
 import lowlevel.AbstractThing;
 import lowlevel.Dungeon;
 import lowlevel.KeyboardControl;
-
 import org.jruby.embed.LocalVariableBehavior;
 import org.jruby.embed.ScriptingContainer;
 import org.jruby.embed.PathType;
@@ -37,13 +27,11 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
-
 import dnd.Dice;
 import org.newdawn.slick.opengl.Texture;
 import primitives.GraphObject;
 import properties.Race;
-import properties.Stat;
-import tools.DungeonGenerator;
+import properties.Material;
 
 public class TileRenderer extends Thread {
 
@@ -120,7 +108,7 @@ public class TileRenderer extends Thread {
 				actionString = "un[e]quip";
 			}
 
-			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName() + " " + actionString, Color.white);
+			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName() + " " + actionString + "   |   " + entry.getValue().getMaterial().getName(), Color.white);
 			w += 12;
 
 		}
@@ -131,46 +119,6 @@ public class TileRenderer extends Thread {
 		return check;
 	}
 
-	/**
-	 * Отрисовка меню выбрасывания предмета
-	 * @deprecated
-	 */
-	public void renderDrop(){
-		headFont.drawString(WIDTH / 2 + 40, 20, "Drop item");
-		
-		int w = 50;
-		
-		for (Entry<Integer, AbstractThing> entry : cDungeon.getHero().inventory().allInvenory().entrySet()) {
-			int h = 20;
-			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName(), Color.white);
-			w += 12;
-		
-		}
-		check.render();
-	}
-	
-	public void renderWeapon(){
-		
-		//TODO: Magic numbers, baka
-		
-		headFont.drawString(WIDTH / 2 + 40, 20, "Weapon");
-		
-		int w = 50;
-		
-		for (Entry<Integer, Weapon> entry : cDungeon.getHero().inventory().getAllWeapon().entrySet()) {
-			int h = 20;
-			bodyFont.drawString(h, w, entry.getKey().toString() + " " + entry.getValue().getName() + 
-					" +" + entry.getValue().getBonus() + " " + entry.getValue().getDamage().getPair(), Color.white);
-			w += 12;
-			
-			if(entry.getValue() != null){
-				check.mark(entry.getValue());
-			}
-
-		}
-		check.render(); //First();
-	}
-	
 	public void renderMainMenu(){
 		// Заглушка
 	}
@@ -178,25 +126,25 @@ public class TileRenderer extends Thread {
 	public void renderInfo(){
 		
 		int h = 20;
-		
-		int w = WIDTH - 65;
-		
+
+		int w = 500;
+
 		bodyFont.drawString(h, w, cDungeon.getHero().getName() + ", the " + cDungeon.getHero().getRace().getName());
-		
-		w = WIDTH - 50;
+
+		w = w + 50;
 		//System.out.println(entry.getValue().getDamage().getDice());
 		
-		if(cDungeon.getHero().getHands() != null){
-			bodyFont.drawString(h, w, "Equipped: " + cDungeon.getHero().getHands().getName() + " " +
-					cDungeon.getHero().getHands().getDamage().getPair() + " +" + cDungeon.getHero().getHands().getBonus()); 
+		if(cDungeon.getHero().getRightHand() != null){
+			bodyFont.drawString(h, w, "Equipped: " + cDungeon.getHero().getRightHand().getName() + " " +
+					cDungeon.getHero().getRightHand().getDamage().getPair() + " +" + cDungeon.getHero().getRightHand().getBonus());
 		}
 		else{
 			bodyFont.drawString(h, w, "Equipped: nothing" + " " + cDungeon.getHero().getDamage().getPair());
 		}
-		
-		w = WIDTH - 35;
-		
-		bodyFont.drawString(h, w, "STR: " + cDungeon.getHero().str().getCurrent() + " DEX: " + 
+
+		w = w + 35;
+
+		bodyFont.drawString(h, w, "STR: " + cDungeon.getHero().str().getCurrent() + " DEX: " +
 				cDungeon.getHero().dex().getCurrent() + " INT: " + cDungeon.getHero().intel().getCurrent() + " STA: "
 				+ cDungeon.getHero().stam().getCurrent() + " WIS: " + cDungeon.getHero().wis().getCurrent() + " CHA: "
 				+ cDungeon.getHero().cha().getCurrent() + " HP: " + cDungeon.getHero().hp().getPair());
@@ -208,77 +156,63 @@ public class TileRenderer extends Thread {
 
 		for(GraphObject tile : cDungeon.dungeon()){
 			String face = tile.getFace();
-
 			if(tile.getVisible()){
 				getTexture(face).bind();
-				//tile.getTexture().bind();
 				renderTile(tile);
 			}
-
 			if(!tmp.getFace().equals(tile.getFace())){
 				tmp = tile;
 				getTexture(face).bind();
-				//tile.getTexture().bind();
 			}
 		}
-
 		if (cDungeon.getItems() != null)
 			for(AbstractThing item : cDungeon.getItems()){
 				String face = item.getFace();
 				if(item.getVisible()){
 					getTexture(face).bind();
-					//item.getTexture().bind();
 					renderTile(item);
 				}
 			}
-		
 		for(AbstractCreature creature : cDungeon.getCreatures()){
 			if(creature.getVisible() && creature.isAlive()){
 				String face = creature.getFace();
-				if(creature.getVisible()){
-					getTexture(face).bind();
-					//item.getTexture().bind();
-					renderTile(creature);
-				}
+				getTexture(face).bind();
+				renderTile(creature);
 			}
 		}
 		renderInfo();
-		
 	}
 
 	public static void loadTextures(){
 		// Обходить случаи отсутствия элементов!!!!!
 		// Теперь грузим текстурки в словарь. Если она там есть - не грузим
-
 		System.out.println("Loading textures...");
 		for(GraphObject tile : cDungeon.dungeon()){
 			if(!textureExists(tile.getFace())) {
 				textures.put(tile.getFace(), tile.loadTexture());
 			}
 		}
-		
-		if(cDungeon.getItems() != null)
-			for(AbstractThing item : cDungeon.getItems()) {
-				if(!textureExists(item.getFace())) {
+		if(cDungeon.getItems() != null) {
+			for (AbstractThing item : cDungeon.getItems()) {
+				if (!textureExists(item.getFace())) {
 					textures.put(item.getFace(), item.loadTexture());
 				}
 			}
-		
-		for(GraphObject creature : cDungeon.getCreatures()){
+		}
+		for(GraphObject creature : cDungeon.getCreatures()) {
 			if(!textureExists(creature.getFace())) {
 				textures.put(creature.getFace(), creature.loadTexture());
 			}
 		}
 
 		// Все предметы в карманах у тварей
-		for(AbstractCreature c : cDungeon.getCreatures()){
-			for(Entry<Integer, AbstractThing> t : c.inventory().allInvenory().entrySet()){
+		for(AbstractCreature c : cDungeon.getCreatures()) {
+			for(Entry<Integer, AbstractThing> t : c.inventory().allInvenory().entrySet()) {
 				if(!textureExists(t.getValue().getFace())) {
 					textures.put(t.getValue().getFace(), t.getValue().loadTexture());
 				}
 			}
 		}
-		
 		System.out.println("Done");
 	}
 	
@@ -289,31 +223,28 @@ public class TileRenderer extends Thread {
 				textures.remove(tile.getFace());
 			}
 		}
-		
-		if (cDungeon.getItems() != null)
-			for(AbstractThing item : cDungeon.getItems()){
-				if(textureExists(item.getFace())) {
+		if (cDungeon.getItems() != null) {
+			for (AbstractThing item : cDungeon.getItems()) {
+				if (textureExists(item.getFace())) {
 					item.destroyTexture();
 					textures.remove(item.getFace());
 				}
 			}
-		
-		for(GraphObject creature : cDungeon.getCreatures()){
+		}
+		for(GraphObject creature : cDungeon.getCreatures()) {
 			if(textureExists(creature.getFace())) {
 				creature.destroyTexture();
 				textures.remove(creature.getFace());
 			}
 		}
-		
-		for(AbstractCreature c : cDungeon.getCreatures()){
-			for(Entry<Integer, AbstractThing> t : c.inventory().allInvenory().entrySet()){
+		for(AbstractCreature c : cDungeon.getCreatures()) {
+			for(Entry<Integer, AbstractThing> t : c.inventory().allInvenory().entrySet()) {
 				if(textureExists(t.getValue().getFace())) {
 					t.getValue().destroyTexture();
 					textures.remove(t.getValue().getFace());
 				}
 			}
 		}
-		
 	}
 	
 	// Отрисовка отдельного тайла
@@ -330,7 +261,7 @@ public class TileRenderer extends Thread {
 		GL11.glVertex2f(tile.getX() * TILE_SIZE, tile.getY() * TILE_SIZE + TILE_SIZE);
 		GL11.glEnd();
 	}
-	
+
 	@Override
 	public void run(){
 		System.out.println("Rendering thread has started.");
@@ -370,15 +301,9 @@ public class TileRenderer extends Thread {
 		 case INVENTORY:
 			 renderInventory();
 			 break;
-		 case DROP_ITEM:
-			 renderDrop();
-			 break;
 		 case DUNGEON:
 			 //camera.use();
 			 renderDungeon();
-			 break;
-		 case TAKE_WEAPON:
-			 renderWeapon();
 			 break;
 		 case DEATH:
 			 renderDeath();
@@ -408,11 +333,11 @@ public class TileRenderer extends Thread {
 			
 			Display.sync(100);
 
-		if (Display.isCloseRequested()) {
-			Display.destroy();
-			System.exit(0);
+			if (Display.isCloseRequested()) {
+				Display.destroy();
+				System.exit(0);
 			}
-		Thread.yield();
+			Thread.yield();
 		}
 		
 	}
@@ -425,12 +350,11 @@ public class TileRenderer extends Thread {
 			Display.setVSyncEnabled(true);
 			
 			Keyboard.create();
-		} 
-		catch (LWJGLException e) {
+		} catch (LWJGLException e) {
 			e.printStackTrace();
 			System.exit(0);
 
-			}
+		}
 		System.out.println("Done!");
 		System.out.println("Initializing OpenGL...");
 		GL11.glEnable(GL11.GL_TEXTURE_2D);              
@@ -478,46 +402,26 @@ public class TileRenderer extends Thread {
 		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/races.rb");
 		Race test_race = (Race) ruby.get("race");
 		Race gobo = (Race) ruby.get("gobo");
-		//Dice 
-		//Race dwarf = new Race("Dwarf", 5, 0, -3, -1, -1, 4);
 		Hero you = new Hero("Maga", "./res/mobs/human.png", 10, 10, test_race, 4, Profession.WARRIOR);
 		
-		//Mob enemy = new Mob("Grusk'ar", "./res/mobs/gobbo.png", 5, 5, gobo, 4, true);
-		
 		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/basic_forest.rb");
-		//Dungeon d = generator.generateDungeon();//new Dungeon("./modules/TestModule/locations/texture.json");
+
 		Dungeon d = (Dungeon) ruby.get("forest");
-		
 
 		Random rnd = new Random();
-		/*
-		for(int i = 1; i < 4; ++i){ 
-			d.addLife(new Mob("Grusk'ar #" + i, "./res/mobs/gobbo.png", rnd.nextInt(10), rnd.nextInt(10), gobo, 4, true));
+
+		for(int i = 1; i < 20; i++){
+			d.addLife(new Mob("Grusk'ar #", "./res/mobs/gobbo.png", rnd.nextInt(10), rnd.nextInt(10), gobo, 4, true));
 		}
+
 		for(AbstractCreature c : d.getCreatures()){
-			if(c != d.getCreatures().getFirst())
-				c.setAI(new AgressiveAI());
+			if(c != you)
+				c.setAI(new PassiveAI());
 		}
-		//d.addLife(enemy);
-		//enemy.setVisible(false);
-		*/
+
 		you.setVisible(true);
 
-		//System.out.println(d.getCreature(5, 5));
-		Weapon w = new Weapon("Morgenshtern", "./res/items/star.png", Weapon.Type.ONE_HAND_SWORD, "Mace", new Dice(1, 6), 100, 10);
-		//w.setVisible(true);
-		//w.setEquippable(true);
-		d.addThing(w, 2, 2);
-
-		//d.addThing(new Weapon("Sword", "./res/items/star.png", Weapon.Type.ONE_HAND_SWORD, "Mace", new Dice(1, 8), 100, 10, 2,2));
-		
-		//d.addThing(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3, Armor.Type.HEAD));
-		
-
-		//enemy.takeItem(new Armor("cup", "./res/items/star.png", 100, 10, 4, 3));
-
-		d.addThing(new Armor("cup", "./res/items/star.png", 100, 10, 1, 1, Armor.Type.HEAD));
-		d.addThing(new Armor("chainmail", "./res/items/star.png", 100, 10, 2, 2, Armor.Type.BODY));
+		d.addThing(new Weapon("Morgenshtern", "./res/items/star.png", Weapon.Type.MACE, new Material("Iron"), true, new Dice(1, 6), 100, 10), 10, 10);
 
 		TileRenderer r = new TileRenderer(d);
 	
@@ -527,7 +431,7 @@ public class TileRenderer extends Thread {
 
 		d.addHero(you);
 		you.setVisible(true);
-		
+
 		Thread keyboard = new Thread(controller);
 		Thread renderer = new Thread(r);
 		

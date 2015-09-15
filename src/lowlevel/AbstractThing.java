@@ -1,11 +1,12 @@
 package lowlevel;
 
 import primitives.GraphObject;
+import properties.Material;
 
 
-public abstract class AbstractThing extends GraphObject{
+public abstract class AbstractThing extends GraphObject {
 
-	public static enum MainType{
+	public static enum MainType {
 		WEAPON,
 		ARMOR,
 		THING,
@@ -13,19 +14,20 @@ public abstract class AbstractThing extends GraphObject{
 		SCROLL,
 		PORTAL
 	}
-	
+
 	private MainType mType;
-	
+
 	protected String name;
 	protected int heavy;
 	protected int cost;
-	
+	protected Material madeOf; // Из чего сделано
+
 	protected int bonus;
 	protected boolean allowed; // Запрет/разрешение подбирать предмет
 	protected boolean equipped;
 	protected boolean equippable; // Можно натянуть на себя?
 
-	public AbstractThing(String name, String face, int heavy, int cost, long x, long y, MainType mType){
+	public AbstractThing(String name, String face, int heavy, int cost, long x, long y, MainType mType, Material material) {
 		super(face, x, y);
 		this.name = name;
 		this.heavy = heavy;
@@ -33,9 +35,10 @@ public abstract class AbstractThing extends GraphObject{
 		this.mType = mType;
 		allowed = true;
 		equipped = false;
+		madeOf = material;
 	}
 
-	public AbstractThing(String name, String face, int heavy, int cost, MainType mType){
+	public AbstractThing(String name, String face, int heavy, int cost, MainType mType, Material material) {
 		super(face);
 		this.name = name;
 		this.heavy = heavy;
@@ -43,61 +46,64 @@ public abstract class AbstractThing extends GraphObject{
 		this.mType = mType;
 		allowed = true;
 		equipped = false;
+		madeOf = material;
 	}
 
 
 	public AbstractThing() {
-		
+
 	}
-	public boolean isAllowed(){
+
+	public boolean isAllowed() {
 		return allowed;
 	}
 
 	public void setAllow(boolean a) {
 		allowed = a;
 	}
-	public void setName(String name){
+
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public void setBonus(int bonus){
+	public void setBonus(int bonus) {
 		this.bonus = bonus;
 	}
-	
-	public int getBonus(){
+
+	public int getBonus() {
 		return bonus;
 	}
 
-	public void setPos(int x, int y){
+	public void setPos(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
-	
-	public int getCost(){
+
+	public int getCost() {
 		return this.cost;
 	}
-	
-	public void setCost(int cost){
+
+	public void setCost(int cost) {
 		this.cost = cost;
 	}
-	
-	public void setHeavy(int heavy){
+
+	public void setHeavy(int heavy) {
 		this.heavy = heavy;
 	}
-	
-	public void setVisible(boolean visible){
+
+	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
-	
-	public String getName(){
+
+	public String getName() {
 		return name;
 	}
 
-	public int getHeavy(){
+	public int getHeavy() {
 		return heavy;
 	}
-	
-	public boolean getVisible(){
+
+	public boolean getVisible() {
 		return visible;
 	}
 
@@ -105,32 +111,36 @@ public abstract class AbstractThing extends GraphObject{
 		return mType;
 	}
 
-	public boolean isEquipped()
-	{
+	public boolean isEquipped() {
 		return equipped;
 	}
 
-	public void equip()
-	{
+	public void equip() {
 		equipped = true;
 	}
 
-	public void unequip()
-	{
+	public void unequip() {
 		equipped = false;
 	}
 
-	public boolean getEquippable()
-	{
+	public boolean getEquippable() {
 		return equippable;
 	}
 
-	public void setEquippable(boolean equippable)
-	{
+	public void setEquippable(boolean equippable) {
 		this.equippable = equippable;
 	}
 
 	public void setMType(MainType mType) {
 		this.mType = mType;
+	}
+
+	public Material getMaterial() {
+		return madeOf;
+	}
+
+	public void setMAterial(Material material)
+	{
+		madeOf = material;
 	}
 }

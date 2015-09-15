@@ -2,40 +2,38 @@ package items;
 
 import dnd.Dice;
 import lowlevel.AbstractThing;
+import properties.Material;
 
 public class Weapon extends AbstractThing{
 
 	
 	public enum Type {
-		ONE_HAND_SWORD,
-		TWO_HAND_SWORD,
+		SWORD,
 		MACE,
 		STAFF,
+		AXE
 	}
-	
-	
+
 	private Type type;
-	//private Stat damage;
 	private Dice damage;
-	private String symType;
-	
-	
-	public Weapon(String name, String face, Type type, String symType,
-			Dice damage, int heavy, int cost, long x, long y){
+	private boolean onehanded;
 
-		super(name, face, heavy, cost, x, y, AbstractThing.MainType.WEAPON);
+	public Weapon(String name, String face, Type type, Material material, boolean onehanded,
+			Dice damage, int heavy, int cost, long x, long y) {
+
+		super(name, face, heavy, cost, x, y, AbstractThing.MainType.WEAPON, material);
 		this.type = type;
-		this.symType = symType;
 		this.damage = damage;
+		this.onehanded = onehanded;
 	}
 
-	public Weapon(String name, String face, Type type, String symType,
-				  Dice damage, int heavy, int cost){
+	public Weapon(String name, String face, Type type, Material material, boolean onehanded,
+				  Dice damage, int heavy, int cost) {
 
-		super(name, face, heavy, cost, AbstractThing.MainType.WEAPON);
+		super(name, face, heavy, cost, AbstractThing.MainType.WEAPON, material);
 		this.type = type;
-		this.symType = symType;
 		this.damage = damage;
+		this.onehanded = onehanded;
 	}
 
 	public Type getType(){
@@ -46,9 +44,13 @@ public class Weapon extends AbstractThing{
 		return this.damage;
 	}
 	
-	
-	
-	public String getSymType(){
-		return this.symType;
+	public boolean isOnehanded()
+	{
+		return onehanded;
+	}
+
+	public boolean isTwohanded()
+	{
+		return !onehanded;
 	}
 }

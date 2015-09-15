@@ -96,7 +96,7 @@ end
 forests = []
 
 # Сколько будет локаций
-forests_number = 20
+forests_number = 2
 
 forests_number.times {
     |i|

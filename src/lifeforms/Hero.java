@@ -97,6 +97,8 @@ public class Hero extends AbstractCreature{
 		this.visionRadius = visionRadius;
 		// HP = stamina / 2
 		this.hp = new Stat(modifSta()+6);
+		rightHand = null;
+		leftHand = null;
 	}
 	
 

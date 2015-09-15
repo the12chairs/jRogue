@@ -7,7 +7,8 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import java.io.FileInputStream;
 import java.io.File;
-public class GraphObject {
+
+public abstract class GraphObject {
 	
 	protected String face;
 	
@@ -46,9 +47,9 @@ public class GraphObject {
 	}
 
 	public GraphObject(){
-		
+
 	}
-	
+
 	public GraphObject(String face, long x, long y){
 		this.face = face;
 		this.x = x;

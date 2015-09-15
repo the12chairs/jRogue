@@ -4,13 +4,14 @@ import lifeforms.AbstractCreature;
 import lowlevel.Dungeon;
 import lowlevel.Tile;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class AgressiveAI implements AI{
 
-	
 	@Override
 	public void lurk(AbstractCreature c) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

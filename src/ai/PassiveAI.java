@@ -40,33 +40,31 @@ public class PassiveAI implements AI{
 			
 		case 1:
 			if(c.getX()+1 < maxX){
-				if(viewed.getTile(c.getX()+1, c.getY()).getPassable() == true)
+				if(viewed.getTile(c.getX()+1, c.getY()).getPassable())
 					c.move(1, 0);
 			}
 			break;
 		case 2:
 			if( c.getX()-1 > 0){
-				if(viewed.getTile(c.getX()-1, c.getY()).getPassable() == true)
+				if(viewed.getTile(c.getX()-1, c.getY()).getPassable())
 					c.move(-1, 0);
 			}
 			break;
 		case 3:
 			if(c.getY()+1 < maxY){
-				if(viewed.getTile(c.getX(), c.getY()+1).getPassable() == true)
+				if(viewed.getTile(c.getX(), c.getY()+1).getPassable())
 					c.move(0, 1);
 			}
 			break;
 		case 4:
 			if(c.getY()-1 > 0){
-				if(viewed.getTile(c.getX(), c.getY()-1).getPassable() == true)
+				if(viewed.getTile(c.getX(), c.getY()-1).getPassable())
 				c.move(0,  -1);
 			}
 			break;
 		}
 	}
 
-	
-	
 	public Tile nextPath(AbstractCreature c){
 		ArrayList<Tile> history = new ArrayList<Tile>();
 		Tile next = path.get(0);
