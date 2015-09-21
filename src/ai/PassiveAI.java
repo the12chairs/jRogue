@@ -14,12 +14,15 @@ public class PassiveAI implements AI{
 	private Dungeon viewed;
 	private int maxX;
 	private int maxY;
+
+	private Tile oldDest;
+
 	ArrayList<Tile> path; // Путь к жертве
 	
 	public PassiveAI(){
 		rnd = new Random();
 		path = new ArrayList<Tile>();
-		//history = new ArrayList<Tile>();
+		oldDest = null;
 	}
 	
 	public void setVisible(Dungeon d){
@@ -66,13 +69,7 @@ public class PassiveAI implements AI{
 	}
 
 	public Tile nextPath(AbstractCreature c){
-		ArrayList<Tile> history = new ArrayList<Tile>();
-		Tile next = path.get(0);
-		//if(next.getX() == c.getX() && next.getY() == c.getY()){
-			//next = path.get(1);
-		//}
-
-		return next;
+        return path.get(0);
 	}
 	
 	@Override
@@ -80,8 +77,9 @@ public class PassiveAI implements AI{
 		// TODO Auto-generated method stub
 		Tile start = viewed.getTile(c.getX(), c.getY());
 		Tile finish = viewed.getTile(victum.getX(), victum.getY());
-		//System.out.println(path.size());
+
 		path = AStar.search(viewed, start, finish);
+		//System.out.println(path.size());
 
 		// Догнал - бьем
 		if(victum.getX() == nextPath(c).getX() && victum.getY() == nextPath(c).getY()){
@@ -91,22 +89,25 @@ public class PassiveAI implements AI{
 		else{
 			c.setX(nextPath(c).getX());
 			c.setY(nextPath(c).getY());
-	
 		}
-		path.clear();
+		//path.clear();
 	}
 	
 	@Override
 	public void march(AbstractCreature c, Tile t) {
-		if(t != null || t.getPassable()){
-			Tile start = viewed.getTile(c.getX(), c.getY());
-			path = AStar.search(viewed, start, t);
-			System.out.println(path.size());
-			//if(nextPath(c).getX() != c.getX() && nextPath(c).getY() != c.getY()){
+		if(t != null) {
+			if (t.getPassable()) {
+				Tile start = viewed.getTile(c.getX(), c.getY());
+				path = AStar.search(viewed, start, t);
 				c.setX(nextPath(c).getX());
-				c.setY(nextPath(c).getY());		
-			//}
+				c.setY(nextPath(c).getY());
+			}
 		}
+	}
+
+	public ArrayList<Tile> getPath()
+	{
+		return path;
 	}
 
 }

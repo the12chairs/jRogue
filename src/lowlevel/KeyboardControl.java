@@ -340,7 +340,8 @@ public class KeyboardControl extends Thread {
 			for(AbstractCreature c : creatures){
 				if(c != controlled && c.isAlive()){
 					c.getAi().setVisible(TileRenderer.getDungeon());
-					c.getAi().setDivide((int)TileRenderer.getDungeon().getWidth(), (int)TileRenderer.getDungeon().getHeight());
+					c.getAi().setDivide((int) TileRenderer.getDungeon().getWidth(), (int) TileRenderer.getDungeon().getHeight());
+					//c.march(TileRenderer.getDungeon().getTile(29, 29));
 					c.attack(this.controlled); // атакуем героя
 				}
 				if(!c.isAlive()){

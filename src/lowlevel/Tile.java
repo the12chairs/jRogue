@@ -7,7 +7,6 @@ import primitives.GraphObject;
 public class Tile extends GraphObject {
 	
 	protected String name;
-	//protected boolean visible;
 	protected boolean passable;
 	protected String texturePath;
 	protected boolean visited;
@@ -16,7 +15,6 @@ public class Tile extends GraphObject {
 		//Tile t = new Tile("Стена", '#', true, false, 1, 1);
 		//System.out.println(t.getTile());
 	}
-	
 	
 	public Tile() {
 		
@@ -31,8 +29,7 @@ public class Tile extends GraphObject {
 		this.y = y;
 		
 	}
-	
-	
+
 	public Tile(String name, String face, boolean visible, boolean passable, long x, long y){
 		super(face, x, y);
 		this.name = name;
@@ -43,9 +40,7 @@ public class Tile extends GraphObject {
 		this.y = y;
 		visited = false;
 	}
-	
-	
-	
+
 	// Конструктор прототипа.
 	public Tile(String name, String face, boolean visible, boolean passable){
 		super(face);
@@ -56,35 +51,30 @@ public class Tile extends GraphObject {
 		visited = false;
 	}
 	
-
-	
 	public boolean getVisited(){
 		return visited;
 	}
-	
 
 	void setName(String name){
 		this.name = name;
 	}
-	
-	
+
 	public void setPassable(boolean passable){
 		this.passable = passable;
 	}
-	
+
 	public String getName(){
 		return this.name;
 	}
-	
-	
+
 	public boolean getPassable(){
 		return this.passable;
 	}
-	
+
 	public void setTexturePath(String texturePath){
 		this.texturePath = texturePath;
 	}
-	
+
 	public String getTexturePath(){
 		return texturePath;
 	}

@@ -28,24 +28,24 @@ public class AStar {
 		return (Math.abs(s.getX() - f.getX()) + Math.abs(s.getY() - f.getY()));
 	}
 
-	private static void nein(Dungeon d, Tile center) {
+    private static long chebishev(Tile s, Tile f){
+        return Math.max(Math.abs(s.getX() - f.getX()), Math.abs(s.getY() - f.getY()));
+    }
+
+
+    private static void nein(Dungeon d, Tile center) {
 		for(int i = (int)center.getY()-1; i <= center.getY()+1; i++){
-			//if(i < 0 || i > d.getHeight()) continue;
 			for(int j = (int)center.getX()-1; j<= center.getX()+1; j++){
-				//if(j < 0 || j > d.getWidth()) continue;
 				Tile t = null;
-				/*if(((i > 0) && (j > 0)) || i < d.getHeight() && j < d.getWidth()){
-					
-				}
-				else {
-					continue;
-				}
-				*/
+
 				t = d.getTile(j,  i);
-				if( t != null){
+				if(t != null){
+                    if(!t.getPassable()) {
+                        continue;
+                    }
 					//System.out.println((center.getX()+1)+":"+(center.getY()+1));
-					if((t.getX() != center.getX()) || (t.getY() != center.getY())){
-						open.add(t);
+					if((t.getX() != center.getX()) || (t.getY() != center.getY())) { // Switch to OR
+                        open.add(t);
 					}
 				}
 				//System.out.println(t.getX()+":"+t.getY());
@@ -55,7 +55,7 @@ public class AStar {
 
 	public static ArrayList<Tile> search(Dungeon d, Tile start, Tile finish) {
 		
-		boolean found = false;
+		//boolean found = false;
 		Tile actual =  null;
 		open.clear();
 		closed.clear();
@@ -64,36 +64,28 @@ public class AStar {
 		open.add(actual);
 		closed.add(actual);
 		closed.remove(actual);
-		while(!found){
+		while(true){
 			nein(d, actual);
-			//closed.add(actual);
-			//open.remove(actual);
 			long min = 100000;
-			//System.out.println(manhattan(start, finish));
 			Tile mint = null;
 
 			for(Tile t : open){
-                //System.out.println(t.getPassable());
-				//System.out.println(t.getX()+":"+t.getY());
+
 				if(!closed.contains(t)){
 					// Диагональ
-					g = 40;
+					g = 140;
 					//Диагонали
 					if((t.getX() > actual.getX()) && (t.getY() > actual.getY())){
-						g = 14;
+						g = 140;
 					} else
 					if(t.getX() < actual.getX() && (t.getY() < actual.getY())){
-						g = 14;
+						g = 140;
 					} else
 					if((t.getX() > actual.getX()) && (t.getY() < actual.getY())) {
-						g = 14;
-
+						g = 140;
 					} else
 					if((t.getX() < actual.getX()) && (t.getY() > actual.getY())){
-						g = 14;
-					}
-					if(!t.getPassable()){
-						g = 100000;
+						g = 140;
 					}
 
 					h = manhattan(t, finish);
@@ -107,21 +99,13 @@ public class AStar {
 			}
 			
 			actual = mint;
-			//System.out.println("Loop");
-			//System.out.println(actual.getX() + ":" + actual.getY());
 			if(actual != null) {
 				open.remove(actual);
 			
 				closed.add(actual);
 			}
-			/*
-			if(open.contains(finish)){
-				found = true;
-				break;
-			}
-			*/
+
 			if(actual == finish){
-				found = true;
 				break;
 			}
 		}
@@ -129,24 +113,8 @@ public class AStar {
 		return closed;
 	}
 
-	
+
 	public static void main(String args[]){
-		ScriptingContainer ruby = new ScriptingContainer(LocalVariableBehavior.PERSISTENT);
-		
-		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/races.rb");
-		Race test_race = (Race) ruby.get("race");
-		Race gobo = (Race) ruby.get("gobo");
-		//Dice 
-		//Race dwarf = new Race("Dwarf", 5, 0, -3, -1, -1, 4);
-		Hero you = new Hero("Urist", "./modules/TestModule/heros/hero.png", 3, 3, test_race, 4, Profession.WARRIOR);
-		Mob enemy = new Mob("Urist", "./modules/TestModule/heros/hero.png", 5, 5, gobo, 4, true);
-		
-		ruby.runScriptlet(PathType.ABSOLUTE, "./scripts/basic_forest.rb");
-		DungeonGenerator generator = new DungeonGenerator(30, 31, 5, 5);
-		//Dungeon d = generator.generateDungeon();//new Dungeon("./modules/TestModule/locations/texture.json");
-		Dungeon d = (Dungeon) ruby.get("forest");
-		//AStar star = new AStar();
-		AStar.search(d, d.getTile(8, 8), d.getTile(3, 4));
 	}
 	
 	

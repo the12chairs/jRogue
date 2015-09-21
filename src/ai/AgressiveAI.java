@@ -36,4 +36,10 @@ public class AgressiveAI implements AI{
 		
 	}
 
+	@Override
+	public ArrayList<Tile> getPath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

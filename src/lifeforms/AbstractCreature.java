@@ -1,6 +1,7 @@
 package lifeforms;
 
 
+import java.util.ArrayList;
 import java.util.Map.Entry;
 
 import ai.AI;
@@ -369,10 +370,11 @@ public abstract class AbstractCreature extends GraphObject{
     public void setAI(AI ai){
         this.ai = ai;
     }
+
     public AI getAi(){
         return ai;
     }
-	
+
 	public Weapon getRightHand()
     {
 		return rightHand;

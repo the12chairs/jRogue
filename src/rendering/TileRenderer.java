@@ -174,6 +174,13 @@ public class TileRenderer extends Thread {
 				}
 			}
 		for(AbstractCreature creature : cDungeon.getCreatures()){
+
+			// Trace path for debug
+			if(creature.getAi() != null) {
+				for (GraphObject t : creature.getAi().getPath()) {
+					bodyFont.drawString(t.getX() * TILE_SIZE, t.getY() * TILE_SIZE, "*");
+				}
+			}
 			if(creature.getVisible() && creature.isAlive()){
 				String face = creature.getFace();
 				getTexture(face).bind();
@@ -410,7 +417,7 @@ public class TileRenderer extends Thread {
 
 		Random rnd = new Random();
 
-		for(int i = 1; i < 20; i++){
+		for(int i = 1; i < 2; i++){
 			d.addLife(new Mob("Grusk'ar #", "./res/mobs/gobbo.png", rnd.nextInt(10), rnd.nextInt(10), gobo, 4, true));
 		}
 
@@ -421,7 +428,7 @@ public class TileRenderer extends Thread {
 
 		you.setVisible(true);
 
-		d.addThing(new Weapon("Morgenshtern", "./res/items/star.png", Weapon.Type.MACE, new Material("Iron"), true, new Dice(1, 6), 100, 10), 10, 10);
+		d.addThing(new Weapon("Morgenshtern", "./res/items/sword.png", Weapon.Type.MACE, new Material("Iron"), true, new Dice(1, 6), 100, 10), 10, 10);
 
 		TileRenderer r = new TileRenderer(d);
 	
@@ -460,8 +467,7 @@ public class TileRenderer extends Thread {
 		public boolean biggerNull(){
 			return (checkedPos > 0);
 		}
-	
-		
+
 		public int getPos(){
 			return checkedPos;
 		}
@@ -471,12 +477,12 @@ public class TileRenderer extends Thread {
 		}
 		
 		public void prev() {
-			checkedPos--;;
+			checkedPos--;
 			renderPos = checkedPos * 12;
 		}
 	
 		public void next() {
-			checkedPos++;// += 12;
+			checkedPos++;
 			renderPos = checkedPos * 12;
 		}
 		
