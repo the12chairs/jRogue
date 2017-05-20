@@ -2,20 +2,14 @@ package lowlevel;
 
 import primitives.GraphObject;
 
-
-
+// Tile is a piece of a map where you can step, drop something, etc
 public class Tile extends GraphObject {
-	
+
 	protected String name;
 	protected boolean passable;
 	protected String texturePath;
 	protected boolean visited;
 
-	public static void main(String[] args) {
-		//Tile t = new Tile("Стена", '#', true, false, 1, 1);
-		//System.out.println(t.getTile());
-	}
-	
 	public Tile() {
 		
 	}
@@ -30,10 +24,10 @@ public class Tile extends GraphObject {
 		
 	}
 
+	// Tile with coords
 	public Tile(String name, String face, boolean visible, boolean passable, long x, long y){
 		super(face, x, y);
 		this.name = name;
-		//this.face = face;
 		this.visible = visible;
 		this.passable = passable;
 		this.x = x;
@@ -41,7 +35,7 @@ public class Tile extends GraphObject {
 		visited = false;
 	}
 
-	// Конструктор прототипа.
+	// Proto-Tile without coords
 	public Tile(String name, String face, boolean visible, boolean passable){
 		super(face);
 		this.name = name;

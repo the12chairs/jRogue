@@ -2,30 +2,28 @@ package dnd;
 
 import java.util.Random;
 
-
-
+/**
+ * Class for dice implementation
+ */
 public class Dice {
 	
-	private int num;
-	private int edges;
-	
+	private int num; // How many dices you trow at same time
+	private int edges; // Number of edges of each of dices
+
 	private Random rand;
-	
+
 	public Dice(int num, int edges){
 		
 		this.num = num;
 		this.edges = edges;
 	
 	}
-	
-	
-	
+
 	public Dice getDice(){
 		return this;
 	}
 	
 	public int throwDice(){
-		
 		rand = new Random();
 		int sum = 0;
 		for(int i = 0; i < num; i++){
@@ -33,16 +31,8 @@ public class Dice {
 		}
 			return sum;
 	}
-	
+
 	public String getPair(){
 		return num + "d" + edges;
 	}
-	public static void main(String args[]){
-		
-		Dice dice = new Dice(1, 6);
-		
-		for(int i = 0; i < 100; i++)
-			System.out.println(dice.throwDice());
-	}
-
 }

@@ -8,10 +8,10 @@ import org.newdawn.slick.opengl.TextureLoader;
 import java.io.FileInputStream;
 import java.io.File;
 
+// Anything that can be rendered
 public abstract class GraphObject {
 	
 	protected String face;
-	
 	protected long x;
 	protected long y;
 	protected boolean visible;

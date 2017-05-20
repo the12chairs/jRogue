@@ -3,7 +3,7 @@ package lowlevel;
 import primitives.GraphObject;
 import properties.Material;
 
-
+// Class for items implementation
 public abstract class AbstractThing extends GraphObject {
 
 	public static enum MainType {
@@ -20,13 +20,13 @@ public abstract class AbstractThing extends GraphObject {
 	protected String name;
 	protected int heavy;
 	protected int cost;
-	protected Material madeOf; // Из чего сделано
-
+	protected Material madeOf;
 	protected int bonus;
-	protected boolean allowed; // Запрет/разрешение подбирать предмет
+	protected boolean allowed; // Can it be taken?
 	protected boolean equipped;
-	protected boolean equippable; // Можно натянуть на себя?
+	protected boolean equippable; // Can it be equipped?
 
+	// If we know item positon
 	public AbstractThing(String name, String face, int heavy, int cost, long x, long y, MainType mType, Material material) {
 		super(face, x, y);
 		this.name = name;
@@ -37,7 +37,8 @@ public abstract class AbstractThing extends GraphObject {
 		equipped = false;
 		madeOf = material;
 	}
-
+	// If we don't know item positon (generated into creature's pocket as example)
+	//TODO: possibly don't need this method
 	public AbstractThing(String name, String face, int heavy, int cost, MainType mType, Material material) {
 		super(face);
 		this.name = name;
@@ -49,9 +50,7 @@ public abstract class AbstractThing extends GraphObject {
 		madeOf = material;
 	}
 
-
 	public AbstractThing() {
-
 	}
 
 	public boolean isAllowed() {

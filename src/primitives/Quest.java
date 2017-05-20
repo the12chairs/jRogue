@@ -8,7 +8,7 @@ import org.json.simple.parser.ParseException;
 
 import tools.FileReader;
 
-
+// Quests for hero
 public class Quest {
 	
 	private String title;
@@ -16,7 +16,7 @@ public class Quest {
 	private long exp;
 	private long gold;
 	private String autorName;
-	// Не уверен насчет этих атрибутов
+	// Do we really need this props?
 	private boolean isSuccess;
 	private boolean isFailed;
 	
@@ -27,27 +27,24 @@ public class Quest {
 	
 	public Quest(String questFile){
 		
-		// Прочитаем все значения из файла-описания квеста
+		// Read all form description file
 		String fileContent = null;
 		
 		try {
 			fileContent = FileReader.readFile(questFile);
 			
-		} catch (IOException e) { // Хьюстон, у нас проблема
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		// Парсим засранца
+
 		JSONParser parser = new JSONParser();
 		
 		Object obj = null;
 		try {
-			obj = parser.parse(fileContent); // В obj лежит распарсенный квест
+			obj = parser.parse(fileContent); // obj is parsed quest
 		} catch (ParseException e) {
-			// Нираспарсилось((((999
 			e.printStackTrace();
 		}
-		// Выдернем из него все значения
 		JSONObject jsonObj = (JSONObject) obj;
 		
 		
@@ -57,12 +54,11 @@ public class Quest {
 		this.gold = (long) jsonObj.get("gold");
 		this.autorName = (String) jsonObj.get("autor");
 		
-		// Не невыполненный, не выполненный одновременно. Короче говоря, активный
+		// Active quest. Not failed, not done
 		this.isFailed = false;
 		this.isSuccess = false;
 	}
-	
-	// Некоторый необходимый минимум получения и установки статуса квеста
+
 	public boolean isSuccess(){
 		return this.isSuccess;
 	}
@@ -75,7 +71,6 @@ public class Quest {
 		this.isSuccess = true;
 		this.isFailed = false;
 	}
-	
 	
 	public void fail(){
 		this.isSuccess = false;
@@ -90,8 +85,7 @@ public class Quest {
 			return false;
 		}
 	}
-	// Геттеры-сеттеры, вся шаверма
-	
+
 	public String getTitle() {
 		return title;
 	}

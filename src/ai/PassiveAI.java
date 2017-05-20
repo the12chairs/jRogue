@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
 
+/**
+ * AI class for passive creatures, wich wouldn't attack first
+ * TODO: rework it
+ */
 public class PassiveAI implements AI{
 
 	private Random rnd;
@@ -17,19 +21,18 @@ public class PassiveAI implements AI{
 
 	private Tile oldDest;
 
-	ArrayList<Tile> path; // Путь к жертве
-	
+	ArrayList<Tile> path;
+
 	public PassiveAI(){
 		rnd = new Random();
 		path = new ArrayList<Tile>();
 		oldDest = null;
 	}
-	
+
 	public void setVisible(Dungeon d){
 		viewed = d;
 	}
-	
-	
+
 	@Override
 	public void setDivide(int x, int y){
 		maxX = x;
@@ -79,18 +82,16 @@ public class PassiveAI implements AI{
 		Tile finish = viewed.getTile(victum.getX(), victum.getY());
 
 		path = AStar.search(viewed, start, finish);
-		//System.out.println(path.size());
 
-		// Догнал - бьем
+		// If a victum is near you - hit it
 		if(victum.getX() == nextPath(c).getX() && victum.getY() == nextPath(c).getY()){
 			c.hit(victum);
 		}
-		// Иначе догоняем
+		// If not - try to stay near
 		else{
 			c.setX(nextPath(c).getX());
 			c.setY(nextPath(c).getY());
 		}
-		//path.clear();
 	}
 	
 	@Override
@@ -109,5 +110,4 @@ public class PassiveAI implements AI{
 	{
 		return path;
 	}
-
 }

@@ -17,25 +17,22 @@ import properties.Race;
 import properties.Stat;
 import properties.Weaponable;
 
-
-
-
+// Our playable hero.
 public class Hero extends AbstractCreature{
 
-	
-	LinkedList<Quest> questJournal; // Активные, выполненные, проваленные. Смотрим по флажку в Quest
-	private Stat exp; // Опыт персонажа
-	private int level; // Его уровень
+	LinkedList<Quest> questJournal; // Quests
+	private Stat exp; // experience
+	private int level;
 	private long statPoints;
 	private Weapon hands;
-	
-	
-	// Баланс тут
+
+	// Balance. WTF is this?
 	private static final int expCoef = 6;
 	private static final int statCoef = 10;
 	private static final int firstExpCoef = 5;
 	private static final int massCoef = 8;
-	// Пока уровень не является отдельной сущностью. Пусть будет тут
+
+	// TODO: implement Level class with perks, etc
 	public boolean isLevelUp(){
 		if(this.exp.getCurrent() >= this.exp.getFull()){
 			return true;
@@ -44,16 +41,15 @@ public class Hero extends AbstractCreature{
 			return false;
 		}
 	}
-	
+
 	public void doLevelUp(){
 		while(this.isLevelUp()){
 			this.level++;
 			this.statPoints += statCoef;
-			this.exp.setFull(this.exp.getFull() * expCoef); // Будь внимателен!
+			this.exp.setFull(this.exp.getFull() * expCoef); // Be careful!
 		}
-		
 	}
-	
+
 	public void takeQuest(Quest quest){
 		this.questJournal.push(quest);
 	}
@@ -63,13 +59,12 @@ public class Hero extends AbstractCreature{
 			if(q == quest){
 				q.success();
 				this.purse += q.getGold();
-				// Получим экспу
+				// Gain some exp
 				this.exp.setCurrent(this.exp.getCurrent() + q.getExp());
 			}
 		}
-
 	}
-	
+
 	public void failQuest(Quest quest){
 		quest.fail();
 	}
@@ -88,29 +83,18 @@ public class Hero extends AbstractCreature{
 		this.profession = profession;
 		this.inventory = new Inventory();
 		this.mass = new Stat(0, str.getCurrent() * massCoef);
-		//this.initRaceBonuses();
 		this.questJournal = new LinkedList<Quest>();
 		this.level = 0;
 		this.exp = new Stat(0, firstExpCoef);
 		this.statPoints = 0;
-		this.damage = new Dice(1, 3);//new Stat(str, str + damageCoef);
+		this.damage = new Dice(1, 3);
 		this.visionRadius = visionRadius;
-		// HP = stamina / 2
 		this.hp = new Stat(modifSta()+6);
 		rightHand = null;
 		leftHand = null;
 	}
 	
-
-	public static void main(String[] args) {
-		// Тесты
-		//Race dwarf = new Race("Дварф", 5, 0, -3, -2, -1,  4);
-		//Hero you = new Hero("Макс", "ololo", 2, 1, 5, 5, 5, 5, dwarf, 3, Profession.WARRIOR);
-		//System.out.println("Опыт: " + you.exp.getPair());
-
-	}
-
-	public Stat getExp() {
+    public Stat getExp() {
 		return exp;
 	}
 
@@ -133,9 +117,4 @@ public class Hero extends AbstractCreature{
 	public void setStatPoints(long statPoints) {
 		this.statPoints = statPoints;
 	}
-
-
-	
-
-
 }

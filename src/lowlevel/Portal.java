@@ -1,21 +1,21 @@
 package lowlevel;
 
 
-// Портал - активная зона, через которую можно перемещаться между тайлами
+/**
+ * Portal is a mechanic which allows you to move between dungeons. Stay on portal and press [G]o
+ */
 public class Portal extends AbstractThing {
 
-	
 	private Dungeon prev;
 	private Dungeon next;
 
-	// Координаты, куда переносится прошедший
+	// Coordinates of a portal
 	private int startX;
 	private int startY;
 
-	// Портал: куда, откуда, и расположение 
+	// start dung, finish dung and coords
 	public Portal(Dungeon first, Dungeon last, long x, long y)
 	{
-		
 		this.x = x;
 		this.y = y;
 		prev = first;
@@ -25,7 +25,7 @@ public class Portal extends AbstractThing {
 		startY = (int)y;
 	}
 
-	// Портал: куда, откуда, расположение и координаты выхода
+	// start dung, finish dung, coords and coords for exit
 	public Portal(Dungeon first, Dungeon last, long x, long y, int startX, int startY)
 	{
 		this.x = x;

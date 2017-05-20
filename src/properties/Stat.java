@@ -1,9 +1,12 @@
 package properties;
 
+/**
+ * For all stats that can be temporary changed
+ */
 public class Stat {
 
-	private long cValue; // Текущее значение
-	private long fValue; // Полное значение
+	private long cValue; // Current value
+	private long fValue; // Full value
 	
 	public Stat(){
 		this.cValue = 0;
@@ -36,8 +39,6 @@ public class Stat {
 	}
 	
 	public String getPair(){
-		// Для удобства вывода
 		return cValue + "/" + fValue;
 	}
-	
 }

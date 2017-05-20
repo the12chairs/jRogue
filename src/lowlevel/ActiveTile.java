@@ -1,10 +1,11 @@
 package lowlevel;
 
-
+/**
+ * Class for tiles with some action/trigger
+ * Doors, levers, traps...
+ */
 public class ActiveTile extends Tile {
-	
-	// Двери, рычаги, etc...
-	
+
 	protected String offTile;
 	protected String onTile;
 	protected boolean isActive;
@@ -21,11 +22,10 @@ public class ActiveTile extends Tile {
 		this.x = x;
 		this.y = y;
 		this.isActive = false;
-		this.face = offTile; // Выводить мы будем тайл, для единообразия
+		this.face = offTile; // We need render it as other tiles
 		this.passable = offPassable;
 	}
-	
-	
+
 	public void activate(){
 		this.isActive = true;
 		this.face = this.onTile;
@@ -47,5 +47,4 @@ public class ActiveTile extends Tile {
 	public void setOnTile(String onTile) {
 		this.onTile = onTile;
 	}
-	
 }

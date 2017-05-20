@@ -15,15 +15,17 @@ import lifeforms.AbstractCreature.Profession;
 import lowlevel.Dungeon;
 import lowlevel.Tile;
 
+/**
+ *  A standart AStar pathfinding algorythm implementation, used for AI classes
+ */
 public class AStar {
 
 	private static ArrayList<Tile> open = new ArrayList<>();
 	private static ArrayList<Tile> closed  = new ArrayList<>();
-	private static long g; // Стоимость перемещения
-	private static long h; // Расстояние от точки до конечной
+	private static long g; // Veigth
+	private static long h; // path form start to finish
 	private static long f; // g+h
 
-	
 	private static long manhattan(Tile s, Tile f){
 		return (Math.abs(s.getX() - f.getX()) + Math.abs(s.getY() - f.getY()));
 	}
@@ -31,7 +33,6 @@ public class AStar {
     private static long chebishev(Tile s, Tile f){
         return Math.max(Math.abs(s.getX() - f.getX()), Math.abs(s.getY() - f.getY()));
     }
-
 
     private static void nein(Dungeon d, Tile center) {
 		for(int i = (int)center.getY()-1; i <= center.getY()+1; i++){
@@ -43,20 +44,17 @@ public class AStar {
                     if(!t.getPassable()) {
                         continue;
                     }
-					//System.out.println((center.getX()+1)+":"+(center.getY()+1));
 					if((t.getX() != center.getX()) || (t.getY() != center.getY())) { // Switch to OR
                         open.add(t);
 					}
 				}
-				//System.out.println(t.getX()+":"+t.getY());
 			}
 		}
 	}
 
 	public static ArrayList<Tile> search(Dungeon d, Tile start, Tile finish) {
-		
-		//boolean found = false;
-		Tile actual =  null;
+
+        Tile actual =  null;
 		open.clear();
 		closed.clear();
 		
@@ -72,7 +70,7 @@ public class AStar {
 			for(Tile t : open){
 
 				if(!closed.contains(t)){
-					// Диагональ
+					// Diagonal
 					g = 140;
 					//Диагонали
 					if((t.getX() > actual.getX()) && (t.getY() > actual.getY())){
@@ -109,13 +107,6 @@ public class AStar {
 				break;
 			}
 		}
-		
 		return closed;
 	}
-
-
-	public static void main(String args[]){
-	}
-	
-	
 }

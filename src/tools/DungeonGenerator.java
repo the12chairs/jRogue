@@ -9,9 +9,11 @@ import lowlevel.Tile;
 //import lowlevel.ActiveTile;
 import lowlevel.Dungeon;
 
-
+/**
+ * Generator for dungeons
+ */
 public class DungeonGenerator {
-	Dungeon dungeon; // Что мы будем генерить
+	Dungeon dungeon; // What to generate
 	
 	
 	private int height;
@@ -20,16 +22,13 @@ public class DungeonGenerator {
 	private int maxRooms;
 	
 	private int minDivide;
-	
-	
+
 	private List<Room> rooms;
 	
 	public static final Tile wall = new Tile("Wall", "./res/tiles/wall.png", false, false);
 	public static final Tile floor = new Tile("Floor", "./res/tiles/floor.png", false, true);
-	
-	
-	
-	// Комнаты для удобства представления
+
+	// Rooms
 	class Room {
 		
 		int hlx;
@@ -37,7 +36,6 @@ public class DungeonGenerator {
 		int brx;
 		int bry;
 
-		
 		int square;
 		
 		public Room(int hlx, int hly, int brx, int bry){
@@ -51,8 +49,7 @@ public class DungeonGenerator {
 		}
 		
 	}
-	
-	
+
 	public DungeonGenerator(int height, int width, int rooms, int minDivide){
 		
 		System.out.println("Initialization dungeon generator...");		
@@ -83,9 +80,7 @@ public class DungeonGenerator {
 		return new Room(hlx, hly, brx, bry);
 	}
 	
-	
 
-	
 	public int horizontalDivide(){
 		Random rnd = new Random();
 		int d = 0;
@@ -103,8 +98,7 @@ public class DungeonGenerator {
 		}
 		return d;
 	}
-	
-	
+
 	public void makeRoom(Room r){
 		for(int i = r.hlx; i <= r.brx; i++){
 			for(int j = r.hly; j <= r.bry; j++){
@@ -114,8 +108,6 @@ public class DungeonGenerator {
 			}
 		}
 	}
-	
-	
 	
 	public Dungeon generateDungeon(){
 	
@@ -143,17 +135,11 @@ public class DungeonGenerator {
 		int x2;
 		int y2;
 		
-		
-		//for(int i = 1; i < maxRooms; i++){
-		
 
-		
+
 		int wh = horizontalDivide();
 		int ww = verticalDivide();
-		
-		//makeRoom(new Room(prewH, wh, prewW, ww));
-		
-			
+
 			
 		// Верхняя левая
 		
@@ -190,17 +176,14 @@ public class DungeonGenerator {
 			}
 		}
 		
-		
 		// Нижняя левая
-		
 		for(int j = prewW; j < ww - 1; j++){
 			for(int k = wh; k < height - 1; k++){
 				dungeon.removeTile(j, k);
 				dungeon.addTile(new Tile(floor, j, k));
 			}
 		}
-		
-		
+
 		// Нижняя правая
 		for(int j = ww + 1; j < width; j++){
 			for(int k = wh + 1; k < height; k++){
@@ -209,46 +192,6 @@ public class DungeonGenerator {
 			}
 		}
 					
-	
-		
-		
-		// Коридоры
-		
-		
-	
-		//while (wh)
-		//wh = horizontalDivide();
-		//ww = verticalDivide();
-		//Random rnd = new Random();
-		
-		//}
-		
-		
-
-		
-		//Room r = new Room(r);
-		
-		
-		/*for(int i = 0; i <= height; i++){
-			dungeon.removeTile(i, prewH);
-			dungeon.addTile(new Tile(floor, i, prewH));
-		}
-		
-		for(int i = 0; i <= width; i++){
-			dungeon.removeTile(prewW, i);
-			dungeon.addTile(new Tile(floor, prewW, i));
-		}*/
-		
-		
 		return dungeon;
-		
 	}
-	
-	
-	
-	public static void main(String args[]){
-		DungeonGenerator g = new DungeonGenerator(20, 30, 2, 5);
-		g.generateDungeon();
-	}
-	
 }

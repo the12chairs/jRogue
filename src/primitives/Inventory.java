@@ -12,53 +12,41 @@ import java.util.Map.Entry;
 
 import lowlevel.AbstractThing;
 
+// Inventory and all it can do
 public class Inventory {
-	
+
 	int itemNumber;
-	
+
 	private Map<Integer, AbstractThing> inventory;
-	
-	
+
 	public Inventory(){
-		
 		inventory = new HashMap<Integer, AbstractThing>();
 		itemNumber = 0;
 	}
-	
-	
-	
-	
-	
+
 	public Map<Integer, AbstractThing> allInvenory(){
 		return inventory;
 	}
-	
-	
+
 	public Map<Integer, Weapon> getAllWeapon(){
 		Map<Integer, Weapon> weapons = new HashMap<Integer, Weapon>();
 		
 		for (Entry<Integer, AbstractThing> entry : inventory.entrySet()){
 			if(entry.getValue().getMType() == AbstractThing.MainType.WEAPON){
 				weapons.put(entry.getKey(), (Weapon) entry.getValue());
-				//System.out.println(entry.getValue().getName());
 			}
 		}
-
 		return weapons;
 	}
 
-	
 	public Map<Integer, Armor> getAllArmor(){
 		Map<Integer, Armor> armors = new HashMap<Integer, Armor>();
 	
 		for (Entry<Integer, AbstractThing> entry : inventory.entrySet()){
 			if(entry.getValue().getMType() == AbstractThing.MainType.ARMOR){
 				armors.put(entry.getKey(), (Armor) entry.getValue());
-				//System.out.println(entry.getValue().getName());
 			}
-			
 		}
-		
 		return armors;
 	}
 
@@ -74,36 +62,32 @@ public class Inventory {
 	public AbstractThing findByKey(Integer key){
 		return inventory.get(key);
 	}
-	
-	
+
 	public void pushItem(AbstractThing item){
 		
 		this.inventory.put(itemNumber,item);
 		itemNumber++;
 	}
 	
-	
-	// Удаление по ключу
+	// Remove by key
 	public void dropItem(Integer key){
 
 		inventory.remove(key);
 		itemNumber--;
-		
-		
-		
-		// Костыльное царство // Зато работает
-		
-		// Сохраняем оставшиеся предметы в инвентаре
+
+		// Black magic
+
+		// Save rest of the objects in inventory
 		List<AbstractThing> buffer = new ArrayList<AbstractThing>();
 		for(Entry<Integer, AbstractThing> t: inventory.entrySet()){
 			buffer.add(t.getValue());
-		}	
-		
-		// Зачищаем инвентарь
+		}
+
+		// Clear inventory
 		inventory.clear();
 		
 		int i = 0;
-		// Запихиваем предметы из буфера обратно в инвентарь
+		// Push saved items form buffer to inventory
 		for(AbstractThing t : buffer){
 			inventory.put(i, t);
 			i++;
@@ -111,37 +95,32 @@ public class Inventory {
 		
 	}
 	
-	// Удаление по значению
+	// Remove by value
 	public void dropItem(AbstractThing item){
-		
 		
 		for(Entry<Integer, AbstractThing> t : inventory.entrySet()){
 		
 			if(t == item){
 				inventory.remove(t.getKey());
-				//inventory.remove(t);
 				itemNumber--;
 				System.out.println("Dropped");
 			}
 		}
 		
-		// Сохраняем оставшиеся предметы в инвентаре
+		// Save rest of the objects in inventory
 		List<AbstractThing> buffer = new ArrayList<AbstractThing>();
 		for(Entry<Integer, AbstractThing> t: inventory.entrySet()){
 			buffer.add(t.getValue());
 		}	
 		
-		// Зачищаем инвентарь
+		// Clear inventory
 		inventory.clear();
 		
 		int i = 0;
-		// Запихиваем предметы из буфера обратно в инвентарь
+		// Push saved items form buffer to inventory
 		for(AbstractThing t : buffer){
 			inventory.put(i, t);
 			i++;
 		}
-			
 	}
-
-
 }

@@ -6,11 +6,14 @@ import lowlevel.Tile;
 
 import java.util.ArrayList;
 
+/**
+ * AI interface
+ */
 public interface AI {
-	public void lurk(AbstractCreature c); // Что делать просто так
-	public void attack(AbstractCreature c, AbstractCreature victim); // При атаке
-	public void march(AbstractCreature c, Tile t);
-	public void setVisible(Dungeon d); // Видимый мобу участок карты
-	public void setDivide(int x, int y); // Границы карты
-	public ArrayList<Tile> getPath();
+	public void lurk(AbstractCreature c); // What to do without commands
+	public void attack(AbstractCreature c, AbstractCreature victim); // What to do at attack
+	public void march(AbstractCreature c, Tile t); // Go to tile
+	public void setVisible(Dungeon d); // What a creature see
+	public void setDivide(int x, int y); // Map divides
+	public ArrayList<Tile> getPath(); // Path in a creature's memory
 }

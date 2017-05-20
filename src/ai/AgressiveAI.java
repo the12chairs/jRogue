@@ -7,6 +7,9 @@ import lowlevel.Tile;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * AI which will try to attack you anycase
+ */
 public class AgressiveAI implements AI{
 
 	@Override
@@ -17,7 +20,6 @@ public class AgressiveAI implements AI{
 	@Override
 	public void attack(AbstractCreature c, AbstractCreature victim) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -41,5 +43,4 @@ public class AgressiveAI implements AI{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

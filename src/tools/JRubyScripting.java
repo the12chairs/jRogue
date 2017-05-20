@@ -19,27 +19,18 @@ import javax.script.ScriptContext;
 
 
 public class JRubyScripting {
-	/*
-	
-	private Ruby runtime = JavaEmbedUtils.initialize(new ArrayList());
-	private RubyRuntimeAdapter evaler = JavaEmbedUtils.newRuntimeAdapter();
-*/
+
 	
 	private ScriptEngine ruby = new ScriptEngineManager().getEngineByName("jruby");
-    //process a ruby file
-    //jruby.eval(new BufferedReader(new FileReader("myruby.rb")));
-	
+
 	public void eval(String expression) throws ScriptException{
 		ruby.eval(expression);
-		//JavaEmbedUtils.terminate(runtime);		
 	}
 	
 	public void evalFile(String filename) throws FileNotFoundException, ScriptException{
 		String content = new Scanner(new File(filename)).useDelimiter("\\Z").next();
 		eval(content);
 	}
-	
-	
 	
 	public static void main(String args[]){
 		JRubyScripting r = new JRubyScripting();

@@ -15,12 +15,10 @@ import properties.Race;
 import properties.Stat;
 import lowlevel.AbstractThing;
 
-
-
+// Abstract creature class. Extend it for every lifeform you need
 public abstract class AbstractCreature extends GraphObject{
 
-	//static enum Race { HUMAN, ELF, DWARF };
-	public static enum Profession { WARRIOR, ROGUE, MAGE }; // Читать из директории profession
+	public static enum Profession { WARRIOR, ROGUE, MAGE }; // Read from  `profession` directory TODO: remove and create Profession class
 	
 	protected String name;
 	protected Race race;
@@ -32,16 +30,16 @@ public abstract class AbstractCreature extends GraphObject{
 	protected Stat wisdom;
 	protected Stat charisma;
 	protected Stat stamina;
-	protected long purse; // Деньги-денежки
+	protected long purse; // Money
 	protected Stat mass;
 	protected Dice damage;
 	protected Inventory inventory;
 	protected int visionRadius;
-	protected Stat age; // Смари, current значение - текущий возраст, full значение - возраст смерти.
+	protected Stat age; //current is current age, full is maximum lifetime
 	protected boolean weaponed;
 	
-	protected Weapon rightHand; // Что в руках
-    protected Weapon leftHand;
+	protected Weapon rightHand;
+    protected Weapon leftHand; // TODO: it can be a chield, remove and set as AbstractTHing
 
 	protected Armor shield;
 	protected Armor head;
@@ -49,11 +47,13 @@ public abstract class AbstractCreature extends GraphObject{
 	protected Armor arms;
 	protected Armor legs;
 	protected Armor foots;
-	
+
+	//TODO: jewelery
+
 	protected AI ai;
 	
-	// Статы защиты
-	protected Stat headDP; // Защита
+	// Protection stats (resists etc)
+	protected Stat headDP;
 	protected Stat bodyDP;
 	protected Stat legsDP;
 	protected Stat armsDP;
@@ -139,6 +139,7 @@ public abstract class AbstractCreature extends GraphObject{
 		
 	}
 
+	// TODO: probably don't need this methods
 	public void lurk(){
 		ai.lurk(this);
 	}
@@ -155,7 +156,8 @@ public abstract class AbstractCreature extends GraphObject{
 		if(hp.getCurrent() > 0) return true;
 		else return false;
 	}
-	
+
+	// Creature stats
 	public Stat wis(){
 		return wisdom;
 	}
@@ -183,8 +185,8 @@ public abstract class AbstractCreature extends GraphObject{
 	public Stat age(){
 		return age;
 	}
-	
 
+	//TODO: what are thise modificators? Why do we need it?
 	public int modifStr(){
 		return (int)(str.getCurrent() - 10) / 2;
 	}
@@ -236,6 +238,7 @@ public abstract class AbstractCreature extends GraphObject{
 	public Race getRace(){
 		return race;
 	}
+
 	public void setPos(int x, int y)
 	{
 		this.x = x;
@@ -245,13 +248,11 @@ public abstract class AbstractCreature extends GraphObject{
 	public String getName(){
 		return this.name;
 	}
-	
+
 	public void setName(String name){
 		this.name = name;
 	}
-	
-	
-	
+
 	public Dice getDamage(){
 		return damage;
 	}
@@ -276,29 +277,29 @@ public abstract class AbstractCreature extends GraphObject{
 		}
 	}
 	
-	// Обертки для взятия/выкидывания предметов, учитывающие изменение переносимого веса
+	// Metods for take and drop items, we need it for calc weight
+	// TODO: implement overload
 	public void takeItem(AbstractThing item)
 	{
 		this.inventory.pushItem(item);
 		this.mass.setCurrent(this.mass.getCurrent() + item.getHeavy());
 	}
-	
-	
+
+	// By inventory number (Do we really need this method?)
 	public void dropItem(Integer item)
 	{
 		AbstractThing t = inventory.allInvenory().get(item);
 		this.inventory.dropItem(item);
 		this.mass.setCurrent(this.mass.getCurrent() - t.getHeavy());
 	}
-	
-	
+
 	public void dropItem(AbstractThing item)
 	{
-		//AbstractThing t = inventory.findByKey(key);
 		this.inventory.dropItem(item);
 		this.mass.setCurrent(this.mass.getCurrent() - item.getHeavy());
 	}
 
+	// TODO: handle as exeption
 	public void unwearArmor(Armor armor)
 	{
 		Armor.Type type = armor.getType();
@@ -327,10 +328,9 @@ public abstract class AbstractCreature extends GraphObject{
 		default:
 			System.out.println("Error while armor unwearing");
 		}
-		
 	}
 	
-	//TODO: доделать!
+	//TODO: complete method
 	public void wearArmor(Armor armor)
 	{
 		
@@ -338,7 +338,7 @@ public abstract class AbstractCreature extends GraphObject{
 			// For each armor into inventory, if we take marked
 			if(p.getValue() == armor) {
 
-				// if this head armor 
+				// if this is head armor
 				if (p.getValue().getType() == Armor.Type.HEAD) {
 					head = p.getValue();
 					armor.equip();
@@ -387,20 +387,19 @@ public abstract class AbstractCreature extends GraphObject{
 
 	public void useRightWeapon(Weapon w)
 	{
-		//Чорная магия, не трожь! 
+		// Some black magic here, do not modify
 		for(Entry<Integer, Weapon> p : inventory.getAllWeapon().entrySet()){
-			if(p.getValue() == w){
-				// Если руки заняты, меняем оружие
-				if(rightHand != null){
-                    rightHand.unequip();
-                    rightHand = w;
+			if(p.getValue() == w) {
+				// Switch weapon
+				if (rightHand != null) {
+					rightHand.unequip();
+					rightHand = w;
 					this.damage = rightHand.getDamage();
 					w.equip();
 					weaponed = true;
 					System.out.println("Switch weapons");
-				}
-				else{
-                    rightHand = p.getValue();
+				} else {
+					rightHand = p.getValue();
 					damage = rightHand.getDamage();
 					w.equip();
 					weaponed = true;
@@ -408,7 +407,6 @@ public abstract class AbstractCreature extends GraphObject{
 				}
 				break;
 			}
-				
 		}
 	}
 
@@ -420,12 +418,13 @@ public abstract class AbstractCreature extends GraphObject{
 		System.out.println("Unuse weapon");
 	}
 
+	//TODO: refactor, left one method, provide left or right hand as a function parameter
     public void useLeftWeapon(Weapon w)
     {
-        //Чорная магия, не трожь!
+        // Some black magic here, do not modify
         for(Entry<Integer, Weapon> p : inventory.getAllWeapon().entrySet()){
             if(p.getValue() == w){
-                // Если руки заняты, меняем оружие
+                // Switch weapon
                 if(leftHand != null){
                     leftHand.unequip();
                     leftHand = w;
@@ -443,10 +442,10 @@ public abstract class AbstractCreature extends GraphObject{
                 }
                 break;
             }
-
         }
     }
 
+	//TODO: refactor, left one method, provide left or right hand as a function parameter
     public void unuseLeftWeapon(Weapon w) {
         this.damage = new Dice(1, 3);
         leftHand = null;

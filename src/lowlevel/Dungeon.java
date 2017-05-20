@@ -21,6 +21,9 @@ import rlforj.los.ILosBoard;
 
 import tools.FileReader;
 
+/**
+ * Class for level maps. It's all a dungeons
+ */
 public class Dungeon implements ILosBoard{
 	
 	private LinkedList<Tile> dungeon;
@@ -31,7 +34,6 @@ public class Dungeon implements ILosBoard{
 
 	private int numRooms;
 	
-	//private LinkedList<Room> rooms;
 	private long height;
 	private long width;
 	
@@ -72,11 +74,11 @@ public class Dungeon implements ILosBoard{
 	public void addQuest(Quest quest){
 		sceneQuests.push(quest);
 	}
-	//private static final int maxRoomSquare = 20;
-	
+
 	public long getHeight(){
 		return this.height;
 	}
+
 	public long getWidth(){
 		return this.width;
 	}
@@ -85,20 +87,19 @@ public class Dungeon implements ILosBoard{
 		this.dungeon = dungeon;
 	}
 
+	// Return all creatures on a map
 	public LinkedList<AbstractCreature> getCreatures(){
 		return this.sceneLife;
 	}
-	
-	
+
+	// Return all items on a map
 	public LinkedList<AbstractThing> getItems(){
 		if(this.sceneThings.size() == 0) return null;
 		else
 			return this.sceneThings;
 	}
-	
-	
+
 	public Dungeon(int x, int y){
-		//this.rooms = new LinkedList<Room>();
 		this.height = x;
 		this.width = y;
 		// Рисуем коробку x/y, окруженную стеной
@@ -112,7 +113,8 @@ public class Dungeon implements ILosBoard{
 	public LinkedList<Tile> dungeon(){
 		return this.dungeon;
 	}
-	
+
+	// JSON map format. For pre-generated maps (for scenarios, as example)
 	public Dungeon(String filePath){
 
 		this.sceneLife = new LinkedList<AbstractCreature>();
@@ -120,44 +122,41 @@ public class Dungeon implements ILosBoard{
 		this.sceneThings = new LinkedList<AbstractThing>();
 		this.scenePortals = new LinkedList<Portal>();
 
-		// Прочтем карту из json файла
-		// Ох и медленно эта хрень работать будет ><
+		// Read map form JSON
+		// Can it be optimized?
 		dungeon = new LinkedList<Tile>();
 		String fileContent = null;
 		
 		try {
 			fileContent = FileReader.readFile(filePath);
-			
-		} catch (IOException e) { // Хьюстон, у нас проблема
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		// Парсим засранца
+
+		// Parse dat motafucker
 		JSONParser parser = new JSONParser();
 		
 		Object obj = null;
 		try {
 			obj = parser.parse(fileContent);
 		} catch (ParseException e) {
-			// Нираспарсилось((((999
 			e.printStackTrace();
 		}
-		// Выдернем из него все значения
+		// Get main dungeon params from file
 		JSONObject jsonObj = (JSONObject) obj;
 		JSONArray tiles = new JSONArray();
 		this.height = (long) jsonObj.get("height");
 		this.width = (long) jsonObj.get("width");
 		tiles = (JSONArray) jsonObj.get("tiles");
 
-		for(int i = 0; i < tiles.size(); i++){ // Каждый тайл из файла засунем в список тайлов
-			
-			// Создадим на основе полученных значений тайлы, и запихнем и в список тайлов
+		// Push all tile walues into list
+		for(int i = 0; i < tiles.size(); i++) {
 			JSONObject parsableTile = (JSONObject) tiles.get(i);
 			
 			String title = (String) parsableTile.get("title");
 			String tile = parsableTile.get("tile").toString();
 			boolean passable = (boolean) parsableTile.get("passable");
-			boolean visible = true; // По умолчанию видно тайл
+			boolean visible = true; // By default tile is visible
 			long x = (long) parsableTile.get("x"); 
 			long y = (long) parsableTile.get("y");
 			dungeon.add(new Tile(title, tile, passable, visible, x, y));
@@ -167,10 +166,8 @@ public class Dungeon implements ILosBoard{
 	public int getDungeonSize(){
 		return this.dungeon.size();
 	}
-	
-	public void generateDungeon(int x, int y, int rooms){
 
-	}
+	public void generateDungeon(int x, int y, int rooms){}
 
 	public int getNumRooms() {
 		return numRooms;
@@ -180,8 +177,7 @@ public class Dungeon implements ILosBoard{
 		this.numRooms = numRooms;
 	}
 	
-	
-	// Добавить полноценный тайл с коодинатами
+	// Add full-functional Tile with coords
 	public void addTile(Tile t){
 		dungeon.push(t);
 	}
@@ -190,13 +186,16 @@ public class Dungeon implements ILosBoard{
 		Tile t = getTile(x, y);
 		dungeon.remove(t);
 	}
-	// Добавить прототип без координат
+
+	// Add proto-Tile without coords and set they here
 	public void addTile(Tile t, int x, int y){
 		t.setX(x);
 		t.setY(y);
 		dungeon.push(t);
 	}
-	
+
+	// Get a creature form tile with coords x,y. return null of there is no creature
+	// Important: only first-founded creature!
 	public AbstractCreature getCreature(long x, long y){
 		AbstractCreature creature = null;
 		for(AbstractCreature c : sceneLife){
@@ -208,6 +207,7 @@ public class Dungeon implements ILosBoard{
 		return creature;
 	}
 
+	// Get all things for tile with coords x,y. Return empty list if there are no things
 	public List<AbstractThing> getThings(long x, long y){
 		List<AbstractThing> things = new LinkedList<AbstractThing>();
         for(AbstractThing t : sceneThings){
@@ -218,10 +218,13 @@ public class Dungeon implements ILosBoard{
 		return things;
 	}
 
+	// Return all things linked with this dungeon
     public List<AbstractThing> getThings(){
         return sceneThings;
     }
 
+    // Get portal setted on this tile with coords x,y. Null if there is no portal
+	// Important: only first-found portal will be returned
 	public Portal getPortal(long x, long y){
 		Portal portal = null;
 		for(Portal p : scenePortals){
@@ -247,39 +250,24 @@ public class Dungeon implements ILosBoard{
 		}
 		return t;
 	}
-	
 
-	public static void main(String[] args) {
-		// Тесты
-		/*
-		Race dwarf = new Race("Дварф", 5, 0, -3, -1, -1, 4);
-		Hero you = new Hero("Макс", "ololo", 2, 1, 5, 5, 5, 5, dwarf, 2, Profession.WARRIOR);
-		//System.out.println("Опыт: " + you.exp.getPair());
-		you.initRaceBonuses();
-		
-		System.out.println(you.getFace());
-		//Dungeon d = new Dungeon("./modules/TestModule/locations/texture.json");
-		LinkedList<AbstractCreature> f = new LinkedList<AbstractCreature>();
-		f.push(you);
-		//d.addLife(you);
-*/
-	}
-
+	// If such coords in dungeon size
 	@Override
 	public boolean contains(int x, int y) {
 		return x >= 0 && y >= 0 && x < width && y < height;
-		//return true;
 	}
 
+	// can we stay on this tile with x,y?
 	@Override
 	public boolean isObstacle(int x, int y) {
 		return !getTile(x, y).getPassable();
 	}
 
+	// Visit a tile, it means remember it for FOV-alhorytm
 	@Override
 	public void visit(int x, int y) {
 		if(x < width && y < height) {
-			getTile(x, y).visit(); // Нужен для определения, надо ли его рисовать
+			getTile(x, y).visit();
 			getTile(x, y).setVisible(true);
 
 			for(AbstractThing t : getThings(x, y)){
@@ -292,7 +280,7 @@ public class Dungeon implements ILosBoard{
 				}
 			}
 			
-			// Исправить!
+			// TODO: repair. WAT?
 			for(AbstractCreature c : sceneLife){
 				if(c == sceneLife.getFirst()) continue;
 				if(getTile(c.getX(), c.getY()).isVisited()){
@@ -304,7 +292,5 @@ public class Dungeon implements ILosBoard{
 			}
 		}
 	}
-
-
 }
 

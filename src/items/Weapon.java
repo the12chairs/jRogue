@@ -4,9 +4,11 @@ import dnd.Dice;
 import lowlevel.AbstractThing;
 import properties.Material;
 
+/**
+ * Class for weapon implementation
+ */
 public class Weapon extends AbstractThing{
 
-	
 	public enum Type {
 		SWORD,
 		MACE,

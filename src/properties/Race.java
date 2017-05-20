@@ -2,20 +2,18 @@ package properties;
 
 import dnd.Dice;
 
+// Races and they stats
 public class Race {
 
 	private String name;
-	// Расовые бонусы к статам
+	// Race stat bonuses
 	private Dice strBonus;
 	private Dice dexBonus;
 	private Dice intelBonus;
-	//private Dice hpBonus;
 	private Dice wisBonus;
 	private Dice charBonus;
 	private Dice stamBonus;
-	
-	//TODO Не железный бонус, а описание бросков кубиков
-	
+
 	public Race(String name, Dice str, Dice dex, Dice intel, Dice wis, Dice cha, Dice stam){
 		this.name = name;
 		this.strBonus = str;

@@ -14,6 +14,8 @@ import rendering.TileRenderer;
 import rlforj.los.IFovAlgorithm;
 import rlforj.los.ShadowCasting;
 
+// Class for set keyboard controls.
+// TODO: remove logic from here
 public class KeyboardControl extends Thread {
 	
 	private long turns;
@@ -31,13 +33,11 @@ public class KeyboardControl extends Thread {
 		controlled = null;
 	}
 
-	
 	public void controlCreature(AbstractCreature creature){
 		controlled = creature;
 		recreateVisible();
 	}
-	
-	
+
 	public boolean isPassable(Tile t){
 		if(t != null){
 			return t.getPassable();
@@ -66,7 +66,7 @@ public class KeyboardControl extends Thread {
 		a.visitFieldOfView(TileRenderer.getDungeon(), (int)controlled.getX(), (int)controlled.getY(), controlled.getVisionRadius());
 	}
 
-	// Главный метод; Вызывается в потоке и вызывает управление в зависимости он состояния рендерера
+	// main method. Control the game in depends on render.STATE
 	
 	public synchronized void stateManager(){
 
@@ -94,12 +94,11 @@ public class KeyboardControl extends Thread {
 
 		while(Keyboard.next()){
 		
-			// Перемещаем ползунок
+			// Move a caret
 			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)){
 				if(TileRenderer.check.getPos() < controlled.inventory().allInvenory().size()-1){
 					TileRenderer.check.next();
 					TileRenderer.check.mark(controlled.inventory().allInvenory().get(TileRenderer.check.getPos()));
-					//System.out.println(pos);
 				}
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
@@ -109,9 +108,8 @@ public class KeyboardControl extends Thread {
 				}
 			}
 
-			// Эквип
+			// Equip
 			if(Keyboard.isKeyDown(Keyboard.KEY_E)){
-
 				turns++;
 				switch(TileRenderer.check.getThing().getMType()){
 				
@@ -186,7 +184,7 @@ public class KeyboardControl extends Thread {
 				}
 				
 			}
-			// Дроп
+			// Drop item
 			if(Keyboard.isKeyDown(Keyboard.KEY_D)){
 				turns++;
 				drop(controlled, TileRenderer.check.getPos());
@@ -195,7 +193,6 @@ public class KeyboardControl extends Thread {
 			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
 				TileRenderer.gameState = TileRenderer.State.DUNGEON;
 			}
-		
 		}
 	}
 
@@ -203,7 +200,7 @@ public class KeyboardControl extends Thread {
 		AbstractThing dropped;
 		if(who.inventory().allInvenory().get(TileRenderer.check.getPos()) != null){
 			dropped = who.inventory().allInvenory().get(what);
-			// Попытка выбросить экипированное
+			// Try to drop an equipped item
 			if(who.getRightHand() == dropped){
 				who.unuseRightWeapon((Weapon) dropped);
 			}
@@ -224,28 +221,25 @@ public class KeyboardControl extends Thread {
 			}
 			who.dropItem(what);
 			TileRenderer.getDungeon().addThing(dropped, who.getX(), who.getY());
-
 		}
 	}
 
-	// При смерти существа
-	
+	// On death. TODO: remove as a logic method
 	public void death(AbstractCreature who) {
-		// Сохраняем оставшиеся предметы в инвентаре
+		// Save loot into list
 		List<Integer> buffer = new ArrayList<>();
 		for (Entry<Integer, AbstractThing> t : who.inventory().allInvenory().entrySet()) {
 			buffer.add(t.getKey());
 		}
-		// Зачищаем инвентарь
+		// Drop all from inventory
 		for (Integer i : buffer) {
 			drop(who, i);
 		}
-		// Уберем тушку
 	}
 
 	public synchronized void commandAction(){
 
-		// Старушка умерла
+		// If you are dead
 		if(!controlled.isAlive()){
 			TileRenderer.gameState = TileRenderer.State.DEATH;
 		}
@@ -253,7 +247,6 @@ public class KeyboardControl extends Thread {
 		long x = controlled.getX();
 		long y = controlled.getY();
 
-		//Keyboard.
 		while(Keyboard.next()){
 			if(Keyboard.getEventKeyState()){
 				if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
@@ -271,7 +264,7 @@ public class KeyboardControl extends Thread {
 				}
 			}
 			
-			// Взять предмет
+			// Take item
 			if(Keyboard.isKeyDown(Keyboard.KEY_COMMA)){
 				turns++;
 				AbstractThing getted = null;
@@ -287,22 +280,22 @@ public class KeyboardControl extends Thread {
 				}
 			}
 			
-			// Вызов инвентаря
+			// Render inventory
 			if(Keyboard.isKeyDown(Keyboard.KEY_I)) {
 				TileRenderer.gameState = TileRenderer.State.INVENTORY;
 			}
 
-			// Переход на другую карту
+			// Move next dungeon
 			if(Keyboard.isKeyDown(Keyboard.KEY_G)) {
 				Portal port = TileRenderer.getDungeon().getPortal(x, y);
 				if(port != null){
 					TileRenderer.getDungeon().removeHero();
 					port.next().addHero((Hero) controlled);
 					TileRenderer.setDungeon(port.next());
-					// Установим координаты героя на координаты старта портальной точки
+					// Set start coords as portal coords wich was used for change dungeon
 					port.next().getHero().setX(port.getStartX());
 					port.next().getHero().setY(port.getStartY());
-					// Герой видимый
+					// Visible hero
 					port.next().getHero().setVisible(true);
 				}
 			}
@@ -310,7 +303,8 @@ public class KeyboardControl extends Thread {
 			recreateVisible();
 		}
 	}
-	
+
+	// Move controlled creature (your hero, pet, any creature what can be controlled at this moment)
 	public void controlledMove(int dx, int dy) {
 		turns++;
 		Tile t = TileRenderer.getDungeon().getTile(controlled.getX()+dx, controlled.getY()+dy);
@@ -325,14 +319,15 @@ public class KeyboardControl extends Thread {
 			}
 		}
 
-		// лечение тут
+		// Healing. TODO: remove it
 		int hilKoef = 5;
 		if(turns%hilKoef == 0 && controlled.hp().getCurrent() < controlled.hp().getFull()){
 			controlled.hp().setCurrent(controlled.hp().getCurrent() + 1);
 		}
 	}
 
-	// Ход всех существ карты
+	// All map creatures do something
+	// TODO: move all activity into AI and call AI methods
 	public void surroundTurn(){
 		if(turns>oldTurns){
 			List<AbstractCreature> deadCreatures = new ArrayList<>();
@@ -341,8 +336,7 @@ public class KeyboardControl extends Thread {
 				if(c != controlled && c.isAlive()){
 					c.getAi().setVisible(TileRenderer.getDungeon());
 					c.getAi().setDivide((int) TileRenderer.getDungeon().getWidth(), (int) TileRenderer.getDungeon().getHeight());
-					//c.march(TileRenderer.getDungeon().getTile(29, 29));
-					c.attack(this.controlled); // атакуем героя
+					c.attack(this.controlled); // Attack hero
 				}
 				if(!c.isAlive()){
 					death(c);

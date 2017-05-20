@@ -33,6 +33,9 @@ import primitives.GraphObject;
 import properties.Race;
 import properties.Material;
 
+/**
+ * Graphic renderer
+ */
 public class TileRenderer extends Thread {
 
 
@@ -59,7 +62,7 @@ public class TileRenderer extends Thread {
 
 	public static Checkbox check;
 
-	public static Map<String, Texture> textures; // Словарик загруженных текстур
+	public static Map<String, Texture> textures; // Map of loaded textures
 
 	public TileRenderer(Dungeon cDungeon)
 	{
@@ -88,7 +91,7 @@ public class TileRenderer extends Thread {
 	}
 
 	/**
-	 * Отрисовка инвентаря
+	 * Render inventory
 	 */
 	public void renderInventory()
 	{
@@ -120,7 +123,7 @@ public class TileRenderer extends Thread {
 	}
 
 	public void renderMainMenu(){
-		// Заглушка
+		// TODO: make it
 	}
 
 	public void renderInfo(){
@@ -132,7 +135,6 @@ public class TileRenderer extends Thread {
 		bodyFont.drawString(h, w, cDungeon.getHero().getName() + ", the " + cDungeon.getHero().getRace().getName());
 
 		w = w + 50;
-		//System.out.println(entry.getValue().getDamage().getDice());
 		
 		if(cDungeon.getHero().getRightHand() != null){
 			bodyFont.drawString(h, w, "Equipped: " + cDungeon.getHero().getRightHand().getName() + " " +
@@ -191,8 +193,8 @@ public class TileRenderer extends Thread {
 	}
 
 	public static void loadTextures(){
-		// Обходить случаи отсутствия элементов!!!!!
-		// Теперь грузим текстурки в словарь. Если она там есть - не грузим
+		// TODO: handle situation when no elements
+		// Load unic textures into hash
 		System.out.println("Loading textures...");
 		for(GraphObject tile : cDungeon.dungeon()){
 			if(!textureExists(tile.getFace())) {
@@ -212,7 +214,7 @@ public class TileRenderer extends Thread {
 			}
 		}
 
-		// Все предметы в карманах у тварей
+		// All items in all inventories
 		for(AbstractCreature c : cDungeon.getCreatures()) {
 			for(Entry<Integer, AbstractThing> t : c.inventory().allInvenory().entrySet()) {
 				if(!textureExists(t.getValue().getFace())) {
@@ -224,6 +226,7 @@ public class TileRenderer extends Thread {
 	}
 	
 	public void destroyTextures() {
+		System.out.println("Starting textures destroying...");
 		for(GraphObject tile : cDungeon.dungeon()){
 			if(textureExists(tile.getFace())) {
 				tile.destroyTexture();
@@ -252,13 +255,13 @@ public class TileRenderer extends Thread {
 				}
 			}
 		}
+		System.out.println("Done");
 	}
 	
-	// Отрисовка отдельного тайла
+	// Render a single tile
 	public void renderTile(GraphObject tile){
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glTexCoord2f(0,0);
-		// Умножим игровую координату на TILE_SIZE, чтобы получить реальную графическую координату
 		GL11.glVertex2f(tile.getX() * TILE_SIZE, tile.getY() * TILE_SIZE);
 		GL11.glTexCoord2f(1,0);
 		GL11.glVertex2f(tile.getX() * TILE_SIZE + TILE_SIZE, tile.getY() * TILE_SIZE);
@@ -274,7 +277,6 @@ public class TileRenderer extends Thread {
 		System.out.println("Rendering thread has started.");
 		render();
 		Thread.yield();
-		
 	}
 
 	public long getTime(){
@@ -302,14 +304,12 @@ public class TileRenderer extends Thread {
 	}
 	
 	 public void renderState(){
-		 // Состояния рендерера
-
+		 // Renderer state
 		 switch(gameState){
 		 case INVENTORY:
 			 renderInventory();
 			 break;
 		 case DUNGEON:
-			 //camera.use();
 			 renderDungeon();
 			 break;
 		 case DEATH:
@@ -317,7 +317,6 @@ public class TileRenderer extends Thread {
 			 break;
 		 default:
 			 break;
-			
 		 }
 	 }
 
@@ -327,7 +326,6 @@ public class TileRenderer extends Thread {
 		Dungeon prev = cDungeon;
 		while (true) {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-			// Каков костыль
 			if(cDungeon != prev){
 				destroyTextures();
 				prev = cDungeon;
@@ -346,7 +344,6 @@ public class TileRenderer extends Thread {
 			}
 			Thread.yield();
 		}
-		
 	}
 
 	private void initGL(int width, int height) {
@@ -390,7 +387,6 @@ public class TileRenderer extends Thread {
 		headFont = new TrueTypeFont(awtFont1, false);
 		Font awtFont2 = new Font("Times New Roman", Font.PLAIN, 14);
 		bodyFont = new TrueTypeFont(awtFont2, false);
-
 	}
 	
 	public static Dungeon getDungeon() {
@@ -433,8 +429,6 @@ public class TileRenderer extends Thread {
 		TileRenderer r = new TileRenderer(d);
 	
 		KeyboardControl controller = new KeyboardControl();
-		//r.controller.setDungeon(d);
-		//controller.setDungeon(d);
 
 		d.addHero(you);
 		you.setVisible(true);
@@ -444,20 +438,19 @@ public class TileRenderer extends Thread {
 		
 		renderer.start();
 		keyboard.start();
-		// Центровака по герою
+		// Center on hero
 		camera = new Camera((int)you.getY()+6, (int)you.getX()+6);
 
 		controller.controlCreature(you);
 	}
 
-	// Контейнер, содержащий выбранный предмет
+	// Container with selected item (in inventory)
 	public class Checkbox {
 		
-		private AbstractThing checked; // Предмет
-		private int checkedPos; // Его позиция в инвентаре (0 - N)
-		private int renderPos; // Костыль, нужен только для отрисовки
+		private AbstractThing checked; // Item
+		private int checkedPos; // Item position (0 - N)
+		private int renderPos; // Renderer coordinates
 		private String mark;
-		
 		
 		public Checkbox(String mark) {
 			this.mark = mark;
@@ -494,7 +487,4 @@ public class TileRenderer extends Thread {
 			return checked;
 		}
 	}
-	
-
-
 }
